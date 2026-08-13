@@ -54,13 +54,17 @@ namespace siddiqsoft
     class ScopeTrace
     {
         // Colors for output
-        static constexpr std::string_view RED {"\033[0;31m"};
-        static constexpr std::string_view BLU {"\033[0;34m"};
-        static constexpr std::string_view GRN {"\033[0;32m"};
-        static constexpr std::string_view YLW {"\033[1;33m"};
-        static constexpr std::string_view BOLD {"\033[1m"};
-        static constexpr std::string_view NOTBOLD {"\033[22m"};
-        static constexpr std::string_view NOC {"\033[0m"}; // No Color
+        static constexpr std::string_view LTGY {"\033[38;5;250m"};  //< Light gray
+        static constexpr std::string_view DKGY {"\033[1;40m"};  //< Dark gray
+        static constexpr std::string_view RED {"\033[0;31m"};   //< Red
+        static constexpr std::string_view BLU {"\033[0;34m"};   //< Blue
+        static constexpr std::string_view GRN {"\033[0;32m"};   //< Green
+        static constexpr std::string_view YLW {"\033[1;33m"};   //< Yellow
+        static constexpr std::string_view BOLD {"\033[1m"};     //< Bold
+        static constexpr std::string_view ITAL {"\033[3m"};     //< Italic
+        static constexpr std::string_view NOTBOLD {"\033[22m"}; //< Not bold
+        static constexpr std::string_view NOTITAL {"\033[23m"}; //< Not italic
+        static constexpr std::string_view NOC {"\033[0m"};      //< No Color
 
     public:
         /// @brief Access thread-local scope nesting level counter
@@ -148,6 +152,13 @@ namespace siddiqsoft
             return name_part.substr(start_pos);
         }
 
+        [[nodiscard]] static std::string current_timestamp() noexcept
+        {
+            // This gives a timestamp in ISO 8601 format with UTC timezone: "2026-08-13T23:16:00.519049Z"
+            // Note we use fractional seconds with microsecond precision.
+            return std::format("{}{:%FT%TZ}{}  ", LTGY, std::chrono::system_clock::now(), NOC);
+        }
+
         /// @brief Get the plain function name matching __func__ from the source location
         /// @return Plain function name string view
         [[nodiscard]] std::string_view function_name() const noexcept { return extract_func_name(m_location.function_name()); }
@@ -195,12 +206,13 @@ namespace siddiqsoft
                 --current_depth();
             }
 
-#if defined(DEBUG) || defined(_DEBUG)
+#if defined(DEBUG) || defined(_DEBUG) || defined(DEBUG_TRACE)
             auto        us = std::chrono::duration_cast<std::chrono::microseconds>(elapsed()).count();
             std::string indent(m_scope_depth * 2, ' ');
 
             std::println(std::cerr,
-                         "{}{}{} - COMPLETED - time:{}{}us{}",
+                         "{}{}{}{} - COMPLETED - time:{}{}us{}",
+                         current_timestamp(),
                          indent,
                          BLU,
                          m_scope_name.empty() ? m_location.file_name() : m_scope_name,
@@ -219,12 +231,33 @@ namespace siddiqsoft
         {
             std::string indent(m_scope_depth * 2, ' ');
             std::println(std::cerr,
-                         "{}{}{} - {}{}",
+                         "{}{}{}{} - {}{}",
+                         current_timestamp(),
                          indent,
                          YLW,
                          m_scope_name.empty() ? m_location.file_name() : m_scope_name,
                          std::format(fmt, std::forward<Args>(args)...),
                          NOC);
+        }
+
+        /// @brief Log a formatted warning message to std::cerr with indentation and scope label
+        /// @tparam Args Format argument types
+        /// @param fmt Format string
+        /// @param args Format arguments
+        template <typename... Args>
+        void trace(std::format_string<Args...> fmt, Args&&... args)
+        {
+#if defined(DEBUG_TRACE)
+            std::string indent(m_scope_depth * 2, ' ');
+            std::println(std::cerr,
+                         "{}{}{}{} - {}{}",
+                         current_timestamp(),
+                         indent,
+                         LTGY,
+                         m_scope_name.empty() ? m_location.file_name() : m_scope_name,
+                         std::format(fmt, std::forward<Args>(args)...),
+                         NOC);
+#endif
         }
 
         /// @brief Log a formatted error message to std::cerr with indentation and scope label
@@ -236,7 +269,8 @@ namespace siddiqsoft
         {
             std::string indent(m_scope_depth * 2, ' ');
             std::println(std::cerr,
-                         "{}{}{} - {}{}",
+                         "{}{}{}{} - {}{}",
+                         current_timestamp(),
                          indent,
                          RED,
                          m_scope_name.empty() ? m_location.file_name() : m_scope_name,
@@ -250,7 +284,8 @@ namespace siddiqsoft
         {
             std::string indent(m_scope_depth * 2, ' ');
             std::println(std::cerr,
-                         "{}{}{} - {}{}{} - {}{}",
+                         "{}{}{}{} - {}{}{} - {}{}",
+                         current_timestamp(),
                          indent,
                          RED,
                          m_scope_name.empty() ? m_location.file_name() : m_scope_name,
@@ -266,12 +301,13 @@ namespace siddiqsoft
         /// @param fmt Format string
         /// @param args Format arguments
         template <typename... Args>
-        void msg(std::format_string<Args...> fmt, Args&&... args)
+        void info(std::format_string<Args...> fmt, Args&&... args)
         {
 #if defined(DEBUG) || defined(_DEBUG)
             std::string indent(m_scope_depth * 2, ' ');
             std::println(std::cerr,
-                         "{}{}{} - {}{}",
+                         "{}{}{}{} - {}{}",
+                         current_timestamp(),
                          indent,
                          NOC,
                          m_scope_name.empty() ? m_location.file_name() : m_scope_name,
@@ -291,7 +327,8 @@ namespace siddiqsoft
                 auto        us = std::chrono::duration_cast<std::chrono::microseconds>(elapsed()).count();
                 std::string indent(m_scope_depth * 2, ' ');
                 if (m_scope_name.empty()) {
-                    return std::format("{}[{}:{}] {} took {}us",
+                    return std::format("{}{}[{}:{}] {} took {}us",
+                                       current_timestamp(),
                                        indent,
                                        m_location.file_name(),
                                        m_location.line(),
@@ -299,7 +336,8 @@ namespace siddiqsoft
                                        us);
                 }
                 else {
-                    return std::format("{}[{}:{}] {} ({}) took {}us",
+                    return std::format("{}{}[{}:{}] {} ({}) took {}us",
+                                       current_timestamp(),
                                        indent,
                                        m_location.file_name(),
                                        m_location.line(),

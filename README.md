@@ -11,7 +11,7 @@
 - **RAII Scope Timing**: Automatic duration measurement upon scope exit.
 - **`std::source_location` Integration**: Capture file, line, and function automatically.
 - **Nesting Level Tracking**: Indents nested scope execution trees dynamically using thread-local depth counter.
-- **Structured Scope Logging**: Specialized `msg()`, `warn()`, `err()`, and `exp()` methods for formatted console logging with ANSI colors.
+- **Structured Scope Logging**: Specialized `info()`, `warn()`, `err()`, and `exp()` methods for formatted console logging with ANSI colors.
 - **String Formatting & Stream Support**: Native `to_string()` formatting and `operator<<` stream insertion support.
 
 ---
@@ -53,7 +53,7 @@ How many of us have had to write
         try {
             siddiqsoft::ScopeTrace inner("foo-Nested"); // explicit inner scope label
 
-            inner.msg("From the inner scope line: {}", __LINE__);
+            inner.info("From the inner scope line: {}", __LINE__);
             throw std::runtime_error(std::format("Deliberate error from line: {}", __LINE__));
         }
         catch (const std::exception& e) {
@@ -101,7 +101,7 @@ For full detailed documentation, integration guides, and API specifications, vis
 void sub_task()
 {
     siddiqsoft::ScopeTrace inner;
-    inner.msg("Processing items...");
+    inner.info("Processing items...");
     // Perform work...
 }
 
@@ -109,7 +109,7 @@ int main()
 {
     siddiqsoft::ScopeTrace scope;
 
-    scope.msg("Starting application execution");
+    scope.info("Starting application execution");
 
     try {
         sub_task();

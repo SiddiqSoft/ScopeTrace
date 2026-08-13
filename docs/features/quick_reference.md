@@ -10,7 +10,7 @@ siddiqsoft::ScopeTrace scope("step_name");
 ### Structured Console Logging
 ```cpp
 // Info log (in debug builds)
-scope.msg("Processing item {} of {}", current, total);
+scope.info("Processing item {} of {}", current, total);
 
 // Warning log (yellow output)
 scope.warn("Cache miss for key: {}", key);

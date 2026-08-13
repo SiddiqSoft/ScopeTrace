@@ -34,7 +34,7 @@ Using `std::source_location::current()`, `ScopeTrace` captures caller details au
 
 Within an active scope, you can output formatted contextual messages to `std::cerr` with depth indentation and ANSI color coding:
 
-- **`scope.msg("...")`**: Debug information (active in `DEBUG` / `_DEBUG` builds).
+- **`scope.info("...")`**: Debug information (active in `DEBUG` / `_DEBUG` builds).
 - **`scope.warn("...")`**: Warning messages (colored yellow).
 - **`scope.err("...")`**: Error messages (colored red).
 - **`scope.exp(e)`**: Formatted exception log (colored bold red with exception type and `what()`).

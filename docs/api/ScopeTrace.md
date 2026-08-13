@@ -71,7 +71,7 @@ Formats and outputs an error message to `std::cerr` (colored red) prefixed by th
 ### `void exp(const std::exception& e)`
 Outputs caught exception details (`typeid(e).name()` and `e.what()`) to `std::cerr` (colored bold red) prefixed by the depth-indented scope name.
 
-### `template <typename... Args> void msg(std::format_string<Args...> fmt, Args&&... args)`
+### `template <typename... Args> void info(std::format_string<Args...> fmt, Args&&... args)`
 In debug builds (`DEBUG` / `_DEBUG`), formats and outputs an informational message to `std::cerr` prefixed by the depth-indented scope name.
 
 ---

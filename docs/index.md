@@ -14,7 +14,7 @@
 
 - **Zero-Boilerplate Tracing**: Automatically record function name, file path, and line numbers using `std::source_location`.
 - **Nesting Level Tracking**: Indents nested scope execution trees dynamically using thread-local scope depth.
-- **Structured Console Logging**: Methods for `msg()`, `warn()`, `err()`, and `exp()` with depth indentation and ANSI colors.
+- **Structured Console Logging**: Methods for `info()`, `warn()`, `err()`, and `exp()` with depth indentation and ANSI colors.
 - **C++23 Native Support**: Leverages `std::format`, `std::println`, and `std::ostream`.
 
 ---
@@ -28,7 +28,7 @@
 void process_request()
 {
     siddiqsoft::ScopeTrace scope("process_request");
-    scope.msg("Parsing incoming payload...");
+    scope.info("Parsing incoming payload...");
     // Work executed here...
 }
 

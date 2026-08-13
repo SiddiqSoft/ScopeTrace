@@ -11,7 +11,7 @@ This example demonstrates how to use `siddiqsoft::ScopeTrace` for scope tracing,
 void worker()
 {
     siddiqsoft::ScopeTrace scope("worker");
-    scope.msg("Worker starting task with ID={}", 42);
+    scope.info("Worker starting task with ID={}", 42);
 
     std::this_thread::sleep_for(std::chrono::milliseconds(10));
 
@@ -34,7 +34,7 @@ void perform_operation()
 int main()
 {
     siddiqsoft::ScopeTrace scope("main");
-    scope.msg("Application initialization complete");
+    scope.info("Application initialization complete");
 
     perform_operation();
 
