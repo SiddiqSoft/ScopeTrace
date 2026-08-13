@@ -41,8 +41,6 @@
 
 #include <chrono>
 #include <format>
-#include <functional>
-#include <mutex>
 #include <ostream>
 #include <source_location>
 #include <string>
@@ -85,12 +83,12 @@ namespace siddiqsoft
         /// @return std::source_location instance
         [[nodiscard]] const std::source_location& location() const noexcept { return m_location; }
 
-        /// @brief Get optional user message attached to scope log
-        /// @return Message string
+        /// @brief Get custom scope label/name attached to scope log
+        /// @return Scope name string view
         [[nodiscard]] std::string_view name() const noexcept { return m_scope_name; }
 
-        /// @brief Construct a ScopedDebugLog with optional message and location
-        /// @param msg Custom scope label or context message
+        /// @brief Construct a ScopedDebugLog with a scope name and optional source location
+        /// @param sn Custom scope label or context name
         /// @param sl Source location (defaults to caller site)
         explicit ScopedDebugLog(std::string_view sn, const std::source_location& sl = std::source_location::current())
             : m_location(sl)
@@ -112,7 +110,7 @@ namespace siddiqsoft
         /// @brief Move assignment is not supported
         ScopedDebugLog& operator=(ScopedDebugLog&&) = delete;
 
-        /// @brief Destructor triggers callbacks and updates depth counter
+        /// @brief Destructor logs scope completion in debug builds and updates depth counter
         ~ScopedDebugLog() noexcept
         {
             if (current_depth() > 0) {
@@ -134,7 +132,10 @@ namespace siddiqsoft
 #endif
         }
 
-
+        /// @brief Log a formatted warning message to std::cerr with indentation and scope label
+        /// @tparam Args Format argument types
+        /// @param fmt Format string
+        /// @param args Format arguments
         template <typename... Args>
         void warn(std::format_string<Args...> fmt, Args&&... args)
         {
@@ -148,6 +149,10 @@ namespace siddiqsoft
                          NOC);
         }
 
+        /// @brief Log a formatted error message to std::cerr with indentation and scope label
+        /// @tparam Args Format argument types
+        /// @param fmt Format string
+        /// @param args Format arguments
         template <typename... Args>
         void err(std::format_string<Args...> fmt, Args&&... args)
         {
@@ -161,6 +166,8 @@ namespace siddiqsoft
                          NOC);
         }
 
+        /// @brief Log exception details (type and message) to std::cerr with indentation and scope label
+        /// @param e Reference to caught exception
         void exp(const std::exception& e)
         {
             std::string indent(m_scope_depth * 2, ' ');
@@ -176,6 +183,10 @@ namespace siddiqsoft
                          NOC);
         }
 
+        /// @brief Log a formatted debug message to std::cerr in debug builds with indentation and scope label
+        /// @tparam Args Format argument types
+        /// @param fmt Format string
+        /// @param args Format arguments
         template <typename... Args>
         void msg(std::format_string<Args...> fmt, Args&&... args)
         {

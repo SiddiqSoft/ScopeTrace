@@ -2,26 +2,47 @@
 
 ## Cheat Sheet
 
-### Basic Instantiation
+### Scope Instantiation
 ```cpp
 siddiqsoft::ScopedDebugLog scope("step_name");
 ```
 
-### Instance Callback
+### Structured Console Logging
 ```cpp
-siddiqsoft::ScopedDebugLog scope([](const siddiqsoft::ScopedDebugLog& log) {
-    std::cout << log.to_string() << "\n";
-}, "custom_step");
+// Info log (in debug builds)
+scope.msg("Processing item {} of {}", current, total);
+
+// Warning log (yellow output)
+scope.warn("Cache miss for key: {}", key);
+
+// Error log (red output)
+scope.err("Failed to open connection to host: {}", host);
+
+// Exception log (red bold output)
+try {
+    // ...
+} catch (const std::exception& e) {
+    scope.exp(e);
+}
 ```
 
-### Global Callback
+### Formatting & Streaming
 ```cpp
-siddiqsoft::ScopedDebugLog::set_global_callback([](const siddiqsoft::ScopedDebugLog& log) {
-    spdlog::info("{}", log);
-});
+// Format as std::string
+std::string formatted = scope.to_string();
+
+// Stream insertion operator
+std::cout << scope << std::endl;
 ```
 
-### Reset Global Callback
+### Scope Metrics & Nesting
 ```cpp
-siddiqsoft::ScopedDebugLog::reset_global_callback();
+// Elapsed time
+auto duration = scope.elapsed();
+
+// Instance nesting depth
+size_t level = scope.depth();
+
+// Current thread nesting depth counter
+size_t thread_depth = siddiqsoft::ScopedDebugLog::current_depth();
 ```

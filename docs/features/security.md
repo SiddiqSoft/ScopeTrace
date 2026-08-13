@@ -2,10 +2,10 @@
 
 ## Exception Safety
 
-`siddiqsoft::ScopedDebugLog::~ScopedDebugLog()` is declared `noexcept`.
-Any exceptions thrown inside user-defined callback functions are caught safely inside the destructor to prevent `std::terminate()` from being invoked during stack unwinding.
+- **`noexcept` Destructor Guarantee**: `siddiqsoft::ScopedDebugLog::~ScopedDebugLog()` is explicitly declared `noexcept` to ensure safety during stack unwinding.
+- **Exception Logging Utility**: The `scope.exp(const std::exception& e)` method safe-prints exception types and messages to `std::cerr` without throwing exceptions.
 
-## Thread Safety
+## Thread Safety & Performance
 
-- **Thread-Local Scope Depth**: Nesting depth relies on `thread_local` state, requiring zero lock contention between threads.
-- **Global Callback Protection**: Setting and dispatching global callbacks is protected via `std::mutex`.
+- **Zero-Lock Nesting Depth**: Scope nesting depth is stored in `thread_local` state (`current_depth()`), requiring zero lock contention or synchronization overhead across concurrent threads.
+- **Header-Only Efficiency**: Small, lightweight header-only implementation with minimal overhead.

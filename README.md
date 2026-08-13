@@ -9,9 +9,9 @@
 
 - **RAII Scope Timing**: Automatic duration measurement upon scope exit.
 - **`std::source_location` Integration**: Capture file, line, and function automatically.
-- **Nesting Level Tracking**: Indents nested scope execution trees dynamically.
-- **Flexible Logging Sinks**: Thread-safe global callback or per-instance logger callbacks.
-- **`std::format` & Stream Support**: Native `std::formatter` specialization and `operator<<` support.
+- **Nesting Level Tracking**: Indents nested scope execution trees dynamically using thread-local depth counter.
+- **Structured Scope Logging**: Specialized `msg()`, `warn()`, `err()`, and `exp()` methods for formatted console logging with ANSI colors.
+- **String Formatting & Stream Support**: Native `to_string()` formatting and `operator<<` stream insertion support.
 
 ---
 
@@ -33,19 +33,25 @@ For full detailed documentation, integration guides, and API specifications, vis
 #include <iostream>
 #include <siddiqsoft/ScopedDebugLog.hpp>
 
+void sub_task()
+{
+    siddiqsoft::ScopedDebugLog inner("sub_task");
+    inner.msg("Processing items...");
+    // Perform work...
+}
+
 int main()
 {
-    // Register global scope logging handler
-    siddiqsoft::ScopedDebugLog::set_global_callback([](const siddiqsoft::ScopedDebugLog& log) {
-        std::cout << log << std::endl;
-    });
-
     siddiqsoft::ScopedDebugLog scope("main");
+    scope.msg("Starting application execution");
 
-    {
-        siddiqsoft::ScopedDebugLog inner("sub_task");
-        // Perform work...
+    try {
+        sub_task();
     }
+    catch (const std::exception& e) {
+        scope.exp(e);
+    }
+
     return 0;
 }
 ```
