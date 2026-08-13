@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
+	<metadata>
+		<id>SiddiqSoft.ScopedDebugLog</id>
+		<version>$VERSION$</version>
+		<authors>SiddiqSoft</authors>
+		<description>Modern C++23 RAII scope logger measuring elapsed duration, location, and nesting level.</description>
+		<tags>cpp native nativepackage header-only raii scope-logger logging profiling</tags>
+		<projectUrl>https://github.com/SiddiqSoft/ScopedDebugLog</projectUrl>
+		<repository type="git" url="https://github.com/SiddiqSoft/ScopedDebugLog" />
+		<requireLicenseAcceptance>true</requireLicenseAcceptance>
+		<license type="expression">BSD-3-Clause</license>
+		<icon>docs\Siddiq-Software-Avatar.png</icon>
+		<readme>docs\README.md</readme>
+		<releaseNotes>Refer to the project repository for release notes.</releaseNotes>
+		<copyright>Copyright (c) 2026 Siddiq Software LLC</copyright>
+		<dependencies>
+			<!-- Add package dependencies here -->
+		</dependencies>
+	</metadata>
+
+	<files>
+		<!-- includes -->
+		<file src="..\include\**\*.hpp" target="build\native\include\" />
+		<file src="..\SiddiqSoft.ScopedDebugLog.natvis" target="build\native\" />
+		<file src="Siddiq-Software-Avatar.png" target="docs\" />
+		<file src="..\README.md" target="docs\" />
+		<file src="SiddiqSoft.ScopedDebugLog.targets" target="build\native\SiddiqSoft.ScopedDebugLog.targets" />
+	</files>
+</package>

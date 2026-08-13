@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AutoVisualizer xmlns="http://schemas.microsoft.com/vstudio/debugger/natvis/2010">
+  <Type Name="siddiqsoft::ScopedDebugLog">
+    <DisplayString Condition="!m_scope_name.empty()">{m_scope_name} (depth={m_scope_depth})</DisplayString>
+    <DisplayString>{m_location} (depth={m_scope_depth})</DisplayString>
+    <Expand>
+      <Item Name="[name]">m_scope_name</Item>
+      <Item Name="[depth]">m_scope_depth</Item>
+      <Item Name="[location]">m_location</Item>
+      <Item Name="[start_timestamp]">m_start_timestamp</Item>
+    </Expand>
+  </Type>
+</AutoVisualizer>
