@@ -994,6 +994,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#nodiscard-static-stdstring_view-extract_func_namestdstring_view-full_signature-noexcept" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        [[nodiscard]] static std::string_view extract_func_name(std::string_view full_signature) noexcept
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -1049,6 +1060,28 @@
     <span class="md-ellipsis">
       
         [[nodiscard]] std::string_view name() const noexcept
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#nodiscard-stdstring_view-function_name-const-noexcept" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        [[nodiscard]] std::string_view function_name() const noexcept
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#nodiscard-stdstring_view-func_name-const-noexcept" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        [[nodiscard]] std::string_view func_name() const noexcept
       
     </span>
   </a>
@@ -1419,6 +1452,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#nodiscard-static-stdstring_view-extract_func_namestdstring_view-full_signature-noexcept" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        [[nodiscard]] static std::string_view extract_func_name(std::string_view full_signature) noexcept
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -1474,6 +1518,28 @@
     <span class="md-ellipsis">
       
         [[nodiscard]] std::string_view name() const noexcept
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#nodiscard-stdstring_view-function_name-const-noexcept" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        [[nodiscard]] std::string_view function_name() const noexcept
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#nodiscard-stdstring_view-func_name-const-noexcept" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        [[nodiscard]] std::string_view func_name() const noexcept
       
     </span>
   </a>
@@ -1676,6 +1742,8 @@
 <h2 id="static-methods">Static Methods<a class="headerlink" href="#static-methods" title="Permanent link">&para;</a></h2>
 <h3 id="static-size_t-current_depth-noexcept"><code>static size_t&amp; current_depth() noexcept</code><a class="headerlink" href="#static-size_t-current_depth-noexcept" title="Permanent link">&para;</a></h3>
 <p>Accesses the thread-local scope depth counter. Returns a reference to the current thread's nesting depth index (<code>size_t</code>).</p>
+<h3 id="nodiscard-static-stdstring_view-extract_func_namestdstring_view-full_signature-noexcept"><code>[[nodiscard]] static std::string_view extract_func_name(std::string_view full_signature) noexcept</code><a class="headerlink" href="#nodiscard-static-stdstring_view-extract_func_namestdstring_view-full_signature-noexcept" title="Permanent link">&para;</a></h3>
+<p>Extracts the plain function name (matching the <code>__func__</code> macro) from a full function signature string (such as <code>std::source_location::function_name()</code>).</p>
 <hr />
 <h2 id="accessor-member-functions">Accessor Member Functions<a class="headerlink" href="#accessor-member-functions" title="Permanent link">&para;</a></h2>
 <h3 id="nodiscard-auto-elapsed-const-noexcept"><code>[[nodiscard]] auto elapsed() const noexcept</code><a class="headerlink" href="#nodiscard-auto-elapsed-const-noexcept" title="Permanent link">&para;</a></h3>
@@ -1686,6 +1754,10 @@
 <p>Returns the <code>std::source_location</code> object captured at construction.</p>
 <h3 id="nodiscard-stdstring_view-name-const-noexcept"><code>[[nodiscard]] std::string_view name() const noexcept</code><a class="headerlink" href="#nodiscard-stdstring_view-name-const-noexcept" title="Permanent link">&para;</a></h3>
 <p>Returns the scope name string view passed at construction.</p>
+<h3 id="nodiscard-stdstring_view-function_name-const-noexcept"><code>[[nodiscard]] std::string_view function_name() const noexcept</code><a class="headerlink" href="#nodiscard-stdstring_view-function_name-const-noexcept" title="Permanent link">&para;</a></h3>
+<p>Returns the plain function name matching the <code>__func__</code> macro, extracted from <code>m_location.function_name()</code>.</p>
+<h3 id="nodiscard-stdstring_view-func_name-const-noexcept"><code>[[nodiscard]] std::string_view func_name() const noexcept</code><a class="headerlink" href="#nodiscard-stdstring_view-func_name-const-noexcept" title="Permanent link">&para;</a></h3>
+<p>Shorthand alias for <code>function_name()</code>.</p>
 <hr />
 <h2 id="logging-member-functions">Logging Member Functions<a class="headerlink" href="#logging-member-functions" title="Permanent link">&para;</a></h2>
 <h3 id="template-typename-args-void-warnstdformat_stringargs-fmt-args-args"><code>template &lt;typename... Args&gt; void warn(std::format_string&lt;Args...&gt; fmt, Args&amp;&amp;... args)</code><a class="headerlink" href="#template-typename-args-void-warnstdformat_stringargs-fmt-args-args" title="Permanent link">&para;</a></h3>
@@ -1797,7 +1869,7 @@
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.expand", "navigation.path", "navigation.top", "navigation.footer", "navigation.tracking", "search.suggest", "search.highlight", "search.share", "content.code.copy", "content.code.annotate"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": "0.1.0-alpha.11"}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.expand", "navigation.path", "navigation.top", "navigation.footer", "navigation.tracking", "search.suggest", "search.highlight", "search.share", "content.code.copy", "content.code.annotate"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": "0.9.1-1"}</script>
     
     
       <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
