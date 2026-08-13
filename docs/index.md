@@ -1,9 +1,10 @@
 # ScopeTrace
 
-[![Build Status](https://dev.azure.com/siddiqsoft/siddiqsoft/_apis/build/status/SiddiqSoft.ScopeTrace?branchName=main)](https://dev.azure.com/siddiqsoft/siddiqsoft/_build/latest?definitionId=1)
-[![GitHub release](https://img.shields.io/github/v/release/SiddiqSoft/ScopeTrace)](https://github.com/SiddiqSoft/ScopeTrace/releases)
+![](https://dev.azure.com/siddiqsoft/siddiqsoft/_apis/build/status%2FSiddiqSoft.ScopeTrace?repoName=SiddiqSoft%2FScopeTrace&branchName=dev)
 [![NuGet](https://img.shields.io/nuget/v/SiddiqSoft.ScopeTrace)](https://www.nuget.org/packages/SiddiqSoft.ScopeTrace/)
-[![License](https://img.shields.io/github/license/SiddiqSoft/ScopeTrace)](https://github.com/SiddiqSoft/ScopeTrace/blob/main/LICENSE)
+![](https://img.shields.io/nuget/v/SiddiqSoft.ScopeTrace)
+![](https://img.shields.io/github/v/tag/SiddiqSoft/ScopeTrace)
+![](https://img.shields.io/azure-devops/tests/siddiqsoft/siddiqsoft/34)
 
 `siddiqsoft::ScopeTrace` is a header-only C++23 RAII scope logger designed for execution tracing, performance measurement, and nesting depth visualization.
 

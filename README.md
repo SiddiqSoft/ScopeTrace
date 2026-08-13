@@ -3,7 +3,7 @@
 ![](https://dev.azure.com/siddiqsoft/siddiqsoft/_apis/build/status%2FSiddiqSoft.ScopeTrace?repoName=SiddiqSoft%2FScopeTrace&branchName=dev)
 ![](https://img.shields.io/nuget/v/SiddiqSoft.ScopeTrace)
 ![](https://img.shields.io/github/v/tag/SiddiqSoft/ScopeTrace)
-![](https://img.shields.io/azure-devops/tests/siddiqsoft/siddiqsoft/33)
+![](https://img.shields.io/azure-devops/tests/siddiqsoft/siddiqsoft/34)
 [![NuGet](https://img.shields.io/nuget/v/SiddiqSoft.ScopeTrace)](https://www.nuget.org/packages/SiddiqSoft.ScopeTrace/)
 
 `siddiqsoft::ScopeTrace` is a modern, lightweight, header-only C++23 RAII scope logger designed for performance profiling and scope execution tracing.
@@ -27,7 +27,7 @@ How many of us have had to write
     ```cpp
     void foo() {
     #if defined(DEBUG)
-            std::println(std::cerr, "{} - Something or the other: {}", __func__, foo);
+            std::println(std::cerr, "{} - Something or the other", __func__);
     #endif
 
         try {
@@ -37,7 +37,7 @@ How many of us have had to write
         }
 
     #if defined(DEBUG)
-            std::println(std::cerr, "{} - COMPLETED - Something or the other: {}", __func__);
+            std::println(std::cerr, "{} - COMPLETED", __func__);
     #endif
     }
     ```
@@ -48,10 +48,10 @@ How many of us have had to write
 
     ```cpp
     void foo() {
-        siddiqsoft::ScopeTrace scope;
+        siddiqsoft::ScopeTrace scope; // automatically defaults scope name to plain __func__ ("foo")
 
         try {
-            auto inner= scope,ext("-Nested"); // get an inner scope. adds "-Nested" to the scope name
+            siddiqsoft::ScopeTrace inner("foo-Nested"); // explicit inner scope label
 
             inner.msg("From the inner scope line: {}", __LINE__);
             throw std::runtime_error(std::format("Deliberate error from line: {}", __LINE__));
@@ -119,6 +119,26 @@ int main()
     }
 
     return 0;
+}
+```
+
+---
+
+## 🔍 Function Name Extraction (`__func__`)
+
+`ScopeTrace` provides built-in utilities to extract the clean function name matching `__func__` from verbose `std::source_location::function_name()` signatures:
+
+```cpp
+void MyClass::process_data()
+{
+    siddiqsoft::ScopeTrace scope;
+
+    // Returns "process_data"
+    std::string_view name1 = scope.function_name();
+    std::string_view name2 = scope.func_name(); // Alias
+
+    // Static helper for any signature string
+    std::string_view name3 = siddiqsoft::ScopeTrace::extract_func_name("virtual void MyClass::process_data(int) const");
 }
 ```
 
