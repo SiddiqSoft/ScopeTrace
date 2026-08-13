@@ -33,6 +33,9 @@ Copy construction, move construction, copy assignment, and move assignment opera
 ### `static size_t& current_depth() noexcept`
 Accesses the thread-local scope depth counter. Returns a reference to the current thread's nesting depth index (`size_t`).
 
+### `[[nodiscard]] static std::string_view extract_func_name(std::string_view full_signature) noexcept`
+Extracts the plain function name (matching the `__func__` macro) from a full function signature string (such as `std::source_location::function_name()`).
+
 ---
 
 ## Accessor Member Functions
@@ -48,6 +51,12 @@ Returns the `std::source_location` object captured at construction.
 
 ### `[[nodiscard]] std::string_view name() const noexcept`
 Returns the scope name string view passed at construction.
+
+### `[[nodiscard]] std::string_view function_name() const noexcept`
+Returns the plain function name matching the `__func__` macro, extracted from `m_location.function_name()`.
+
+### `[[nodiscard]] std::string_view func_name() const noexcept`
+Shorthand alias for `function_name()`.
 
 ---
 

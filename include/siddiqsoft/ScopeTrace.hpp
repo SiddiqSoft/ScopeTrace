@@ -87,15 +87,93 @@ namespace siddiqsoft
         /// @return Scope name string view
         [[nodiscard]] std::string_view name() const noexcept { return m_scope_name; }
 
+        /// @brief Extract the plain function name matching __func__ from a full function signature
+        /// @param full_signature Function signature string (e.g. from std::source_location::function_name())
+        /// @return Plain function name string view
+        [[nodiscard]] static std::string_view extract_func_name(std::string_view full_signature) noexcept
+        {
+            if (full_signature.empty()) return {};
+
+            // Find opening parenthesis of parameter list outside template angle brackets
+            size_t param_start = std::string_view::npos;
+            size_t angle_depth = 0;
+            for (size_t i = 0; i < full_signature.size(); ++i) {
+                char c = full_signature[i];
+                if (c == '<') {
+                    ++angle_depth;
+                }
+                else if (c == '>') {
+                    if (angle_depth > 0) --angle_depth;
+                }
+                else if (c == '(' && angle_depth == 0) {
+                    param_start = i;
+                    break;
+                }
+            }
+
+            std::string_view name_part =
+                    (param_start != std::string_view::npos) ? full_signature.substr(0, param_start) : full_signature;
+
+            // Trim trailing whitespace
+            while (!name_part.empty() && (name_part.back() == ' ' || name_part.back() == '\t')) {
+                name_part.remove_suffix(1);
+            }
+
+            if (name_part.empty()) return {};
+
+            // Scan backwards to find start of plain function name (after last ':', space, '*', '&')
+            size_t end_pos   = name_part.size();
+            size_t start_pos = end_pos;
+            angle_depth      = 0;
+
+            for (size_t i = end_pos; i > 0; --i) {
+                char c = name_part[i - 1];
+                if (c == '>') {
+                    ++angle_depth;
+                }
+                else if (c == '<') {
+                    if (angle_depth > 0) --angle_depth;
+                }
+                else if (angle_depth == 0) {
+                    if (c == ':' || c == ' ' || c == '\t' || c == '*' || c == '&') {
+                        start_pos = i;
+                        break;
+                    }
+                }
+                if (angle_depth == 0 && i - 1 == 0) {
+                    start_pos = 0;
+                }
+            }
+
+            return name_part.substr(start_pos);
+        }
+
+        /// @brief Get the plain function name matching __func__ from the source location
+        /// @return Plain function name string view
+        [[nodiscard]] std::string_view function_name() const noexcept { return extract_func_name(m_location.function_name()); }
+
+        /// @brief Alias for function_name() matching __func__
+        /// @return Plain function name string view
+        [[nodiscard]] std::string_view func_name() const noexcept { return function_name(); }
+
+    public:
         /// @brief Construct a ScopeTrace with a scope name and optional source location
         /// @param sn Custom scope label or context name
         /// @param sl Source location (defaults to caller site)
-        explicit ScopeTrace(std::string_view sn, const std::source_location& sl = std::source_location::current())
+        explicit ScopeTrace(std::string_view sn = {}, const std::source_location& sl = std::source_location::current())
             : m_location(sl)
             , m_start_timestamp(std::chrono::system_clock::now())
             , m_scope_name(sn)
             , m_scope_depth(current_depth()++)
         {
+            if (sn.empty()) m_scope_name = extract_func_name(m_location.function_name());
+        }
+
+        ScopeTrace nest(std::string_view sn, const std::source_location& sl = std::source_location::current())
+        {
+            // The scope name is required when nesting.
+            // We will add the function name and the scope name to the log message.
+            return ScopeTrace {std::format("{}-{}", m_scope_name, sn), sl};
         }
 
         /// @brief Copying is not supported

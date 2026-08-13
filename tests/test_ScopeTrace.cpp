@@ -39,35 +39,34 @@ TEST(ScopeTraceTest, ScopeDepthNesting)
 
 TEST(ScopeTraceTest, FormattingAndStream)
 {
-    siddiqsoft::ScopeTrace scope("StreamScope");
+    siddiqsoft::ScopeTrace scope;
     {
         std::string str = scope.to_string();
-        EXPECT_TRUE(str.contains("StreamScope"));
+        EXPECT_TRUE(str.contains("Test"));
         EXPECT_TRUE(str.contains("took"));
 
         std::ostringstream os;
         os << scope;
-        EXPECT_TRUE(os.str().contains("StreamScope"));
+        EXPECT_TRUE(os.str().contains("Test"));
         EXPECT_TRUE(os.str().contains("took"));
 
         std::string formatted = std::format("{}", scope.to_string());
-        EXPECT_TRUE(formatted.contains("StreamScope"));
+        EXPECT_TRUE(formatted.contains("Test"));
         EXPECT_TRUE(formatted.contains("took"));
     }
 }
 
 TEST(ScopeTraceTest, ExceptionSafety)
 {
-    siddiqsoft::ScopeTrace scope(__func__);
+    siddiqsoft::ScopeTrace scope;
 
     try {
-        siddiqsoft::ScopeTrace scope(std::string(__func__) + "-Nested");
+        auto inner = scope.nest("Nested");
 
-        scope.msg("From the inner scope line: {}", __LINE__);
+        inner.msg("From the inner scope line: {}", __LINE__);
         throw std::runtime_error(std::format("Deliberate error from line: {}", __LINE__));
     }
     catch (const std::exception& e) {
         scope.exp(e);
     }
 }
-
