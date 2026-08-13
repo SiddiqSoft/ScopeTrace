@@ -9,10 +9,15 @@ if(${${PROJECT_NAME}_BUILD_TESTS})
                     PRIVATE
                     ${PROJECT_SOURCE_DIR}/tests/test_ScopedDebugLog.cpp)
 
+    if( CMAKE_BUILD_TYPE MATCHES [Dd][Ee][Bb][Uu][Gg])
+        message(STATUS "Enable DEBUG pre-processor macros.. cmake_build_type:${CMAKE_BUILD_TYPE}")
+        target_compile_definitions(${TESTPROJ} PRIVATE DEBUG=1 _DEBUG=1)
+    endif()
+
     include(GoogleTest)
     enable_testing()
 
-    target_compile_features(${TESTPROJ} PRIVATE cxx_std_23)
+    target_compile_features(${TESTPROJ} PRIVATE cxx_std_${CMAKE_CXX_STANDARD})
     target_compile_options(${TESTPROJ}
                             PRIVATE
                             $<$<CXX_COMPILER_ID:MSVC>:/std:c++latest> )

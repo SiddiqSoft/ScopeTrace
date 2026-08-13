@@ -53,8 +53,18 @@
 namespace siddiqsoft
 {
     /// @brief Modern RAII scope logger measuring elapsed duration, location, and nesting level.
-    struct ScopedDebugLog
+    class ScopedDebugLog
     {
+        // Colors for output
+        static constexpr std::string_view RED {"\033[0;31m"};
+        static constexpr std::string_view BLU {"\033[0;34m"};
+        static constexpr std::string_view GRN {"\033[0;32m"};
+        static constexpr std::string_view YLW {"\033[1;33m"};
+        static constexpr std::string_view BOLD {"\033[1m"};
+        static constexpr std::string_view NOTBOLD {"\033[22m"};
+        static constexpr std::string_view NOC {"\033[0m"}; // No Color
+
+    public:
         /// @brief Access thread-local scope nesting level counter
         /// @return Reference to current thread scope depth
         static size_t& current_depth() noexcept
@@ -63,73 +73,30 @@ namespace siddiqsoft
             return depth;
         }
 
-        /// @brief Set a thread-safe global callback invoked when any ScopedDebugLog exits (unless overridden)
-        /// @param callback Function accepting a const reference to ScopedDebugLog
-        static void set_global_callback(std::function<void(const ScopedDebugLog&)> callback)
-        {
-            std::lock_guard<std::mutex> lock(global_mutex());
-            global_callback_storage() = std::move(callback);
-        }
-
-        /// @brief Reset the global callback
-        static void reset_global_callback()
-        {
-            std::lock_guard<std::mutex> lock(global_mutex());
-            global_callback_storage() = nullptr;
-        }
-
         /// @brief Calculate elapsed time since scope entry
         /// @return Duration elapsed
-        [[nodiscard]] auto elapsed() const noexcept
-        {
-            return std::chrono::system_clock::now() - startTimestamp;
-        }
+        [[nodiscard]] auto elapsed() const noexcept { return std::chrono::system_clock::now() - m_start_timestamp; }
 
         /// @brief Get the nesting depth of this scope log
         /// @return Depth level (0 for top-level scope)
-        [[nodiscard]] size_t depth() const noexcept
-        {
-            return scopeDepth;
-        }
+        [[nodiscard]] size_t depth() const noexcept { return m_scope_depth; }
 
         /// @brief Get source location of this scope log
         /// @return std::source_location instance
-        [[nodiscard]] const std::source_location& location() const noexcept
-        {
-            return sourceLocation;
-        }
+        [[nodiscard]] const std::source_location& location() const noexcept { return m_location; }
 
         /// @brief Get optional user message attached to scope log
         /// @return Message string
-        [[nodiscard]] std::string_view message() const noexcept
-        {
-            return scopeMessage;
-        }
+        [[nodiscard]] std::string_view name() const noexcept { return m_scope_name; }
 
         /// @brief Construct a ScopedDebugLog with optional message and location
         /// @param msg Custom scope label or context message
         /// @param sl Source location (defaults to caller site)
-        explicit ScopedDebugLog(std::string_view msg = "",
-                                const std::source_location& sl = std::source_location::current())
-            : sourceLocation(sl),
-              startTimestamp(std::chrono::system_clock::now()),
-              scopeMessage(msg),
-              scopeDepth(current_depth()++)
-        {
-        }
-
-        /// @brief Construct a ScopedDebugLog with custom callback, optional message, and location
-        /// @param callback Callback executed on destruction receiving this ScopedDebugLog
-        /// @param msg Custom scope label or context message
-        /// @param sl Source location (defaults to caller site)
-        explicit ScopedDebugLog(std::function<void(const ScopedDebugLog&)>&& callback,
-                                std::string_view msg = "",
-                                const std::source_location& sl = std::source_location::current())
-            : mCallback(std::move(callback)),
-              sourceLocation(sl),
-              startTimestamp(std::chrono::system_clock::now()),
-              scopeMessage(msg),
-              scopeDepth(current_depth()++)
+        explicit ScopedDebugLog(std::string_view sn, const std::source_location& sl = std::source_location::current())
+            : m_location(sl)
+            , m_start_timestamp(std::chrono::system_clock::now())
+            , m_scope_name(sn)
+            , m_scope_depth(current_depth()++)
         {
         }
 
@@ -148,32 +115,82 @@ namespace siddiqsoft
         /// @brief Destructor triggers callbacks and updates depth counter
         ~ScopedDebugLog() noexcept
         {
-            if (current_depth() > 0)
-            {
+            if (current_depth() > 0) {
                 --current_depth();
             }
 
-            try
-            {
-                if (mCallback)
-                {
-                    mCallback(*this);
-                }
-                else
-                {
-                    std::lock_guard<std::mutex> lock(global_mutex());
-                    auto& gcb = global_callback_storage();
-                    if (gcb)
-                    {
-                        gcb(*this);
-                    }
-                }
-            }
-            catch (...)
-            {
-                // Swallow exceptions to preserve noexcept warranty
-            }
+#if defined(DEBUG) || defined(_DEBUG)
+            auto        us = std::chrono::duration_cast<std::chrono::microseconds>(elapsed()).count();
+            std::string indent(m_scope_depth * 2, ' ');
+
+            std::println(std::cerr,
+                         "{}{}{} - COMPLETED - time:{}{}us{}",
+                         indent,
+                         BLU,
+                         m_scope_name.empty() ? m_location.file_name() : m_scope_name,
+                         GRN,
+                         us,
+                         NOC);
+#endif
         }
+
+
+        template <typename... Args>
+        void warn(std::format_string<Args...> fmt, Args&&... args)
+        {
+            std::string indent(m_scope_depth * 2, ' ');
+            std::println(std::cerr,
+                         "{}{}{} - {}{}",
+                         indent,
+                         YLW,
+                         m_scope_name.empty() ? m_location.file_name() : m_scope_name,
+                         std::format(fmt, std::forward<Args>(args)...),
+                         NOC);
+        }
+
+        template <typename... Args>
+        void err(std::format_string<Args...> fmt, Args&&... args)
+        {
+            std::string indent(m_scope_depth * 2, ' ');
+            std::println(std::cerr,
+                         "{}{}{} - {}{}",
+                         indent,
+                         RED,
+                         m_scope_name.empty() ? m_location.file_name() : m_scope_name,
+                         std::format(fmt, std::forward<Args>(args)...),
+                         NOC);
+        }
+
+        void exp(const std::exception& e)
+        {
+            std::string indent(m_scope_depth * 2, ' ');
+            std::println(std::cerr,
+                         "{}{}{} - {}{}{} - {}{}",
+                         indent,
+                         RED,
+                         m_scope_name.empty() ? m_location.file_name() : m_scope_name,
+                         BOLD,
+                         typeid(e).name(),
+                         NOTBOLD,
+                         e.what(),
+                         NOC);
+        }
+
+        template <typename... Args>
+        void msg(std::format_string<Args...> fmt, Args&&... args)
+        {
+#if defined(DEBUG) || defined(_DEBUG)
+            std::string indent(m_scope_depth * 2, ' ');
+            std::println(std::cerr,
+                         "{}{}{} - {}{}",
+                         indent,
+                         NOC,
+                         m_scope_name.empty() ? m_location.file_name() : m_scope_name,
+                         std::format(fmt, std::forward<Args>(args)...),
+                         NOC);
+#endif
+        }
+
 
         /// @brief Format scope log as string representation
         /// @tparam charT Character type (default char)
@@ -181,32 +198,28 @@ namespace siddiqsoft
         template <typename charT = char>
         [[nodiscard]] auto to_string() const
         {
-            if constexpr (std::is_same_v<charT, char>)
-            {
-                auto us = std::chrono::duration_cast<std::chrono::microseconds>(elapsed()).count();
-                std::string indent(scopeDepth * 2, ' ');
-                if (scopeMessage.empty())
-                {
+            if constexpr (std::is_same_v<charT, char>) {
+                auto        us = std::chrono::duration_cast<std::chrono::microseconds>(elapsed()).count();
+                std::string indent(m_scope_depth * 2, ' ');
+                if (m_scope_name.empty()) {
                     return std::format("{}[{}:{}] {} took {}us",
                                        indent,
-                                       sourceLocation.file_name(),
-                                       sourceLocation.line(),
-                                       sourceLocation.function_name(),
+                                       m_location.file_name(),
+                                       m_location.line(),
+                                       m_location.function_name(),
                                        us);
                 }
-                else
-                {
+                else {
                     return std::format("{}[{}:{}] {} ({}) took {}us",
                                        indent,
-                                       sourceLocation.file_name(),
-                                       sourceLocation.line(),
-                                       sourceLocation.function_name(),
-                                       scopeMessage,
+                                       m_location.file_name(),
+                                       m_location.line(),
+                                       m_location.function_name(),
+                                       m_scope_name,
                                        us);
                 }
             }
-            else
-            {
+            else {
                 static_assert(std::is_same_v<charT, char>, "ScopedDebugLog supports char formatting");
             }
         }
@@ -219,38 +232,12 @@ namespace siddiqsoft
         }
 
     private:
-        static std::mutex& global_mutex()
-        {
-            static std::mutex mtx;
-            return mtx;
-        }
-
-        static std::function<void(const ScopedDebugLog&)>& global_callback_storage()
-        {
-            static std::function<void(const ScopedDebugLog&)> callback;
-            return callback;
-        }
-
-        std::function<void(const ScopedDebugLog&)> mCallback {};
-        std::source_location sourceLocation;
-        std::chrono::system_clock::time_point startTimestamp;
-        std::string scopeMessage {};
-        size_t scopeDepth {0};
+        std::source_location                  m_location;
+        std::chrono::system_clock::time_point m_start_timestamp;
+        std::string                           m_scope_name {};
+        size_t                                m_scope_depth {0};
     };
 
-    /// @brief Aliases for backward compatibility
-    using scopelog = ScopedDebugLog;
-    using ScopeLog = ScopedDebugLog;
 } // namespace siddiqsoft
-
-template <class charT>
-struct std::formatter<siddiqsoft::ScopedDebugLog, charT> : std::formatter<basic_string_view<charT>, charT>
-{
-    template <class FC>
-    auto format(const siddiqsoft::ScopedDebugLog& sl, FC& ctx) const
-    {
-        return std::formatter<basic_string_view<charT>, charT>::format(sl.to_string<charT>(), ctx);
-    }
-};
 
 #endif // SIDDIQSOFT_SCOPEDDEBUGLOG_HPP
