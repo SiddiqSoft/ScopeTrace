@@ -1,6 +1,6 @@
 # ScopeTrace
 
-![](https://dev.azure.com/siddiqsoft/siddiqsoft/_apis/build/status%2FSiddiqSoft.ScopeTrace?repoName=SiddiqSoft%2FScopeTrace&branchName=dev)
+![](https://dev.azure.com/siddiqsoft/siddiqsoft/_apis/build/status%2FSiddiqSoft.ScopeTrace?repoName=SiddiqSoft%2FScopeTrace&branchName=master)
 ![](https://img.shields.io/nuget/v/SiddiqSoft.ScopeTrace)
 ![](https://img.shields.io/github/v/tag/SiddiqSoft/ScopeTrace)
 ![](https://img.shields.io/azure-devops/tests/siddiqsoft/siddiqsoft/34)
