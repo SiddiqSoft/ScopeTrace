@@ -3,21 +3,21 @@
 ```cpp
 #include <iostream>
 #include <thread>
-#include <siddiqsoft/scopelog.hpp>
+#include <siddiqsoft/ScopedDebugLog.hpp>
 
 void worker()
 {
-    siddiqsoft::scopelog scope("worker");
+    siddiqsoft::ScopedDebugLog scope("worker");
     std::this_thread::sleep_for(std::chrono::milliseconds(10));
 }
 
 int main()
 {
-    siddiqsoft::scopelog::set_global_callback([](const siddiqsoft::scopelog& log) {
+    siddiqsoft::ScopedDebugLog::set_global_callback([](const siddiqsoft::ScopedDebugLog& log) {
         std::cout << log << std::endl;
     });
 
-    siddiqsoft::scopelog scope("main");
+    siddiqsoft::ScopedDebugLog scope("main");
     worker();
     return 0;
 }

@@ -1,20 +1,21 @@
-# `scopelog` API Reference
+# `ScopedDebugLog` API Reference
 
-Defined in `<siddiqsoft/scopelog.hpp>`
+Defined in `<siddiqsoft/ScopedDebugLog.hpp>`
 
 ```cpp
 namespace siddiqsoft {
-    struct scopelog;
-    using ScopeLog = scopelog;
+    struct ScopedDebugLog;
+    using scopelog = ScopedDebugLog;
+    using ScopeLog = ScopedDebugLog;
 }
 ```
 
 ## Public Constructors
 
-### `scopelog(std::string_view msg = "", const std::source_location& sl = std::source_location::current())`
+### `ScopedDebugLog(std::string_view msg = "", const std::source_location& sl = std::source_location::current())`
 Constructs a scope logger capturing current time and location.
 
-### `scopelog(std::function<void(const scopelog&)>&& callback, std::string_view msg = "", const std::source_location& sl = std::source_location::current())`
+### `ScopedDebugLog(std::function<void(const ScopedDebugLog&)>&& callback, std::string_view msg = "", const std::source_location& sl = std::source_location::current())`
 Constructs a scope logger with a per-instance destruction callback.
 
 ## Member Functions
@@ -36,7 +37,7 @@ Formats scope log as `std::string`.
 
 ## Static Methods
 
-### `set_global_callback(std::function<void(const scopelog&)> cb)`
+### `set_global_callback(std::function<void(const ScopedDebugLog&)> cb)`
 Registers global thread-safe callback.
 
 ### `reset_global_callback()`

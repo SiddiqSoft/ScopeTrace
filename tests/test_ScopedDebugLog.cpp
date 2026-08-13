@@ -6,16 +6,16 @@
 #include <thread>
 #include <vector>
 
-#include "../include/siddiqsoft/scopelog.hpp"
+#include "../include/siddiqsoft/ScopedDebugLog.hpp"
 
-TEST(ScopeLogTest, BasicCallbackExecution)
+TEST(ScopedDebugLogTest, BasicCallbackExecution)
 {
     bool callbackInvoked = false;
     std::string capturedFunc {};
     std::string capturedMsg {};
 
     {
-        siddiqsoft::scopelog scope([&](const siddiqsoft::scopelog& log) {
+        siddiqsoft::ScopedDebugLog scope([&](const siddiqsoft::ScopedDebugLog& log) {
             callbackInvoked = true;
             capturedFunc = log.location().function_name();
             capturedMsg = log.message();
@@ -29,17 +29,17 @@ TEST(ScopeLogTest, BasicCallbackExecution)
     EXPECT_FALSE(capturedFunc.empty());
 }
 
-TEST(ScopeLogTest, ScopeDepthNesting)
+TEST(ScopedDebugLogTest, ScopeDepthNesting)
 {
     std::vector<size_t> depths;
 
     {
-        siddiqsoft::scopelog outer([&](const siddiqsoft::scopelog& log) {
+        siddiqsoft::ScopedDebugLog outer([&](const siddiqsoft::ScopedDebugLog& log) {
             depths.push_back(log.depth());
         }, "Outer");
 
         {
-            siddiqsoft::scopelog inner([&](const siddiqsoft::scopelog& log) {
+            siddiqsoft::ScopedDebugLog inner([&](const siddiqsoft::ScopedDebugLog& log) {
                 depths.push_back(log.depth());
             }, "Inner");
 
@@ -54,39 +54,39 @@ TEST(ScopeLogTest, ScopeDepthNesting)
     EXPECT_EQ(0, depths[1]); // Outer destroyed second
 }
 
-TEST(ScopeLogTest, GlobalCallback)
+TEST(ScopedDebugLogTest, GlobalCallback)
 {
     int globalCount = 0;
     std::string lastMessage {};
 
-    siddiqsoft::scopelog::set_global_callback([&](const siddiqsoft::scopelog& log) {
+    siddiqsoft::ScopedDebugLog::set_global_callback([&](const siddiqsoft::ScopedDebugLog& log) {
         globalCount++;
         lastMessage = log.message();
     });
 
     {
-        siddiqsoft::scopelog scope1("GlobalScope1");
+        siddiqsoft::ScopedDebugLog scope1("GlobalScope1");
     }
 
     {
-        siddiqsoft::scopelog scope2("GlobalScope2");
+        siddiqsoft::ScopedDebugLog scope2("GlobalScope2");
     }
 
     EXPECT_EQ(2, globalCount);
     EXPECT_EQ("GlobalScope2", lastMessage);
 
-    siddiqsoft::scopelog::reset_global_callback();
+    siddiqsoft::ScopedDebugLog::reset_global_callback();
 
     {
-        siddiqsoft::scopelog scope3("GlobalScope3");
+        siddiqsoft::ScopedDebugLog scope3("GlobalScope3");
     }
 
     EXPECT_EQ(2, globalCount); // Unchanged after reset
 }
 
-TEST(ScopeLogTest, FormattingAndStream)
+TEST(ScopedDebugLogTest, FormattingAndStream)
 {
-    siddiqsoft::scopelog scope([&](const siddiqsoft::scopelog& log) {
+    siddiqsoft::ScopedDebugLog scope([&](const siddiqsoft::ScopedDebugLog& log) {
         std::string str = log.to_string();
         EXPECT_TRUE(str.contains("StreamScope"));
         EXPECT_TRUE(str.contains("took"));
@@ -102,13 +102,13 @@ TEST(ScopeLogTest, FormattingAndStream)
     }, "StreamScope");
 }
 
-TEST(ScopeLogTest, ExceptionSafety)
+TEST(ScopedDebugLogTest, ExceptionSafety)
 {
     bool ranCallback = false;
 
     try
     {
-        siddiqsoft::scopelog scope([&](const siddiqsoft::scopelog&) {
+        siddiqsoft::ScopedDebugLog scope([&](const siddiqsoft::ScopedDebugLog&) {
             ranCallback = true;
         }, "ExceptionScope");
 

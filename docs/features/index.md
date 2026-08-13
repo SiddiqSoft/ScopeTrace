@@ -1,6 +1,6 @@
 # Features Overview
 
-`siddiqsoft::scopelog` provides a rich set of capabilities designed for modern C++ application tracing, performance profiling, and scope execution logging.
+`siddiqsoft::ScopedDebugLog` provides a rich set of capabilities designed for modern C++ application tracing, performance profiling, and scope execution logging.
 
 ## Core Capabilities
 

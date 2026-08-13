@@ -7,7 +7,7 @@ if(${${PROJECT_NAME}_BUILD_TESTS})
 
     target_sources(${TESTPROJ}
                     PRIVATE
-                    ${PROJECT_SOURCE_DIR}/tests/test_scopelog.cpp)
+                    ${PROJECT_SOURCE_DIR}/tests/test_ScopedDebugLog.cpp)
 
     include(GoogleTest)
     enable_testing()
@@ -17,7 +17,7 @@ if(${${PROJECT_NAME}_BUILD_TESTS})
                             PRIVATE
                             $<$<CXX_COMPILER_ID:MSVC>:/std:c++latest> )
 
-    target_link_libraries(${TESTPROJ} PRIVATE GTest::gtest_main scopelog)
+    target_link_libraries(${TESTPROJ} PRIVATE GTest::gtest_main ScopedDebugLog)
 
     gtest_discover_tests(${TESTPROJ} XML_OUTPUT_DIR "${PROJECT_SOURCE_DIR}/tests/results")
 

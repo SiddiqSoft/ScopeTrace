@@ -1,18 +1,18 @@
 # Project Dependencies
 
-This document is automatically generated from `CMakeLists.txt` files for `scopelog`.
+This document is automatically generated from `CMakeLists.txt` files for `ScopedDebugLog`.
 
 ## Dependency Diagram
 
 ```mermaid
 graph TD
-    scopelog["scopelog::scopelog"]
+    ScopedDebugLog["ScopedDebugLog::ScopedDebugLog"]
 
     subgraph Test["Test Dependencies (Optional)"]
         GOOGLETEST["googletest v1.17.0"]
     end
 
-    scopelog -. "BUILD_TESTS=ON" .-> GOOGLETEST
+    ScopedDebugLog -. "BUILD_TESTS=ON" .-> GOOGLETEST
 ```
 
 ## Dependency Breakdown

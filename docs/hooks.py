@@ -30,7 +30,7 @@ def on_config(config, **kwargs):
     # 3. Automatically regenerate dependencies documentation from CMakeLists.txt
     try:
         root_dir = Path(__file__).resolve().parent.parent
-        script_path = root_dir / "scripts" / "generate_dependencies_md.py"
+        script_path = root_dir / "docs" / "generate_dependencies_md.py"
         if script_path.exists():
             subprocess.run([sys.executable, str(script_path), "--root", str(root_dir)], check=True)
     except Exception as e:

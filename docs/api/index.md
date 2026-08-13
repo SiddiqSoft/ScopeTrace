@@ -1,5 +1,5 @@
 # API Reference Index
 
-API reference for `siddiqsoft::scopelog`:
+API reference for `siddiqsoft::ScopedDebugLog`:
 
-- [**`scopelog` Struct**](scopelog.md): Full method signatures, member types, and usage code examples.
+- [**`ScopedDebugLog` Struct**](ScopedDebugLog.md): Full method signatures, member types, and usage code examples.

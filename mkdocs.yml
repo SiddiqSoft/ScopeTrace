@@ -1,9 +1,9 @@
-site_name: "scopelog"
+site_name: "ScopedDebugLog"
 site_description: "Modern C++ RAII scope logger library with std::source_location, duration tracking, and custom sinks"
 site_author: "Siddiq Software LLC"
-site_url: "https://SiddiqSoft.github.io/scopelog/"
-repo_url: "https://github.com/SiddiqSoft/scopelog"
-repo_name: "SiddiqSoft/scopelog"
+site_url: "https://SiddiqSoft.github.io/ScopedDebugLog/"
+repo_url: "https://github.com/SiddiqSoft/ScopedDebugLog"
+repo_name: "SiddiqSoft/ScopedDebugLog"
 edit_uri: "edit/main/docs/"
 
 hooks:
@@ -88,7 +88,7 @@ nav:
       - NuGet Package: integration/nuget.md
   - API Reference:
       - Overview: api/index.md
-      - scopelog Struct: api/scopelog.md
+      - ScopedDebugLog Struct: api/ScopedDebugLog.md
   - Examples:
       - Overview: examples/index.md
       - Basic Usage: examples/basic_usage.md

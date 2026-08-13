@@ -2,20 +2,20 @@
 
 ## Using CPM.cmake (Recommended)
 
-Add `scopelog` to your CMake project using CPM.cmake:
+Add `ScopedDebugLog` to your CMake project using CPM.cmake:
 
 ```cmake
 include(CPM.cmake)
 
-CPMAddPackage("gh:SiddiqSoft/scopelog#v1.0.0")
+CPMAddPackage("gh:SiddiqSoft/ScopedDebugLog#v1.0.0")
 
-target_link_libraries(your_target PRIVATE siddiqsoft::scopelog)
+target_link_libraries(your_target PRIVATE siddiqsoft::ScopedDebugLog)
 ```
 
 ## Using Git Submodules
 
 ```cmake
-add_subdirectory(third_party/scopelog)
+add_subdirectory(third_party/ScopedDebugLog)
 
-target_link_libraries(your_target PRIVATE siddiqsoft::scopelog)
+target_link_libraries(your_target PRIVATE siddiqsoft::ScopedDebugLog)
 ```

@@ -1,11 +1,11 @@
-# scopelog
+# ScopedDebugLog
 
-[![Build Status](https://dev.azure.com/siddiqsoft/siddiqsoft/_apis/build/status/SiddiqSoft.scopelog?branchName=main)](https://dev.azure.com/siddiqsoft/siddiqsoft/_build/latest?definitionId=1)
-[![GitHub release](https://img.shields.io/github/v/release/SiddiqSoft/scopelog)](https://github.com/SiddiqSoft/scopelog/releases)
-[![NuGet](https://img.shields.io/nuget/v/SiddiqSoft.scopelog)](https://www.nuget.org/packages/SiddiqSoft.scopelog/)
-[![License](https://img.shields.io/github/license/SiddiqSoft/scopelog)](https://github.com/SiddiqSoft/scopelog/blob/main/LICENSE)
+[![Build Status](https://dev.azure.com/siddiqsoft/siddiqsoft/_apis/build/status/SiddiqSoft.ScopedDebugLog?branchName=main)](https://dev.azure.com/siddiqsoft/siddiqsoft/_build/latest?definitionId=1)
+[![GitHub release](https://img.shields.io/github/v/release/SiddiqSoft/ScopedDebugLog)](https://github.com/SiddiqSoft/ScopedDebugLog/releases)
+[![NuGet](https://img.shields.io/nuget/v/SiddiqSoft.ScopedDebugLog)](https://www.nuget.org/packages/SiddiqSoft.ScopedDebugLog/)
+[![License](https://img.shields.io/github/license/SiddiqSoft/ScopedDebugLog)](https://github.com/SiddiqSoft/ScopedDebugLog/blob/main/LICENSE)
 
-`siddiqsoft::scopelog` is a modern, lightweight, header-only C++23 RAII scope logger designed for performance profiling and scope execution tracing.
+`siddiqsoft::ScopedDebugLog` is a modern, lightweight, header-only C++23 RAII scope logger designed for performance profiling and scope execution tracing.
 
 - **RAII Scope Timing**: Automatic duration measurement upon scope exit.
 - **`std::source_location` Integration**: Capture file, line, and function automatically.
@@ -19,11 +19,11 @@
 
 For full detailed documentation, integration guides, and API specifications, visit our MkDocs documentation site:
 
-- [**Features Overview**](https://SiddiqSoft.github.io/scopelog/features/)
-- [**Integration & CMake Guide**](https://SiddiqSoft.github.io/scopelog/integration/cmake/)
-- [**Dependency Graph**](https://SiddiqSoft.github.io/scopelog/integration/dependencies/)
-- [**API Reference**](https://SiddiqSoft.github.io/scopelog/api/)
-- [**Examples & Walkthroughs**](https://SiddiqSoft.github.io/scopelog/examples/)
+- [**Features Overview**](https://SiddiqSoft.github.io/ScopedDebugLog/features/)
+- [**Integration & CMake Guide**](https://SiddiqSoft.github.io/ScopedDebugLog/integration/cmake/)
+- [**Dependency Graph**](https://SiddiqSoft.github.io/ScopedDebugLog/integration/dependencies/)
+- [**API Reference**](https://SiddiqSoft.github.io/ScopedDebugLog/api/)
+- [**Examples & Walkthroughs**](https://SiddiqSoft.github.io/ScopedDebugLog/examples/)
 
 ---
 
@@ -31,19 +31,19 @@ For full detailed documentation, integration guides, and API specifications, vis
 
 ```cpp
 #include <iostream>
-#include <siddiqsoft/scopelog.hpp>
+#include <siddiqsoft/ScopedDebugLog.hpp>
 
 int main()
 {
     // Register global scope logging handler
-    siddiqsoft::scopelog::set_global_callback([](const siddiqsoft::scopelog& log) {
+    siddiqsoft::ScopedDebugLog::set_global_callback([](const siddiqsoft::ScopedDebugLog& log) {
         std::cout << log << std::endl;
     });
 
-    siddiqsoft::scopelog scope("main");
+    siddiqsoft::ScopedDebugLog scope("main");
 
     {
-        siddiqsoft::scopelog inner("sub_task");
+        siddiqsoft::ScopedDebugLog inner("sub_task");
         // Perform work...
     }
     return 0;
@@ -59,12 +59,12 @@ Integrate via [CPM.cmake](https://github.com/cpm-cmake/CPM.cmake):
 ```cmake
 include(CPM.cmake)
 
-CPMAddPackage("gh:SiddiqSoft/scopelog#v1.0.0")
+CPMAddPackage("gh:SiddiqSoft/ScopedDebugLog#v1.0.0")
 
-target_link_libraries(your_target PRIVATE siddiqsoft::scopelog)
+target_link_libraries(your_target PRIVATE siddiqsoft::ScopedDebugLog)
 ```
 
-For more details, see the [CMake & Integration Documentation](https://SiddiqSoft.github.io/scopelog/integration/cmake/).
+For more details, see the [CMake & Integration Documentation](https://SiddiqSoft.github.io/ScopedDebugLog/integration/cmake/).
 
 ---
 
@@ -80,10 +80,10 @@ For more details, see the [CMake & Integration Documentation](https://SiddiqSoft
 cmake --preset Darwin
 
 # Build test binaries
-cmake --build --preset Darwin
+cmake --build build/Darwin
 
 # Execute unit tests
-ctest --preset Darwin
+ctest --test-dir build/Darwin
 ```
 
 ---
