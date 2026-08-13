@@ -65,11 +65,7 @@ install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/SiddiqSoft.${PROJECT_NAME}.natvis
 
 # ____________________________________
 # Dependencies
-# Here we explicitly declare that we depend on the nlohmann_json package and that
-# the client will only need to depend on our file where the nlohmann_json will
-# automatically included.
-cpmaddpackage("gh:siddiqsoft/RunOnEnd#1.4.5")
-target_link_libraries(${PROJECT_NAME} INTERFACE RunOnEnd::RunOnEnd)
+
 
 # Testing configuration
 if(${PROJECT_NAME}_BUILD_TESTS AND EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/tests" AND IS_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/tests")
