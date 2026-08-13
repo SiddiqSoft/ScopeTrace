@@ -9,25 +9,32 @@
 
 void compute()
 {
-    siddiqsoft::ScopeTrace scope("compute_operation");
-    // Code block execution...
-} // Destruction logs completion status and elapsed duration automatically in debug builds
+    // Defaults scope name to plain function name ("compute")
+    siddiqsoft::ScopeTrace scope;
+    
+    // Explicit nested scope ("compute-stage1")
+    auto sub = scope.nest("stage1");
+    
+    sub.info("Processing stage 1 payload...");
+} // Destructors log completion status and elapsed duration automatically in debug builds
 ```
 
-## Source Location
+## Source Location & Function Name Extraction
 
 Using `std::source_location::current()`, `ScopeTrace` captures caller details automatically:
 - Source file path (`location().file_name()`)
 - Line number (`location().line()`)
 - Enclosing function signature (`location().function_name()`)
 
-## Nesting Depth Tracking
+`ScopeTrace` also includes built-in parsing (`extract_func_name()` / `func_name()`) to extract clean plain function names matching `__func__` from full signature strings.
 
-`ScopeTrace` automatically tracks nested scopes using a thread-local counter (`current_depth()`), producing formatted visual indentation for hierarchical log trees:
+## Nesting Depth & ISO 8601 Timestamps
+
+`ScopeTrace` automatically tracks nested scopes using a thread-local counter (`current_depth()`), producing formatted visual indentation for hierarchical log trees. Each output line is prefixed with an ISO 8601 UTC timestamp (`current_timestamp()`):
 
 ```text
-[main.cpp:12] compute_operation took 150us
-  [main.cpp:18] sub_stage took 40us
+2026-08-13T23:16:00.519049Z   compute - COMPLETED - time:150us
+2026-08-13T23:16:00.519100Z     compute-stage1 - COMPLETED - time:40us
 ```
 
 ## In-Scope Logging Sinks
@@ -35,6 +42,7 @@ Using `std::source_location::current()`, `ScopeTrace` captures caller details au
 Within an active scope, you can output formatted contextual messages to `std::cerr` with depth indentation and ANSI color coding:
 
 - **`scope.info("...")`**: Debug information (active in `DEBUG` / `_DEBUG` builds).
-- **`scope.warn("...")`**: Warning messages (colored yellow).
-- **`scope.err("...")`**: Error messages (colored red).
-- **`scope.exp(e)`**: Formatted exception log (colored bold red with exception type and `what()`).
+- **`scope.trace("...")`**: Trace diagnostic details (light gray, active in `DEBUG_TRACE` builds).
+- **`scope.warn("...")`**: Warning messages (colored yellow, active in all build modes).
+- **`scope.err("...")`**: Error messages (colored red, active in all build modes).
+- **`scope.exp(e)`**: Formatted exception log (colored bold red with exception type and `what()`, active in all build modes).

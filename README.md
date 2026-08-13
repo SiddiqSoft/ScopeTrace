@@ -10,8 +10,8 @@
 
 - **RAII Scope Timing**: Automatic duration measurement upon scope exit.
 - **`std::source_location` Integration**: Capture file, line, and function automatically.
-- **Nesting Level Tracking**: Indents nested scope execution trees dynamically using thread-local depth counter.
-- **Structured Scope Logging**: Specialized `info()`, `warn()`, `err()`, and `exp()` methods for formatted console logging with ANSI colors.
+- **Nesting Level Tracking**: Indents nested scope execution trees dynamically using thread-local depth counter (`current_depth()`) and `nest()` method.
+- **Structured Console Logging**: Specialized `info()`, `trace()`, `warn()`, `err()`, and `exp()` methods for formatted console logging with ANSI colors and ISO 8601 UTC timestamps.
 - **String Formatting & Stream Support**: Native `to_string()` formatting and `operator<<` stream insertion support.
 
 ---
@@ -51,7 +51,7 @@ How many of us have had to write
         siddiqsoft::ScopeTrace scope; // automatically defaults scope name to plain __func__ ("foo")
 
         try {
-            siddiqsoft::ScopeTrace inner("foo-Nested"); // explicit inner scope label
+            auto inner = scope.nest("Nested"); // explicit inner scope label ("foo-Nested")
 
             inner.info("From the inner scope line: {}", __LINE__);
             throw std::runtime_error(std::format("Deliberate error from line: {}", __LINE__));
@@ -64,18 +64,18 @@ How many of us have had to write
 
     === "ScopeTrace output in `DEBUG` mode"
 
-        Note the nesting and color output
+        Note the ISO 8601 UTC timestamp, nesting, and color output
         ```
-        foo-Nested - From the inner scope line: 66
-        foo-Nested - COMPLETED - time:71us
-        foo - St13runtime_error - Deliberate error from line: 67
-        foo - COMPLETED - time:138us
+        2026-08-13T23:16:00.519049Z    foo-Nested - From the inner scope line: 56
+        2026-08-13T23:16:00.519100Z    foo-Nested - COMPLETED - time:71us
+        2026-08-13T23:16:00.519120Z  foo - St13runtime_error - Deliberate error from line: 57
+        2026-08-13T23:16:00.519150Z  foo - COMPLETED - time:138us
         ```
 
     === "ScopeTrace output in `RELEASE` mode"
 
         ```
-        foo - St13runtime_error - Deliberate error from line: 67
+        2026-08-13T23:16:00.519120Z  foo - St13runtime_error - Deliberate error from line: 57
         ```
 
 ---

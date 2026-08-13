@@ -12,9 +12,9 @@
 
 ## Key Highlights
 
-- **Zero-Boilerplate Tracing**: Automatically record function name, file path, and line numbers using `std::source_location`.
-- **Nesting Level Tracking**: Indents nested scope execution trees dynamically using thread-local scope depth.
-- **Structured Console Logging**: Methods for `info()`, `warn()`, `err()`, and `exp()` with depth indentation and ANSI colors.
+- **Zero-Boilerplate Tracing**: Automatically record function name, file path, and line numbers using `std::source_location` and auto-extracted `__func__` names.
+- **Nesting Level Tracking**: Indents nested scope execution trees dynamically using thread-local scope depth and `nest()` scope creation.
+- **Structured Console Logging**: Specialized logging methods for `info()`, `trace()`, `warn()`, `err()`, and `exp()` with depth indentation, ANSI colors, and ISO 8601 UTC timestamps.
 - **C++23 Native Support**: Leverages `std::format`, `std::println`, and `std::ostream`.
 
 ---
