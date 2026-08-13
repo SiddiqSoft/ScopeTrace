@@ -1,0 +1,82 @@
+# SiddiqSoft clang-format
+Language: Cpp
+
+AccessModifierOffset: -4
+
+AlignAfterOpenBracket: Align
+AlignConsecutiveDeclarations: AcrossEmptyLines
+AlignOperands: AlignAfterOperator
+AlignTrailingComments: true
+AlignConsecutiveAssignments: AcrossEmptyLines
+AlignEscapedNewlines: DontAlign
+AlignConsecutiveMacros: AcrossEmptyLines
+
+AllowAllArgumentsOnNextLine: true
+AllowShortBlocksOnASingleLine: Empty
+AllowShortFunctionsOnASingleLine: Inline
+AllowShortIfStatementsOnASingleLine: true
+AllowShortLoopsOnASingleLine: false
+AlwaysBreakAfterDefinitionReturnType: None
+AlwaysBreakBeforeMultilineStrings : false
+AllowAllParametersOfDeclarationOnNextLine : false
+AllowShortCaseLabelsOnASingleLine : true
+AllowShortLambdasOnASingleLine: Inline
+AlwaysBreakTemplateDeclarations: Yes
+
+BinPackArguments : false
+BinPackParameters : false
+
+BreakBeforeBraces: Custom
+BraceWrapping:
+  AfterCaseLabel: false
+  AfterClass: true
+  AfterControlStatement: MultiLine
+  AfterEnum: true
+  AfterFunction: true
+  AfterNamespace: true
+  AfterStruct: true
+  AfterUnion: true
+  BeforeCatch: true
+  BeforeElse: true
+  BeforeLambdaBody: false
+  BeforeWhile: false
+  IndentBraces: false
+  SplitEmptyFunction: true
+  SplitEmptyRecord: true
+
+BasedOnStyle: WebKit
+BreakBeforeTernaryOperators : true
+BreakBeforeBinaryOperators : None
+BreakInheritanceList : BeforeComma
+BreakBeforeConceptDeclarations: true
+
+ContinuationIndentWidth : 8
+ColumnLimit: 132
+Cpp11BracedListStyle: true
+IndentCaseLabels: true
+IndentPPDirectives: None
+IndentWidth: 4
+IndentRequires: true
+PointerAlignment: Left
+SpaceAfterCStyleCast: false
+SpaceBeforeAssignmentOperators: true
+SpaceBeforeParens: ControlStatements
+SpaceInEmptyParentheses: false
+SpacesInCStyleCastParentheses: false
+SpacesInSquareBrackets: false
+MaxEmptyLinesToKeep: 2
+NamespaceIndentation: All
+CompactNamespaces : false
+FixNamespaceComments : true
+Standard: Latest
+TabWidth: 4
+UseTab: Never
+SortIncludes: false
+SortUsingDeclarations: false
+IncludeBlocks : Preserve
+ReflowComments:  true
+
+ConstructorInitializerAllOnOneLineOrOnePerLine: false
+ConstructorInitializerIndentWidth: 4
+SpacesInParentheses: false
+KeepEmptyLinesAtTheStartOfBlocks : false

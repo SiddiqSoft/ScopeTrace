@@ -1,0 +1,95 @@
+site_name: "scopelog"
+site_description: "Modern C++ RAII scope logger library with std::source_location, duration tracking, and custom sinks"
+site_author: "Siddiq Software LLC"
+site_url: "https://SiddiqSoft.github.io/scopelog/"
+repo_url: "https://github.com/SiddiqSoft/scopelog"
+repo_name: "SiddiqSoft/scopelog"
+edit_uri: "edit/main/docs/"
+
+hooks:
+  - docs/hooks.py
+
+extra:
+  version: "0.0.0-dev"
+
+theme:
+  name: material
+  logo: assets/logo.png
+  favicon: assets/logo.png
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  features:
+    - navigation.tabs
+    - navigation.tabs.sticky
+    - navigation.sections
+    - navigation.expand
+    - navigation.path
+    - navigation.top
+    - navigation.footer
+    - navigation.tracking
+    - search.suggest
+    - search.highlight
+    - search.share
+    - content.code.copy
+    - content.code.annotate
+
+extra_css:
+  - css/custom.css
+
+extra_javascript:
+  - https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - md_in_html
+  - tables
+  - toc:
+      permalink: true
+  - pymdownx.details
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.tabbed:
+      alternate_style: true
+
+nav:
+  - Home: index.md
+  - Features:
+      - Overview: features/index.md
+      - Scope Logging: features/scope_logging.md
+      - Quick Reference: features/quick_reference.md
+      - Security: features/security.md
+  - Integration:
+      - Overview: integration/index.md
+      - CMake & CPM: integration/cmake.md
+      - Dependencies Diagram: integration/dependencies.md
+      - NuGet Package: integration/nuget.md
+  - API Reference:
+      - Overview: api/index.md
+      - scopelog Struct: api/scopelog.md
+  - Examples:
+      - Overview: examples/index.md
+      - Basic Usage: examples/basic_usage.md
+  - License: license.md

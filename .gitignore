@@ -1,0 +1,37 @@
+# MkDocs build directory and virtual environment
+site/
+.venv/
+docs/doxygen/
+__pycache__/
+*.pyc
+
+
+# Build outputs
+build/
+install/
+out/
+_deps/
+CMakeFiles/
+Testing/
+CMakeCache.txt
+**/*.cmake
+!pack/*.cmake
+**/*.vcxproj
+**/*.sln
+**/Makefile
+Makefile
+lib/
+bin/
+.cpmcache/
+**/tests/results/**
+**/*.profraw
+**/.DS_Store
+
+# User-specific files
+*.rsuser
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.tcl
+*.userprefs

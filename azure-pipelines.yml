@@ -1,0 +1,112 @@
+# ============================================================================
+# Azure Pipelines Main Configuration Template
+# ============================================================================
+
+trigger:
+  branches:
+    include:
+      - main
+      - master
+      - development
+      - release/*
+  paths:
+    exclude:
+      - README.md
+      - .azure/*
+      - azure-pipelines.yml
+
+pr:
+  branches:
+    include:
+      - main
+      - release/*
+
+resources:
+  repositories:
+    - repository: self
+      type: git
+
+parameters:
+  - name: Architectures
+    type: stringList
+    default: [ x64 ]
+    values: [ x64, arm64 ]
+    displayName: "Architectures to build"
+
+  - name: Platforms
+    type: stringList
+    default: [ Windows, Linux ]
+    values: [ Windows, Linux, Darwin ]
+    displayName: "Platforms to build"
+
+  - name: Compilers_Windows
+    type: stringList
+    default: [ MSVC ]
+    values: [ MSVC ]
+    displayName: "Windows Compilers"
+
+  - name: Compilers_Linux
+    type: stringList
+    default: [ GCC, Clang ]
+    values: [ Clang, GCC ]
+    displayName: "Linux Compilers"
+
+  - name: BuildTypes
+    type: stringList
+    default: [ Release ]
+    values: [ Release, Debug ]
+    displayName: "Build Types"
+
+  - name: RunTests
+    type: boolean
+    default: true
+    displayName: "Run tests after build"
+
+  - name: PublishDocs
+    type: boolean
+    default: false
+    displayName: "Publish documentation site"
+
+variables:
+  ${{ if and(eq(parameters.PublishDocs, false), or(eq(variables['Build.SourceBranch'], 'refs/heads/main'), eq(variables['Build.SourceBranch'], 'refs/heads/master'))) }}:
+    PublishDocs: true
+  ${{ else }}:
+    PublishDocs: ${{ parameters.PublishDocs }}
+
+stages:
+  - stage: Windows
+    displayName: Windows Build & Test
+    condition: ${{ containsValue(parameters.Platforms, 'Windows') }}
+    dependsOn: []
+    jobs:
+      - template: .azure/az-build-windows.yml
+        parameters:
+          displayName: "Windows Build and Test"
+          architectures: ${{ parameters.Architectures }}
+          compilers: ${{ parameters.Compilers_Windows }}
+          buildTypes: ${{ parameters.BuildTypes }}
+          runTests: ${{ parameters.RunTests }}
+
+  - stage: Linux
+    displayName: Linux Build & Test
+    condition: ${{ containsValue(parameters.Platforms, 'Linux') }}
+    dependsOn: []
+    jobs:
+      - template: .azure/az-build-linux.yml
+        parameters:
+          displayName: "Linux Build and Test"
+          architectures: ${{ parameters.Architectures }}
+          compilers: ${{ parameters.Compilers_Linux }}
+          buildTypes: ${{ parameters.BuildTypes }}
+          runTests: ${{ parameters.RunTests }}
+
+  - stage: Publication
+    displayName: Publication
+    dependsOn:
+      - Windows
+      - Linux
+    condition: and(eq(${{ variables.PublishDocs }}, true), succeeded())
+    jobs:
+      - template: .azure/az-publish-docs.yml
+        parameters:
+          displayName: Publish Documentation Site
