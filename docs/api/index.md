@@ -1,5 +1,5 @@
 # API Reference Index
 
-API reference for `siddiqsoft::ScopedDebugLog`:
+API reference for `siddiqsoft::ScopeTrace`:
 
-- [**`ScopedDebugLog` Class**](ScopedDebugLog.md): Full method signatures, member types, and usage code examples.
+- [**`ScopeTrace` Class**](ScopeTrace.md): Full method signatures, member types, and usage code examples.

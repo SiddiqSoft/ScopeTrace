@@ -4,7 +4,7 @@
 
 ### Scope Instantiation
 ```cpp
-siddiqsoft::ScopedDebugLog scope("step_name");
+siddiqsoft::ScopeTrace scope("step_name");
 ```
 
 ### Structured Console Logging
@@ -44,5 +44,5 @@ auto duration = scope.elapsed();
 size_t level = scope.depth();
 
 // Current thread nesting depth counter
-size_t thread_depth = siddiqsoft::ScopedDebugLog::current_depth();
+size_t thread_depth = siddiqsoft::ScopeTrace::current_depth();
 ```

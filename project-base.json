@@ -7,7 +7,7 @@
             "description": "Base preset for all project configurations.",
             "cacheVariables": {
                 "CMAKE_CXX_STANDARD": "23",
-                "ScopedDebugLog_BUILD_TESTS": "ON",
+                "ScopeTrace_BUILD_TESTS": "ON",
                 "CI_BUILDID": "0.0.0"
             },
             "hidden": true

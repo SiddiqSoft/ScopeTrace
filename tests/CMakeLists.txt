@@ -7,7 +7,7 @@ if(${${PROJECT_NAME}_BUILD_TESTS})
 
     target_sources(${TESTPROJ}
                     PRIVATE
-                    ${PROJECT_SOURCE_DIR}/tests/test_ScopedDebugLog.cpp)
+                    ${PROJECT_SOURCE_DIR}/tests/test_ScopeTrace.cpp)
 
     if( CMAKE_BUILD_TYPE MATCHES [Dd][Ee][Bb][Uu][Gg])
         message(STATUS "Enable DEBUG pre-processor macros.. cmake_build_type:${CMAKE_BUILD_TYPE}")
@@ -22,7 +22,7 @@ if(${${PROJECT_NAME}_BUILD_TESTS})
                             PRIVATE
                             $<$<CXX_COMPILER_ID:MSVC>:/std:c++latest> )
 
-    target_link_libraries(${TESTPROJ} PRIVATE GTest::gtest_main ScopedDebugLog)
+    target_link_libraries(${TESTPROJ} PRIVATE GTest::gtest_main ${PROJECT_NAME})
 
     gtest_discover_tests(${TESTPROJ} XML_OUTPUT_DIR "${PROJECT_SOURCE_DIR}/tests/results")
 

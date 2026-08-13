@@ -1,26 +1,26 @@
-# `ScopedDebugLog` Class API Reference
+# `ScopeTrace` Class API Reference
 
-Header: `<siddiqsoft/ScopedDebugLog.hpp>`
+Header: `<siddiqsoft/ScopeTrace.hpp>`
 
 ```cpp
 namespace siddiqsoft {
-    class ScopedDebugLog;
+    class ScopeTrace;
 }
 ```
 
-`siddiqsoft::ScopedDebugLog` is a modern C++23 RAII scope logging utility that measures duration, tracks nesting levels, records source locations, and formats diagnostic messages.
+`siddiqsoft::ScopeTrace` is a modern C++23 RAII scope logging utility that measures duration, tracks nesting levels, records source locations, and formats diagnostic messages.
 
 ---
 
 ## Public Constructors & Destructor
 
-### `explicit ScopedDebugLog(std::string_view sn, const std::source_location& sl = std::source_location::current())`
+### `explicit ScopeTrace(std::string_view sn, const std::source_location& sl = std::source_location::current())`
 Constructs a scope logger with the specified scope name `sn` and current source location `sl`. Increments the thread-local nesting depth.
 
 - **`sn`**: Scope name or contextual identifier.
 - **`sl`**: Source location (defaults to `std::source_location::current()`).
 
-### `~ScopedDebugLog() noexcept`
+### `~ScopeTrace() noexcept`
 Destructor. Decrements the thread-local nesting depth. In debug builds (`DEBUG` / `_DEBUG`), logs a scope completion message with elapsed duration (in microseconds) to `std::cerr`.
 
 ### Copy & Move Operations
@@ -38,7 +38,7 @@ Accesses the thread-local scope depth counter. Returns a reference to the curren
 ## Accessor Member Functions
 
 ### `[[nodiscard]] auto elapsed() const noexcept`
-Calculates and returns the duration (`std::chrono::system_clock::duration`) elapsed since the `ScopedDebugLog` instance was constructed.
+Calculates and returns the duration (`std::chrono::system_clock::duration`) elapsed since the `ScopeTrace` instance was constructed.
 
 ### `[[nodiscard]] size_t depth() const noexcept`
 Returns the nesting depth index of this scope instance (`0` for top-level scopes).
@@ -72,5 +72,5 @@ In debug builds (`DEBUG` / `_DEBUG`), formats and outputs an informational messa
 ### `template <typename charT = char> [[nodiscard]] auto to_string() const`
 Formats the scope log as a string containing line indentation, source location, function name, scope name, and elapsed duration in microseconds.
 
-### `friend std::ostream& operator<<(std::ostream& os, const ScopedDebugLog& src)`
+### `friend std::ostream& operator<<(std::ostream& os, const ScopeTrace& src)`
 Stream insertion operator. Writes `src.to_string<char>()` to the standard output stream `os`.

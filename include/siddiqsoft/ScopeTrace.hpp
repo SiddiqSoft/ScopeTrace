@@ -1,8 +1,8 @@
 /*
-    ScopedDebugLog : Modern C++23 RAII Scope Logger Library
+    ScopeTrace : Modern C++23 RAII Scope Logger Library
     Version 1.0.0
 
-    https://github.com/SiddiqSoft/ScopedDebugLog
+    https://github.com/SiddiqSoft/ScopeTrace
 
     BSD 3-Clause License
 
@@ -36,8 +36,8 @@
 */
 
 #pragma once
-#ifndef SIDDIQSOFT_SCOPEDDEBUGLOG_HPP
-#define SIDDIQSOFT_SCOPEDDEBUGLOG_HPP 1
+#ifndef SIDDIQSOFT_SCOPETRACE_HPP
+#define SIDDIQSOFT_SCOPETRACE_HPP 1
 
 #include <chrono>
 #include <format>
@@ -51,7 +51,7 @@
 namespace siddiqsoft
 {
     /// @brief Modern RAII scope logger measuring elapsed duration, location, and nesting level.
-    class ScopedDebugLog
+    class ScopeTrace
     {
         // Colors for output
         static constexpr std::string_view RED {"\033[0;31m"};
@@ -87,10 +87,10 @@ namespace siddiqsoft
         /// @return Scope name string view
         [[nodiscard]] std::string_view name() const noexcept { return m_scope_name; }
 
-        /// @brief Construct a ScopedDebugLog with a scope name and optional source location
+        /// @brief Construct a ScopeTrace with a scope name and optional source location
         /// @param sn Custom scope label or context name
         /// @param sl Source location (defaults to caller site)
-        explicit ScopedDebugLog(std::string_view sn, const std::source_location& sl = std::source_location::current())
+        explicit ScopeTrace(std::string_view sn, const std::source_location& sl = std::source_location::current())
             : m_location(sl)
             , m_start_timestamp(std::chrono::system_clock::now())
             , m_scope_name(sn)
@@ -99,19 +99,19 @@ namespace siddiqsoft
         }
 
         /// @brief Copying is not supported
-        ScopedDebugLog(const ScopedDebugLog&) = delete;
+        ScopeTrace(const ScopeTrace&) = delete;
 
         /// @brief Moving is not supported
-        ScopedDebugLog(ScopedDebugLog&&) = delete;
+        ScopeTrace(ScopeTrace&&) = delete;
 
         /// @brief Copy assignment is not supported
-        ScopedDebugLog& operator=(const ScopedDebugLog&) = delete;
+        ScopeTrace& operator=(const ScopeTrace&) = delete;
 
         /// @brief Move assignment is not supported
-        ScopedDebugLog& operator=(ScopedDebugLog&&) = delete;
+        ScopeTrace& operator=(ScopeTrace&&) = delete;
 
         /// @brief Destructor logs scope completion in debug builds and updates depth counter
-        ~ScopedDebugLog() noexcept
+        ~ScopeTrace() noexcept
         {
             if (current_depth() > 0) {
                 --current_depth();
@@ -231,12 +231,12 @@ namespace siddiqsoft
                 }
             }
             else {
-                static_assert(std::is_same_v<charT, char>, "ScopedDebugLog supports char formatting");
+                static_assert(std::is_same_v<charT, char>, "ScopeTrace supports char formatting");
             }
         }
 
-        /// @brief Stream insertion operator for ScopedDebugLog
-        friend std::ostream& operator<<(std::ostream& os, const ScopedDebugLog& src)
+        /// @brief Stream insertion operator for ScopeTrace
+        friend std::ostream& operator<<(std::ostream& os, const ScopeTrace& src)
         {
             os << src.to_string<char>();
             return os;
@@ -251,4 +251,4 @@ namespace siddiqsoft
 
 } // namespace siddiqsoft
 
-#endif // SIDDIQSOFT_SCOPEDDEBUGLOG_HPP
+#endif // SIDDIQSOFT_SCOPETRACE_HPP

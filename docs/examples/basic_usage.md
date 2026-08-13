@@ -1,16 +1,16 @@
 # Basic Usage Example
 
-This example demonstrates how to use `siddiqsoft::ScopedDebugLog` for scope tracing, nested scope timing, warning and error logging, exception capture, and string formatting.
+This example demonstrates how to use `siddiqsoft::ScopeTrace` for scope tracing, nested scope timing, warning and error logging, exception capture, and string formatting.
 
 ```cpp
 #include <iostream>
 #include <thread>
 #include <stdexcept>
-#include <siddiqsoft/ScopedDebugLog.hpp>
+#include <siddiqsoft/ScopeTrace.hpp>
 
 void worker()
 {
-    siddiqsoft::ScopedDebugLog scope("worker");
+    siddiqsoft::ScopeTrace scope("worker");
     scope.msg("Worker starting task with ID={}", 42);
 
     std::this_thread::sleep_for(std::chrono::milliseconds(10));
@@ -20,7 +20,7 @@ void worker()
 
 void perform_operation()
 {
-    siddiqsoft::ScopedDebugLog scope("perform_operation");
+    siddiqsoft::ScopeTrace scope("perform_operation");
     worker();
 
     try {
@@ -33,7 +33,7 @@ void perform_operation()
 
 int main()
 {
-    siddiqsoft::ScopedDebugLog scope("main");
+    siddiqsoft::ScopeTrace scope("main");
     scope.msg("Application initialization complete");
 
     perform_operation();

@@ -1,11 +1,11 @@
-# ScopedDebugLog
+# ScopeTrace
 
-[![Build Status](https://dev.azure.com/siddiqsoft/siddiqsoft/_apis/build/status/SiddiqSoft.ScopedDebugLog?branchName=main)](https://dev.azure.com/siddiqsoft/siddiqsoft/_build/latest?definitionId=1)
-[![GitHub release](https://img.shields.io/github/v/release/SiddiqSoft/ScopedDebugLog)](https://github.com/SiddiqSoft/ScopedDebugLog/releases)
-[![NuGet](https://img.shields.io/nuget/v/SiddiqSoft.ScopedDebugLog)](https://www.nuget.org/packages/SiddiqSoft.ScopedDebugLog/)
-[![License](https://img.shields.io/github/license/SiddiqSoft/ScopedDebugLog)](https://github.com/SiddiqSoft/ScopedDebugLog/blob/main/LICENSE)
+[![Build Status](https://dev.azure.com/siddiqsoft/siddiqsoft/_apis/build/status/SiddiqSoft.ScopeTrace?branchName=main)](https://dev.azure.com/siddiqsoft/siddiqsoft/_build/latest?definitionId=1)
+[![GitHub release](https://img.shields.io/github/v/release/SiddiqSoft/ScopeTrace)](https://github.com/SiddiqSoft/ScopeTrace/releases)
+[![NuGet](https://img.shields.io/nuget/v/SiddiqSoft.ScopeTrace)](https://www.nuget.org/packages/SiddiqSoft.ScopeTrace/)
+[![License](https://img.shields.io/github/license/SiddiqSoft/ScopeTrace)](https://github.com/SiddiqSoft/ScopeTrace/blob/main/LICENSE)
 
-`siddiqsoft::ScopedDebugLog` is a modern, lightweight, header-only C++23 RAII scope logger designed for performance profiling and scope execution tracing.
+`siddiqsoft::ScopeTrace` is a modern, lightweight, header-only C++23 RAII scope logger designed for performance profiling and scope execution tracing.
 
 - **RAII Scope Timing**: Automatic duration measurement upon scope exit.
 - **`std::source_location` Integration**: Capture file, line, and function automatically.
@@ -19,11 +19,11 @@
 
 For full detailed documentation, integration guides, and API specifications, visit our MkDocs documentation site:
 
-- [**Features Overview**](https://SiddiqSoft.github.io/ScopedDebugLog/features/)
-- [**Integration & CMake Guide**](https://SiddiqSoft.github.io/ScopedDebugLog/integration/cmake/)
-- [**Dependency Graph**](https://SiddiqSoft.github.io/ScopedDebugLog/integration/dependencies/)
-- [**API Reference**](https://SiddiqSoft.github.io/ScopedDebugLog/api/)
-- [**Examples & Walkthroughs**](https://SiddiqSoft.github.io/ScopedDebugLog/examples/)
+- [**Features Overview**](https://SiddiqSoft.github.io/ScopeTrace/features/)
+- [**Integration & CMake Guide**](https://SiddiqSoft.github.io/ScopeTrace/integration/cmake/)
+- [**Dependency Graph**](https://SiddiqSoft.github.io/ScopeTrace/integration/dependencies/)
+- [**API Reference**](https://SiddiqSoft.github.io/ScopeTrace/api/)
+- [**Examples & Walkthroughs**](https://SiddiqSoft.github.io/ScopeTrace/examples/)
 
 ---
 
@@ -31,18 +31,18 @@ For full detailed documentation, integration guides, and API specifications, vis
 
 ```cpp
 #include <iostream>
-#include <siddiqsoft/ScopedDebugLog.hpp>
+#include <siddiqsoft/ScopeTrace.hpp>
 
 void sub_task()
 {
-    siddiqsoft::ScopedDebugLog inner("sub_task");
+    siddiqsoft::ScopeTrace inner("sub_task");
     inner.msg("Processing items...");
     // Perform work...
 }
 
 int main()
 {
-    siddiqsoft::ScopedDebugLog scope("main");
+    siddiqsoft::ScopeTrace scope("main");
     scope.msg("Starting application execution");
 
     try {
@@ -65,12 +65,12 @@ Integrate via [CPM.cmake](https://github.com/cpm-cmake/CPM.cmake):
 ```cmake
 include(CPM.cmake)
 
-CPMAddPackage("gh:SiddiqSoft/ScopedDebugLog#v1.0.0")
+CPMAddPackage("gh:SiddiqSoft/ScopeTrace#v1.0.0")
 
-target_link_libraries(your_target PRIVATE siddiqsoft::ScopedDebugLog)
+target_link_libraries(your_target PRIVATE siddiqsoft::ScopeTrace)
 ```
 
-For more details, see the [CMake & Integration Documentation](https://SiddiqSoft.github.io/ScopedDebugLog/integration/cmake/).
+For more details, see the [CMake & Integration Documentation](https://SiddiqSoft.github.io/ScopeTrace/integration/cmake/).
 
 ---
 

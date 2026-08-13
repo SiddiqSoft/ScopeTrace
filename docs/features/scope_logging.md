@@ -2,28 +2,28 @@
 
 ## How RAII Scope Logging Works
 
-`siddiqsoft::ScopedDebugLog` uses the C++ RAII pattern to measure scope execution duration and emit trace logs upon scope entry and exit.
+`siddiqsoft::ScopeTrace` uses the C++ RAII pattern to measure scope execution duration and emit trace logs upon scope entry and exit.
 
 ```cpp
-#include <siddiqsoft/ScopedDebugLog.hpp>
+#include <siddiqsoft/ScopeTrace.hpp>
 
 void compute()
 {
-    siddiqsoft::ScopedDebugLog scope("compute_operation");
+    siddiqsoft::ScopeTrace scope("compute_operation");
     // Code block execution...
 } // Destruction logs completion status and elapsed duration automatically in debug builds
 ```
 
 ## Source Location
 
-Using `std::source_location::current()`, `ScopedDebugLog` captures caller details automatically:
+Using `std::source_location::current()`, `ScopeTrace` captures caller details automatically:
 - Source file path (`location().file_name()`)
 - Line number (`location().line()`)
 - Enclosing function signature (`location().function_name()`)
 
 ## Nesting Depth Tracking
 
-`ScopedDebugLog` automatically tracks nested scopes using a thread-local counter (`current_depth()`), producing formatted visual indentation for hierarchical log trees:
+`ScopeTrace` automatically tracks nested scopes using a thread-local counter (`current_depth()`), producing formatted visual indentation for hierarchical log trees:
 
 ```text
 [main.cpp:12] compute_operation took 150us

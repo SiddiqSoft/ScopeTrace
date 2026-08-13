@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <AutoVisualizer xmlns="http://schemas.microsoft.com/vstudio/debugger/natvis/2010">
-  <Type Name="siddiqsoft::ScopedDebugLog">
+  <Type Name="siddiqsoft::ScopeTrace">
     <DisplayString Condition="!m_scope_name.empty()">{m_scope_name} (depth={m_scope_depth})</DisplayString>
     <DisplayString>{m_location} (depth={m_scope_depth})</DisplayString>
     <Expand>

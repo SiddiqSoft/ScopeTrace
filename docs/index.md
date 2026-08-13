@@ -1,11 +1,11 @@
-# ScopedDebugLog
+# ScopeTrace
 
-[![Build Status](https://dev.azure.com/siddiqsoft/siddiqsoft/_apis/build/status/SiddiqSoft.ScopedDebugLog?branchName=main)](https://dev.azure.com/siddiqsoft/siddiqsoft/_build/latest?definitionId=1)
-[![GitHub release](https://img.shields.io/github/v/release/SiddiqSoft/ScopedDebugLog)](https://github.com/SiddiqSoft/ScopedDebugLog/releases)
-[![NuGet](https://img.shields.io/nuget/v/SiddiqSoft.ScopedDebugLog)](https://www.nuget.org/packages/SiddiqSoft.ScopedDebugLog/)
-[![License](https://img.shields.io/github/license/SiddiqSoft/ScopedDebugLog)](https://github.com/SiddiqSoft/ScopedDebugLog/blob/main/LICENSE)
+[![Build Status](https://dev.azure.com/siddiqsoft/siddiqsoft/_apis/build/status/SiddiqSoft.ScopeTrace?branchName=main)](https://dev.azure.com/siddiqsoft/siddiqsoft/_build/latest?definitionId=1)
+[![GitHub release](https://img.shields.io/github/v/release/SiddiqSoft/ScopeTrace)](https://github.com/SiddiqSoft/ScopeTrace/releases)
+[![NuGet](https://img.shields.io/nuget/v/SiddiqSoft.ScopeTrace)](https://www.nuget.org/packages/SiddiqSoft.ScopeTrace/)
+[![License](https://img.shields.io/github/license/SiddiqSoft/ScopeTrace)](https://github.com/SiddiqSoft/ScopeTrace/blob/main/LICENSE)
 
-`siddiqsoft::ScopedDebugLog` is a header-only C++23 RAII scope logger designed for execution tracing, performance measurement, and nesting depth visualization.
+`siddiqsoft::ScopeTrace` is a header-only C++23 RAII scope logger designed for execution tracing, performance measurement, and nesting depth visualization.
 
 ---
 
@@ -22,18 +22,18 @@
 
 ```cpp
 #include <iostream>
-#include <siddiqsoft/ScopedDebugLog.hpp>
+#include <siddiqsoft/ScopeTrace.hpp>
 
 void process_request()
 {
-    siddiqsoft::ScopedDebugLog scope("process_request");
+    siddiqsoft::ScopeTrace scope("process_request");
     scope.msg("Parsing incoming payload...");
     // Work executed here...
 }
 
 int main()
 {
-    siddiqsoft::ScopedDebugLog scope("main");
+    siddiqsoft::ScopeTrace scope("main");
     process_request();
     return 0;
 }

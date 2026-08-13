@@ -2,7 +2,7 @@
 
 ## Exception Safety
 
-- **`noexcept` Destructor Guarantee**: `siddiqsoft::ScopedDebugLog::~ScopedDebugLog()` is explicitly declared `noexcept` to ensure safety during stack unwinding.
+- **`noexcept` Destructor Guarantee**: `siddiqsoft::ScopeTrace::~ScopeTrace()` is explicitly declared `noexcept` to ensure safety during stack unwinding.
 - **Exception Logging Utility**: The `scope.exp(const std::exception& e)` method safe-prints exception types and messages to `std::cerr` without throwing exceptions.
 
 ## Thread Safety & Performance

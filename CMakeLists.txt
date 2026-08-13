@@ -2,7 +2,7 @@
 #   See LICENSE file
 #
 #   When building from our CI server, the following options must be set:
-#   - ScopedDebugLog_BUILD_TESTS=ON
+#   - ScopeTrace_BUILD_TESTS=ON
 #   - CI_BUILDID must be set to the gitversion
 #   The file project-base.json contains configuration elements
 # 
@@ -26,7 +26,7 @@ include(pack/CMakeCommonHelpers.cmake)
 
 # Project metadata
 # defaults are in the project-base.json file
-project(ScopedDebugLog
+project(ScopeTrace
         VERSION         "${CURRENT_PROJECT_VERSION}"
         LANGUAGES       CXX
         HOMEPAGE_URL    "%%myurl%%")

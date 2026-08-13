@@ -6,26 +6,26 @@
 #include <thread>
 #include <vector>
 
-#include "../include/siddiqsoft/ScopedDebugLog.hpp"
+#include "../include/siddiqsoft/ScopeTrace.hpp"
 
-TEST(ScopedDebugLogTest, BasicCallbackExecution)
+TEST(ScopeTraceTest, BasicCallbackExecution)
 {
     {
-        siddiqsoft::ScopedDebugLog scope(__func__);
+        siddiqsoft::ScopeTrace scope(__func__);
 
         std::this_thread::sleep_for(std::chrono::milliseconds(2));
     }
 }
 
-TEST(ScopedDebugLogTest, ScopeDepthNesting)
+TEST(ScopeTraceTest, ScopeDepthNesting)
 {
     std::vector<size_t> depths;
 
     {
-        siddiqsoft::ScopedDebugLog outer("Outer");
+        siddiqsoft::ScopeTrace outer("Outer");
 
         {
-            siddiqsoft::ScopedDebugLog inner("Inner");
+            siddiqsoft::ScopeTrace inner("Inner");
 
             inner.warn("Inner scope warning message");
             EXPECT_EQ(1, inner.depth());
@@ -37,9 +37,9 @@ TEST(ScopedDebugLogTest, ScopeDepthNesting)
 }
 
 
-TEST(ScopedDebugLogTest, FormattingAndStream)
+TEST(ScopeTraceTest, FormattingAndStream)
 {
-    siddiqsoft::ScopedDebugLog scope("StreamScope");
+    siddiqsoft::ScopeTrace scope("StreamScope");
     {
         std::string str = scope.to_string();
         EXPECT_TRUE(str.contains("StreamScope"));
@@ -56,16 +56,18 @@ TEST(ScopedDebugLogTest, FormattingAndStream)
     }
 }
 
-TEST(ScopedDebugLogTest, ExceptionSafety)
+TEST(ScopeTraceTest, ExceptionSafety)
 {
-    siddiqsoft::ScopedDebugLog scope(__func__);
+    siddiqsoft::ScopeTrace scope(__func__);
 
     try {
-        siddiqsoft::ScopedDebugLog scope(std::string(__func__) + "Nested");
+        siddiqsoft::ScopeTrace scope(std::string(__func__) + "-Nested");
 
-        throw std::runtime_error("Deliberate error");
+        scope.msg("From the inner scope line: {}", __LINE__);
+        throw std::runtime_error(std::format("Deliberate error from line: {}", __LINE__));
     }
     catch (const std::exception& e) {
         scope.exp(e);
     }
 }
+
