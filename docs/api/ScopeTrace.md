@@ -12,7 +12,12 @@ namespace siddiqsoft {
 
 ---
 
-## Public Constructors & Destructor
+## Helper Types
+
+### `template <typename... Args> struct source_location_format_string`
+A specialized format string wrapper struct in `namespace siddiqsoft` that combines `std::format_string<Args...>` with a `consteval` constructor capturing caller `std::source_location::current()`. Used by `err_throw()` to capture exact call-site file and line numbers.
+
+---
 
 ## Public Constructors & Destructor
 
@@ -85,8 +90,8 @@ Formats and outputs a warning message to `std::cerr` (colored yellow) prefixed b
 ### `template <typename... Args> void err(std::format_string<Args...> fmt, Args&&... args)`
 Formats and outputs an error message to `std::cerr` (colored red) prefixed by timestamp and depth-indented scope name. Active in all build modes.
 
-### `template <typename EX = std::exception, typename... Args> void err_throw(std::format_string<Args...> fmt, Args&&... args) noexcept(false)`
-Unified error logging and exception throwing shortcut. Formats and logs an error message to `std::cerr` (colored orange) with ISO 8601 UTC timestamp, depth-indented scope name, bold exception type name (`typeid(EX).name()`), and formatted message in italics. Then constructs and throws `EX(formatted_message)`. Active in all build modes.
+### `template <typename EX = std::exception, typename... Args> void err_throw(source_location_format_string<std::type_identity_t<Args>...> fmt_loc, Args&&... args) noexcept(false)`
+Unified error logging and exception throwing shortcut. Uses `source_location_format_string` to capture the caller's exact call-site `std::source_location`. Formats and logs an error message to `std::cerr` (colored orange) with ISO 8601 UTC timestamp, depth-indented scope name, bold exception type name (`typeid(EX).name()`), formatted message in italics, and call-site `file:line` details. Then constructs and throws `EX(formatted_message)`. Active in all build modes.
 
 ### `void exp(const std::exception& e)`
 Shortcut for logging caught exceptions in `catch` blocks. Outputs exception type (`typeid(e).name()`) in bold red and exception message (`e.what()`) to `std::cerr` prefixed by timestamp and depth-indented scope name. Active in all build modes.

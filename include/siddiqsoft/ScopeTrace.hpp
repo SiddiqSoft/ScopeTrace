@@ -40,6 +40,7 @@
 #define SIDDIQSOFT_SCOPETRACE_HPP 1
 
 #include <chrono>
+#include <concepts>
 #include <format>
 #include <ostream>
 #include <source_location>
@@ -50,6 +51,22 @@
 
 namespace siddiqsoft
 {
+    /// @brief Wrapper combining std::format_string with automatic caller std::source_location capture.
+    template <typename... Args>
+    struct source_location_format_string
+    {
+        std::format_string<Args...> fmt;
+        std::source_location        location;
+
+        template <typename S>
+            requires std::convertible_to<const S&, std::string_view>
+        consteval source_location_format_string(const S& str, std::source_location loc = std::source_location::current())
+            : fmt(str)
+            , location(loc)
+        {
+        }
+    };
+
     /// @brief Modern RAII scope logger measuring elapsed duration, location, and nesting level.
     class ScopeTrace
     {
@@ -63,6 +80,8 @@ namespace siddiqsoft
         static constexpr std::string_view YLW {"\033[1;33m"};      //< Yellow
         static constexpr std::string_view BOLD {"\033[1m"};        //< Bold
         static constexpr std::string_view ITAL {"\033[3m"};        //< Italic
+        static constexpr std::string_view UNDL {"\033[4m"};        //< Underline
+        static constexpr std::string_view NOTUNDL {"\033[24m"};    //< Not underline
         static constexpr std::string_view NOTBOLD {"\033[22m"};    //< Not bold
         static constexpr std::string_view NOTITAL {"\033[23m"};    //< Not italic
         static constexpr std::string_view NOC {"\033[0m"};         //< No Color
@@ -321,25 +340,36 @@ namespace siddiqsoft
         }
 
 
+        /// @brief Log error with caller source location and throw exception
+        /// @tparam EX Exception type to throw (defaults to std::exception)
+        /// @tparam Args Format argument types
+        /// @param fmt_loc Format string with captured call-site std::source_location
+        /// @param args Format arguments
         template <typename EX = std::exception, typename... Args>
-        void err_throw(std::format_string<Args...> fmt, Args&&... args) noexcept(false)
+        void err_throw(source_location_format_string<std::type_identity_t<Args>...> fmt_loc, Args&&... args) noexcept(false)
         {
-            std::string indent(m_scope_depth * 2, ' ');
+            const auto&      loc = fmt_loc.location;
+            std::string      indent(m_scope_depth * 2, ' ');
+            std::string_view scope_label = m_scope_name.empty() ? extract_func_name(loc.function_name()) : m_scope_name;
 
             std::println(std::cerr,
-                         "{}{}{}{} - {}{}{} - {}{}{}{}",
+                         "{}{}{}{} - {}{}{} - {}{}{}{} - {}from:{}@{}{}",
                          current_timestamp(),
                          indent,
                          ORN,
-                         m_scope_name.empty() ? m_location.file_name() : m_scope_name,
+                         scope_label,
                          BOLD,
                          typeid(EX).name(),
                          NOTBOLD,
                          ITAL,
-                         std::format(fmt, std::forward<Args>(args)...),
+                         std::format(fmt_loc.fmt, std::forward<Args>(args)...),
                          NOTITAL,
-                         NOC);
-            throw EX(std::format(fmt, std::forward<Args>(args)...));
+                         NOC,
+                         UNDL,
+                         loc.file_name(),
+                         loc.line(),
+                         NOTUNDL);
+            throw EX(std::format(fmt_loc.fmt, std::forward<Args>(args)...));
         }
 
 
