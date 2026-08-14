@@ -17,7 +17,7 @@ namespace siddiqsoft {
 ## Public Constructors & Destructor
 
 ### `explicit ScopeTrace(std::string_view sn = {}, const std::source_location& sl = std::source_location::current())`
-Constructs a scope logger with the specified scope name `sn` and caller source location `sl`. Increments the thread-local nesting depth. If `sn` is omitted or empty (`{}`), the scope name automatically defaults to the plain function name extracted via `extract_func_name(sl.function_name())`.
+Constructs a scope logger with the specified scope name `sn` and caller source location `sl`. Increments the thread-local nesting depth. If `sn` is omitted or empty (`{}`), the scope name automatically defaults to the plain function name extracted via `extract_func_name(sl.function_name())` (evaluating to `"GLOBAL"` when declared in global scope outside of any function).
 
 - **`sn`**: Custom scope label or contextual identifier (defaults to `{}`).
 - **`sl`**: Source location (defaults to caller site via `std::source_location::current()`).
@@ -42,7 +42,7 @@ Copy construction, move construction, copy assignment, and move assignment opera
 Accesses the thread-local scope depth counter. Returns a reference to the current thread's nesting depth index (`size_t`).
 
 ### `[[nodiscard]] static std::string_view extract_func_name(std::string_view full_signature) noexcept`
-Extracts the plain function name (matching the `__func__` macro) from a full function signature string (such as `std::source_location::function_name()`).
+Extracts the plain function name (matching the `__func__` macro) from a full function signature string (such as `std::source_location::function_name()`). Returns `"GLOBAL"` if `full_signature` is empty or instantiated in global scope outside of a function.
 
 ### `[[nodiscard]] static std::string current_timestamp() noexcept`
 Returns an ISO 8601 UTC timestamp string with microsecond precision e.g. `"2026-08-13T23:16:00.519049Z  "` (styled with ANSI light gray color codes).

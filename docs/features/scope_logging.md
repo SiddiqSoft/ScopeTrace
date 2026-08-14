@@ -26,15 +26,15 @@ Using `std::source_location::current()`, `ScopeTrace` captures caller details au
 - Line number (`location().line()`)
 - Enclosing function signature (`location().function_name()`)
 
-`ScopeTrace` also includes built-in parsing (`extract_func_name()` / `func_name()`) to extract clean plain function names matching `__func__` from full signature strings.
+`ScopeTrace` also includes built-in parsing (`extract_func_name()` / `func_name()`) to extract clean plain function names matching `__func__` from full signature strings. When `ScopeTrace` is declared in the global scope (outside of any enclosing function), `extract_func_name()` evaluates to `"GLOBAL"`.
 
 ## Nesting Depth & ISO 8601 Timestamps
 
 `ScopeTrace` automatically tracks nested scopes using a thread-local counter (`current_depth()`), producing formatted visual indentation for hierarchical log trees. Each output line is prefixed with an ISO 8601 UTC timestamp (`current_timestamp()`):
 
 ```text
-2026-08-13T23:16:00.519049Z   compute - COMPLETED - time:150us
-2026-08-13T23:16:00.519100Z     compute-stage1 - COMPLETED - time:40us
+2026-08-13T23:16:00.519049Z   GLOBAL - COMPLETED - time:150us
+2026-08-13T23:16:00.519100Z     GLOBAL-stage1 - COMPLETED - time:40us
 ```
 
 ## In-Scope Logging Sinks

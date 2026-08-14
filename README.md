@@ -140,6 +140,9 @@ void MyClass::process_data()
     // Static helper for any signature string
     std::string_view name3 = siddiqsoft::ScopeTrace::extract_func_name("virtual void MyClass::process_data(int) const");
 }
+
+// When declared in global scope (outside of any function):
+static siddiqsoft::ScopeTrace g_scope; // Scope name defaults to "GLOBAL"
 ```
 
 ---

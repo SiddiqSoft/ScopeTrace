@@ -54,17 +54,17 @@ namespace siddiqsoft
     class ScopeTrace
     {
         // Colors for output
-        static constexpr std::string_view LTGY {"\033[38;5;250m"};  //< Light gray
-        static constexpr std::string_view DKGY {"\033[1;40m"};  //< Dark gray
-        static constexpr std::string_view RED {"\033[0;31m"};   //< Red
-        static constexpr std::string_view BLU {"\033[0;34m"};   //< Blue
-        static constexpr std::string_view GRN {"\033[0;32m"};   //< Green
-        static constexpr std::string_view YLW {"\033[1;33m"};   //< Yellow
-        static constexpr std::string_view BOLD {"\033[1m"};     //< Bold
-        static constexpr std::string_view ITAL {"\033[3m"};     //< Italic
-        static constexpr std::string_view NOTBOLD {"\033[22m"}; //< Not bold
-        static constexpr std::string_view NOTITAL {"\033[23m"}; //< Not italic
-        static constexpr std::string_view NOC {"\033[0m"};      //< No Color
+        static constexpr std::string_view LTGY {"\033[38;5;250m"}; //< Light gray
+        static constexpr std::string_view DKGY {"\033[1;40m"};     //< Dark gray
+        static constexpr std::string_view RED {"\033[0;31m"};      //< Red
+        static constexpr std::string_view BLU {"\033[0;34m"};      //< Blue
+        static constexpr std::string_view GRN {"\033[0;32m"};      //< Green
+        static constexpr std::string_view YLW {"\033[1;33m"};      //< Yellow
+        static constexpr std::string_view BOLD {"\033[1m"};        //< Bold
+        static constexpr std::string_view ITAL {"\033[3m"};        //< Italic
+        static constexpr std::string_view NOTBOLD {"\033[22m"};    //< Not bold
+        static constexpr std::string_view NOTITAL {"\033[23m"};    //< Not italic
+        static constexpr std::string_view NOC {"\033[0m"};         //< No Color
 
     public:
         /// @brief Access thread-local scope nesting level counter
@@ -96,7 +96,8 @@ namespace siddiqsoft
         /// @return Plain function name string view
         [[nodiscard]] static std::string_view extract_func_name(std::string_view full_signature) noexcept
         {
-            if (full_signature.empty()) return {};
+            static constexpr std::string_view global {"GLOBAL"};
+            if (full_signature.empty()) return global;
 
             // Find opening parenthesis of parameter list outside template angle brackets
             size_t param_start = std::string_view::npos;
@@ -123,7 +124,7 @@ namespace siddiqsoft
                 name_part.remove_suffix(1);
             }
 
-            if (name_part.empty()) return {};
+            if (name_part.empty()) return global;
 
             // Scan backwards to find start of plain function name (after last ':', space, '*', '&')
             size_t end_pos   = name_part.size();

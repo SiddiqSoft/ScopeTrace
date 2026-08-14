@@ -7,7 +7,7 @@
 // Explicit scope label
 siddiqsoft::ScopeTrace scope("step_name");
 
-// Default scope label (automatically extracts plain function name matching __func__)
+// Default scope label (extracts plain function name, or "GLOBAL" if declared in global scope)
 siddiqsoft::ScopeTrace scope;
 
 // Nested scope creation (automatically formatted as "<parent_name>-<child_name>")

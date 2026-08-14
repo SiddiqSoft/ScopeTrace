@@ -8,11 +8,15 @@
 
 #include "../include/siddiqsoft/ScopeTrace.hpp"
 
-TEST(ScopeTraceTest, BasicCallbackExecution)
+static siddiqsoft::ScopeTrace g_scope;
+
+
+TEST(ScopeTraceTest, HelloWorld)
 {
     {
-        siddiqsoft::ScopeTrace scope(__func__);
+        auto scope = g_scope.nest(__func__);
 
+        scope.trace("Hello, World!");
         std::this_thread::sleep_for(std::chrono::milliseconds(2));
     }
 }
@@ -22,17 +26,17 @@ TEST(ScopeTraceTest, ScopeDepthNesting)
     std::vector<size_t> depths;
 
     {
-        siddiqsoft::ScopeTrace outer("Outer");
+        auto outer = g_scope.nest("Outer");
 
         {
-            siddiqsoft::ScopeTrace inner("Inner");
+            auto inner = outer.nest("Inner");
 
             inner.warn("Inner scope warning message");
-            EXPECT_EQ(1, inner.depth());
+            EXPECT_EQ(2, inner.depth());
             inner.err("Inner scope error message");
         }
         outer.info("Outer scope message");
-        EXPECT_EQ(0, outer.depth());
+        EXPECT_EQ(1, outer.depth());
     }
 }
 
@@ -58,7 +62,7 @@ TEST(ScopeTraceTest, FormattingAndStream)
 
 TEST(ScopeTraceTest, ExceptionSafety)
 {
-    siddiqsoft::ScopeTrace scope;
+    auto scope = g_scope.nest(__func__);
 
     try {
         auto inner = scope.nest("Nested");
