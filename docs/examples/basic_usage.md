@@ -31,7 +31,8 @@ void perform_operation()
         throw std::runtime_error("Simulated failure in sub-system");
     }
     catch (const std::exception& e) {
-        scope.exp(e);
+        // Exception handler shortcut with custom formatted contextual details
+        scope.exp(e, "Error encountered during operation execution");
     }
 }
 

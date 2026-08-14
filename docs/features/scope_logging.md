@@ -45,4 +45,22 @@ Within an active scope, you can output formatted contextual messages to `std::ce
 - **`scope.trace("...")`**: Trace diagnostic details (light gray, active in `DEBUG_TRACE` builds).
 - **`scope.warn("...")`**: Warning messages (colored yellow, active in all build modes).
 - **`scope.err("...")`**: Error messages (colored red, active in all build modes).
-- **`scope.exp(e)`**: Formatted exception log (colored bold red with exception type and `what()`, active in all build modes).
+- **`scope.exp(e)`**: Exception handler shortcut. Logs exception type (`typeid(e).name()`) in bold red and `e.what()` (active in all build modes).
+- **`scope.exp(e, "...")`**: Exception handler shortcut with context. Logs exception type, italicized `e.what()`, and custom formatted contextual details (active in all build modes).
+
+## Exception Handling Shortcuts
+
+Inside `catch` blocks, `ScopeTrace` provides `exp()` shortcuts to instantly log exception details without manual string formatting or `std::cerr` boilerplate:
+
+```cpp
+try {
+    // Operation...
+}
+catch (const std::exception& e) {
+    // Basic exception log: outputs typeid name and e.what()
+    scope.exp(e);
+
+    // Exception log with custom formatted contextual details:
+    scope.exp(e, "Failed while processing item ID: {}", item_id);
+}
+```

@@ -86,7 +86,10 @@ Formats and outputs a warning message to `std::cerr` (colored yellow) prefixed b
 Formats and outputs an error message to `std::cerr` (colored red) prefixed by timestamp and depth-indented scope name. Active in all build modes.
 
 ### `void exp(const std::exception& e)`
-Outputs caught exception details (`typeid(e).name()` and `e.what()`) to `std::cerr` (colored bold red) prefixed by timestamp and depth-indented scope name. Active in all build modes.
+Shortcut for logging caught exceptions in `catch` blocks. Outputs exception type (`typeid(e).name()`) in bold red and exception message (`e.what()`) to `std::cerr` prefixed by timestamp and depth-indented scope name. Active in all build modes.
+
+### `template <typename... Args> void exp(const std::exception& e, std::format_string<Args...> fmt, Args&&... args)`
+Enhanced exception logging shortcut for `catch` blocks. Outputs exception type (`typeid(e).name()`) in bold red, exception message (`e.what()`) in italic, followed by custom formatted contextual details (`fmt`, `args...`) to `std::cerr` prefixed by timestamp and depth-indented scope name. Active in all build modes.
 
 ---
 

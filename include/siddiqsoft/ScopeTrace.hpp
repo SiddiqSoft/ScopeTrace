@@ -57,6 +57,7 @@ namespace siddiqsoft
         static constexpr std::string_view LTGY {"\033[38;5;250m"}; //< Light gray
         static constexpr std::string_view DKGY {"\033[1;40m"};     //< Dark gray
         static constexpr std::string_view RED {"\033[0;31m"};      //< Red
+        static constexpr std::string_view ORN {"\033[38;5;208m"};  //< Orange
         static constexpr std::string_view BLU {"\033[0;34m"};      //< Blue
         static constexpr std::string_view GRN {"\033[0;32m"};      //< Green
         static constexpr std::string_view YLW {"\033[1;33m"};      //< Yellow
@@ -317,6 +318,28 @@ namespace siddiqsoft
                          NOC,
                          std::format(fmt, std::forward<Args>(args)...),
                          NOC);
+        }
+
+
+        template <typename EX = std::exception, typename... Args>
+        void err_throw(std::format_string<Args...> fmt, Args&&... args) noexcept(false)
+        {
+            std::string indent(m_scope_depth * 2, ' ');
+
+            std::println(std::cerr,
+                         "{}{}{}{} - {}{}{} - {}{}{}{}",
+                         current_timestamp(),
+                         indent,
+                         ORN,
+                         m_scope_name.empty() ? m_location.file_name() : m_scope_name,
+                         BOLD,
+                         typeid(EX).name(),
+                         NOTBOLD,
+                         ITAL,
+                         std::format(fmt, std::forward<Args>(args)...),
+                         NOTITAL,
+                         NOC);
+            throw EX(std::format(fmt, std::forward<Args>(args)...));
         }
 
 

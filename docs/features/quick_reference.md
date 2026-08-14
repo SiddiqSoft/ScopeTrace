@@ -28,11 +28,15 @@ scope.warn("Cache miss for key: {}", key);
 // Error log (red output, active in all build modes)
 scope.err("Failed to open connection to host: {}", host);
 
-// Exception log (bold red output, active in all build modes)
+// Exception log shortcuts (active in all build modes)
 try {
     // ...
 } catch (const std::exception& e) {
+    // Basic exception log shortcut (logs typeid name and e.what())
     scope.exp(e);
+
+    // Exception log shortcut with custom formatted context
+    scope.exp(e, "Operation failed for request ID: {}", req_id);
 }
 ```
 
