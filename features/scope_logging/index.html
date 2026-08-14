@@ -587,10 +587,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#source-location" class="md-nav__link">
+  <a href="#source-location-function-name-extraction" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Source Location
+        Source Location &amp; Function Name Extraction
       
     </span>
   </a>
@@ -598,10 +598,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#nesting-depth-tracking" class="md-nav__link">
+  <a href="#nesting-depth-iso-8601-timestamps" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Nesting Depth Tracking
+        Nesting Depth &amp; ISO 8601 Timestamps
       
     </span>
   </a>
@@ -616,6 +616,45 @@
       
     </span>
   </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#unified-error-throwing-catching-patterns" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Unified Error Throwing &amp; Catching Patterns
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Unified Error Throwing &amp; Catching Patterns">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-throw-site-err_throw" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Throw Site (err_throw)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-catch-site-exp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Catch Site (exp)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -1163,10 +1202,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#source-location" class="md-nav__link">
+  <a href="#source-location-function-name-extraction" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Source Location
+        Source Location &amp; Function Name Extraction
       
     </span>
   </a>
@@ -1174,10 +1213,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#nesting-depth-tracking" class="md-nav__link">
+  <a href="#nesting-depth-iso-8601-timestamps" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Nesting Depth Tracking
+        Nesting Depth &amp; ISO 8601 Timestamps
       
     </span>
   </a>
@@ -1192,6 +1231,45 @@
       
     </span>
   </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#unified-error-throwing-catching-patterns" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Unified Error Throwing &amp; Catching Patterns
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Unified Error Throwing &amp; Catching Patterns">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-throw-site-err_throw" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Throw Site (err_throw)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-catch-site-exp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Catch Site (exp)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -1270,28 +1348,64 @@
 </span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>
 </span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="kt">void</span><span class="w"> </span><span class="nf">compute</span><span class="p">()</span>
 </span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="p">{</span>
-</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">    </span><span class="n">siddiqsoft</span><span class="o">::</span><span class="n">ScopeTrace</span><span class="w"> </span><span class="n">scope</span><span class="p">(</span><span class="s">&quot;compute_operation&quot;</span><span class="p">);</span>
-</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">    </span><span class="c1">// Code block execution...</span>
-</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="p">}</span><span class="w"> </span><span class="c1">// Destruction logs completion status and elapsed duration automatically in debug builds</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">    </span><span class="c1">// Defaults scope name to plain function name (&quot;compute&quot;)</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">    </span><span class="n">siddiqsoft</span><span class="o">::</span><span class="n">ScopeTrace</span><span class="w"> </span><span class="n">scope</span><span class="p">;</span>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="w">    </span><span class="c1">// Explicit nested scope (&quot;compute-stage1&quot;)</span>
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="n">sub</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">scope</span><span class="p">.</span><span class="n">nest</span><span class="p">(</span><span class="s">&quot;stage1&quot;</span><span class="p">);</span>
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>
+</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="w">    </span><span class="n">sub</span><span class="p">.</span><span class="n">info</span><span class="p">(</span><span class="s">&quot;Processing stage 1 payload...&quot;</span><span class="p">);</span>
+</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="p">}</span><span class="w"> </span><span class="c1">// Destructors log completion status and elapsed duration automatically in debug builds</span>
 </span></code></pre></div>
-<h2 id="source-location">Source Location<a class="headerlink" href="#source-location" title="Permanent link">&para;</a></h2>
+<h2 id="source-location-function-name-extraction">Source Location &amp; Function Name Extraction<a class="headerlink" href="#source-location-function-name-extraction" title="Permanent link">&para;</a></h2>
 <p>Using <code>std::source_location::current()</code>, <code>ScopeTrace</code> captures caller details automatically:
 - Source file path (<code>location().file_name()</code>)
 - Line number (<code>location().line()</code>)
 - Enclosing function signature (<code>location().function_name()</code>)</p>
-<h2 id="nesting-depth-tracking">Nesting Depth Tracking<a class="headerlink" href="#nesting-depth-tracking" title="Permanent link">&para;</a></h2>
-<p><code>ScopeTrace</code> automatically tracks nested scopes using a thread-local counter (<code>current_depth()</code>), producing formatted visual indentation for hierarchical log trees:</p>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>[main.cpp:12] compute_operation took 150us
-</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>  [main.cpp:18] sub_stage took 40us
+<p><code>ScopeTrace</code> also includes built-in parsing (<code>extract_func_name()</code> / <code>func_name()</code>) to extract clean plain function names matching <code>__func__</code> from full signature strings. When <code>ScopeTrace</code> is declared in the global scope (outside of any enclosing function), <code>extract_func_name()</code> evaluates to <code>"GLOBAL"</code>.</p>
+<h2 id="nesting-depth-iso-8601-timestamps">Nesting Depth &amp; ISO 8601 Timestamps<a class="headerlink" href="#nesting-depth-iso-8601-timestamps" title="Permanent link">&para;</a></h2>
+<p><code>ScopeTrace</code> automatically tracks nested scopes using a thread-local counter (<code>current_depth()</code>), producing formatted visual indentation for hierarchical log trees. Each output line is prefixed with an ISO 8601 UTC timestamp (<code>current_timestamp()</code>):</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>2026-08-13T23:16:00.519049Z   GLOBAL - COMPLETED - time:150us
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>2026-08-13T23:16:00.519100Z     GLOBAL-stage1 - COMPLETED - time:40us
 </span></code></pre></div>
 <h2 id="in-scope-logging-sinks">In-Scope Logging Sinks<a class="headerlink" href="#in-scope-logging-sinks" title="Permanent link">&para;</a></h2>
 <p>Within an active scope, you can output formatted contextual messages to <code>std::cerr</code> with depth indentation and ANSI color coding:</p>
 <ul>
-<li><strong><code>scope.msg("...")</code></strong>: Debug information (active in <code>DEBUG</code> / <code>_DEBUG</code> builds).</li>
-<li><strong><code>scope.warn("...")</code></strong>: Warning messages (colored yellow).</li>
-<li><strong><code>scope.err("...")</code></strong>: Error messages (colored red).</li>
-<li><strong><code>scope.exp(e)</code></strong>: Formatted exception log (colored bold red with exception type and <code>what()</code>).</li>
+<li><strong><code>scope.info("...")</code></strong>: Debug information (active in <code>DEBUG</code> / <code>_DEBUG</code> builds).</li>
+<li><strong><code>scope.trace("...")</code></strong>: Trace diagnostic details (light gray, active in <code>DEBUG_TRACE</code> builds).</li>
+<li><strong><code>scope.warn("...")</code></strong>: Warning messages (colored yellow, active in all build modes).</li>
+<li><strong><code>scope.err("...")</code></strong>: Error messages (colored red, active in all build modes).</li>
+<li><strong><code>scope.err_throw&lt;EX&gt;("...")</code></strong>: Unified error logging &amp; exception throwing shortcut (colored orange, throws <code>EX(formatted_msg)</code>).</li>
+<li><strong><code>scope.exp(e)</code></strong>: Exception handler shortcut. Logs exception type (<code>typeid(e).name()</code>) in bold red and <code>e.what()</code> (active in all build modes).</li>
+<li><strong><code>scope.exp(e, "...")</code></strong>: Exception handler shortcut with context. Logs exception type, italicized <code>e.what()</code>, and custom formatted contextual details (active in all build modes).</li>
 </ul>
+<h2 id="unified-error-throwing-catching-patterns">Unified Error Throwing &amp; Catching Patterns<a class="headerlink" href="#unified-error-throwing-catching-patterns" title="Permanent link">&para;</a></h2>
+<p><code>ScopeTrace</code> simplifies error flow by combining console logging with exception throwing (<code>err_throw()</code>) and exception handling (<code>exp()</code>):</p>
+<h3 id="1-throw-site-err_throw">1. Throw Site (<code>err_throw</code>)<a class="headerlink" href="#1-throw-site-err_throw" title="Permanent link">&para;</a></h3>
+<p>Instead of separate log and throw statements, <code>err_throw&lt;EX&gt;(fmt, args...)</code> logs the formatted error message with timestamps, depth indentation, and exception type details, then immediately throws <code>EX</code>:</p>
+<div class="language-cpp highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">validate_input</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">value</span><span class="p">)</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="p">{</span>
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">    </span><span class="n">siddiqsoft</span><span class="o">::</span><span class="n">ScopeTrace</span><span class="w"> </span><span class="n">scope</span><span class="p">;</span>
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">value</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="w">        </span><span class="c1">// Logs orange error message and throws std::invalid_argument</span>
+</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="w">        </span><span class="n">scope</span><span class="p">.</span><span class="n">err_throw</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">invalid_argument</span><span class="o">&gt;</span><span class="p">(</span><span class="s">&quot;Value must be non-negative, got: {}&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">value</span><span class="p">);</span>
+</span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-2-9"><a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="p">}</span>
+</span></code></pre></div>
+<h3 id="2-catch-site-exp">2. Catch Site (<code>exp</code>)<a class="headerlink" href="#2-catch-site-exp" title="Permanent link">&para;</a></h3>
+<p>Inside <code>catch</code> blocks, <code>exp()</code> logs caught exception details with zero boilerplate:</p>
+<div class="language-cpp highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="k">try</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">    </span><span class="n">validate_input</span><span class="p">(</span><span class="mi">-5</span><span class="p">);</span>
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="p">}</span>
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">exception</span><span class="o">&amp;</span><span class="w"> </span><span class="n">e</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="w">    </span><span class="c1">// Basic exception log: outputs typeid name and e.what()</span>
+</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="w">    </span><span class="n">scope</span><span class="p">.</span><span class="n">exp</span><span class="p">(</span><span class="n">e</span><span class="p">);</span>
+</span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>
+</span><span id="__span-3-8"><a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="w">    </span><span class="c1">// Exception log with custom formatted contextual details:</span>
+</span><span id="__span-3-9"><a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="w">    </span><span class="n">scope</span><span class="p">.</span><span class="n">exp</span><span class="p">(</span><span class="n">e</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Validation failed during request ID: {}&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">request_id</span><span class="p">);</span>
+</span><span id="__span-3-10"><a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="p">}</span>
+</span></code></pre></div>
 
 
 
@@ -1387,7 +1501,7 @@
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.expand", "navigation.path", "navigation.top", "navigation.footer", "navigation.tracking", "search.suggest", "search.highlight", "search.share", "content.code.copy", "content.code.annotate"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": "0.21.0-alpha.1"}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.expand", "navigation.path", "navigation.top", "navigation.footer", "navigation.tracking", "search.suggest", "search.highlight", "search.share", "content.code.copy", "content.code.annotate"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": "0.21.0-alpha.11"}</script>
     
     
       <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
