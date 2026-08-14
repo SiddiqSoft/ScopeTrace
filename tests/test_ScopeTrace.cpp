@@ -30,10 +30,16 @@ TEST(ScopeTraceTest, ScopeDepthNesting)
 
         {
             auto inner = outer.nest("Inner");
+            inner.trace("Inner scope message");
 
             inner.warn("Inner scope warning message");
             EXPECT_EQ(2, inner.depth());
             inner.err("Inner scope error message");
+            {
+                // Use this for anonymous or within an exception scope.
+                inner.nest("Innermost").trace("Innermost scope message");
+                EXPECT_EQ(3, inner.depth());
+            }
         }
         outer.info("Outer scope message");
         EXPECT_EQ(1, outer.depth());
@@ -71,6 +77,6 @@ TEST(ScopeTraceTest, ExceptionSafety)
         throw std::runtime_error(std::format("Deliberate error from line: {}", __LINE__));
     }
     catch (const std::exception& e) {
-        scope.exp(e);
+        scope.exp(e, "Caught exception in outer scope at line: {}", __LINE__);
     }
 }

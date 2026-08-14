@@ -297,6 +297,29 @@ namespace siddiqsoft
                          NOC);
         }
 
+        template <typename... Args>
+        void exp(const std::exception& e, std::format_string<Args...> fmt, Args&&... args)
+        {
+            std::string indent(m_scope_depth * 2, ' ');
+
+            std::println(std::cerr,
+                         "{}{}{}{} - {}{}{} - {}{}{}{} - {}{}",
+                         current_timestamp(),
+                         indent,
+                         RED,
+                         m_scope_name.empty() ? m_location.file_name() : m_scope_name,
+                         BOLD,
+                         typeid(e).name(),
+                         NOTBOLD,
+                         ITAL,
+                         e.what(),
+                         NOTITAL,
+                         NOC,
+                         std::format(fmt, std::forward<Args>(args)...),
+                         NOC);
+        }
+
+
         /// @brief Log a formatted debug message to std::cerr in debug builds with indentation and scope label
         /// @tparam Args Format argument types
         /// @param fmt Format string
