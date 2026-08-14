@@ -25,7 +25,7 @@ def on_config(config, **kwargs):
                 text=True
             ).strip()
         except Exception:
-            version = "0.0.0-master"
+            version = "0.0.0-dev"
 
     # 3. Automatically regenerate dependencies documentation from CMakeLists.txt
     try:

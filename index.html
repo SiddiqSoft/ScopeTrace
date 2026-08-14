@@ -1197,7 +1197,7 @@
 
 
 <h1 id="scopetrace">ScopeTrace<a class="headerlink" href="#scopetrace" title="Permanent link">&para;</a></h1>
-<p><img alt="" src="https://dev.azure.com/siddiqsoft/siddiqsoft/_apis/build/status%2FSiddiqSoft.ScopeTrace?repoName=SiddiqSoft%2FScopeTrace&amp;branchName=master" />
+<p><img alt="" src="https://dev.azure.com/siddiqsoft/siddiqsoft/_apis/build/status%2FSiddiqSoft.ScopeTrace?repoName=SiddiqSoft%2FScopeTrace&amp;branchName=dev" />
 <a href="https://www.nuget.org/packages/SiddiqSoft.ScopeTrace/"><img alt="NuGet" src="https://img.shields.io/nuget/v/SiddiqSoft.ScopeTrace" /></a>
 <img alt="" src="https://img.shields.io/nuget/v/SiddiqSoft.ScopeTrace" />
 <img alt="" src="https://img.shields.io/github/v/tag/SiddiqSoft/ScopeTrace" />
@@ -1206,9 +1206,9 @@
 <hr />
 <h2 id="key-highlights">Key Highlights<a class="headerlink" href="#key-highlights" title="Permanent link">&para;</a></h2>
 <ul>
-<li><strong>Zero-Boilerplate Tracing</strong>: Automatically record function name, file path, and line numbers using <code>std::source_location</code> and auto-extracted <code>__func__</code> names.</li>
-<li><strong>Nesting Level Tracking</strong>: Indents nested scope execution trees dynamically using thread-local scope depth and <code>nest()</code> scope creation.</li>
-<li><strong>Structured Console Logging</strong>: Specialized logging methods for <code>info()</code>, <code>trace()</code>, <code>warn()</code>, <code>err()</code>, and <code>exp()</code> with depth indentation, ANSI colors, and ISO 8601 UTC timestamps.</li>
+<li><strong>Zero-Boilerplate Tracing</strong>: Automatically record function name, file path, and line numbers using <code>std::source_location</code>.</li>
+<li><strong>Nesting Level Tracking</strong>: Indents nested scope execution trees dynamically using thread-local scope depth.</li>
+<li><strong>Structured Console Logging</strong>: Methods for <code>msg()</code>, <code>warn()</code>, <code>err()</code>, and <code>exp()</code> with depth indentation and ANSI colors.</li>
 <li><strong>C++23 Native Support</strong>: Leverages <code>std::format</code>, <code>std::println</code>, and <code>std::ostream</code>.</li>
 </ul>
 <hr />
@@ -1219,7 +1219,7 @@
 </span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="kt">void</span><span class="w"> </span><span class="nf">process_request</span><span class="p">()</span>
 </span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="p">{</span>
 </span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">    </span><span class="n">siddiqsoft</span><span class="o">::</span><span class="n">ScopeTrace</span><span class="w"> </span><span class="n">scope</span><span class="p">(</span><span class="s">&quot;process_request&quot;</span><span class="p">);</span>
-</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="w">    </span><span class="n">scope</span><span class="p">.</span><span class="n">info</span><span class="p">(</span><span class="s">&quot;Parsing incoming payload...&quot;</span><span class="p">);</span>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="w">    </span><span class="n">scope</span><span class="p">.</span><span class="n">msg</span><span class="p">(</span><span class="s">&quot;Parsing incoming payload...&quot;</span><span class="p">);</span>
 </span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="w">    </span><span class="c1">// Work executed here...</span>
 </span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="p">}</span>
 </span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>
@@ -1317,7 +1317,7 @@
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": ".", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.expand", "navigation.path", "navigation.top", "navigation.footer", "navigation.tracking", "search.suggest", "search.highlight", "search.share", "content.code.copy", "content.code.annotate"], "search": "assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": "0.20.0"}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": ".", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.expand", "navigation.path", "navigation.top", "navigation.footer", "navigation.tracking", "search.suggest", "search.highlight", "search.share", "content.code.copy", "content.code.annotate"], "search": "assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": "0.21.0-alpha.1"}</script>
     
     
       <script src="assets/javascripts/bundle.d7400e89.min.js"></script>
