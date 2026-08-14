@@ -11,7 +11,7 @@
 - **RAII Scope Timing**: Automatic duration measurement upon scope exit.
 - **`std::source_location` Integration**: Capture file, line, and function automatically.
 - **Nesting Level Tracking**: Indents nested scope execution trees dynamically using thread-local depth counter (`current_depth()`) and `nest()` method.
-- **Structured Console Logging**: Specialized `info()`, `trace()`, `warn()`, `err()`, and `exp()` methods for formatted console logging with ANSI colors and ISO 8601 UTC timestamps.
+- **Structured Console Logging**: Specialized `info()`, `trace()`, `warn()`, `err()`, `err_throw()`, and `exp()` methods for formatted console logging with ANSI colors and ISO 8601 UTC timestamps.
 - **String Formatting & Stream Support**: Native `to_string()` formatting and `operator<<` stream insertion support.
 
 ---
@@ -54,7 +54,7 @@ How many of us have had to write
             auto inner = scope.nest("Nested"); // explicit inner scope label ("foo-Nested")
 
             inner.info("From the inner scope line: {}", __LINE__);
-            throw std::runtime_error(std::format("Deliberate error from line: {}", __LINE__));
+            inner.err_throw<std::runtime_error>("Deliberate error from line: {}", __LINE__);
         }
         catch (const std::exception& e) {
             scope.exp(e);

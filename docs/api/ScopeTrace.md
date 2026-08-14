@@ -85,6 +85,9 @@ Formats and outputs a warning message to `std::cerr` (colored yellow) prefixed b
 ### `template <typename... Args> void err(std::format_string<Args...> fmt, Args&&... args)`
 Formats and outputs an error message to `std::cerr` (colored red) prefixed by timestamp and depth-indented scope name. Active in all build modes.
 
+### `template <typename EX = std::exception, typename... Args> void err_throw(std::format_string<Args...> fmt, Args&&... args) noexcept(false)`
+Unified error logging and exception throwing shortcut. Formats and logs an error message to `std::cerr` (colored orange) with ISO 8601 UTC timestamp, depth-indented scope name, bold exception type name (`typeid(EX).name()`), and formatted message in italics. Then constructs and throws `EX(formatted_message)`. Active in all build modes.
+
 ### `void exp(const std::exception& e)`
 Shortcut for logging caught exceptions in `catch` blocks. Outputs exception type (`typeid(e).name()`) in bold red and exception message (`e.what()`) to `std::cerr` prefixed by timestamp and depth-indented scope name. Active in all build modes.
 

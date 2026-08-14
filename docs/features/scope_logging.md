@@ -45,22 +45,41 @@ Within an active scope, you can output formatted contextual messages to `std::ce
 - **`scope.trace("...")`**: Trace diagnostic details (light gray, active in `DEBUG_TRACE` builds).
 - **`scope.warn("...")`**: Warning messages (colored yellow, active in all build modes).
 - **`scope.err("...")`**: Error messages (colored red, active in all build modes).
+- **`scope.err_throw<EX>("...")`**: Unified error logging & exception throwing shortcut (colored orange, throws `EX(formatted_msg)`).
 - **`scope.exp(e)`**: Exception handler shortcut. Logs exception type (`typeid(e).name()`) in bold red and `e.what()` (active in all build modes).
 - **`scope.exp(e, "...")`**: Exception handler shortcut with context. Logs exception type, italicized `e.what()`, and custom formatted contextual details (active in all build modes).
 
-## Exception Handling Shortcuts
+## Unified Error Throwing & Catching Patterns
 
-Inside `catch` blocks, `ScopeTrace` provides `exp()` shortcuts to instantly log exception details without manual string formatting or `std::cerr` boilerplate:
+`ScopeTrace` simplifies error flow by combining console logging with exception throwing (`err_throw()`) and exception handling (`exp()`):
+
+### 1. Throw Site (`err_throw`)
+Instead of separate log and throw statements, `err_throw<EX>(fmt, args...)` logs the formatted error message with timestamps, depth indentation, and exception type details, then immediately throws `EX`:
+
+```cpp
+void validate_input(int value)
+{
+    siddiqsoft::ScopeTrace scope;
+
+    if (value < 0) {
+        // Logs orange error message and throws std::invalid_argument
+        scope.err_throw<std::invalid_argument>("Value must be non-negative, got: {}", value);
+    }
+}
+```
+
+### 2. Catch Site (`exp`)
+Inside `catch` blocks, `exp()` logs caught exception details with zero boilerplate:
 
 ```cpp
 try {
-    // Operation...
+    validate_input(-5);
 }
 catch (const std::exception& e) {
     // Basic exception log: outputs typeid name and e.what()
     scope.exp(e);
 
     // Exception log with custom formatted contextual details:
-    scope.exp(e, "Failed while processing item ID: {}", item_id);
+    scope.exp(e, "Validation failed during request ID: {}", request_id);
 }
 ```

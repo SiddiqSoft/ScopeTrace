@@ -28,6 +28,9 @@ scope.warn("Cache miss for key: {}", key);
 // Error log (red output, active in all build modes)
 scope.err("Failed to open connection to host: {}", host);
 
+// Unified Error & Throw shortcut (orange output, active in all build modes)
+scope.err_throw<std::runtime_error>("Fatal database connection timeout: {}s", timeout);
+
 // Exception log shortcuts (active in all build modes)
 try {
     // ...

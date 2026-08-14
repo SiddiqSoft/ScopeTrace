@@ -6,4 +6,5 @@
 
 - [**Scope Logging**](scope_logging.md): Detailed explanation of RAII timing, location capture, depth tracking, and structured message logging.
 - [**Quick Reference**](quick_reference.md): Handy cheat sheet for API usage patterns and options.
+- [**Best Practices Guide**](best_practices.md): Guidelines and recommended patterns for scope tracing, logging sinks, and error/exception flow.
 - [**Security & Exception Model**](security.md): Overview of exception guarantees, thread safety, and memory safety guarantees.
