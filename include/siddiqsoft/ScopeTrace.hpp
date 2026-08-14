@@ -65,6 +65,7 @@ namespace siddiqsoft
         static constexpr std::string_view NOTBOLD {"\033[22m"};    //< Not bold
         static constexpr std::string_view NOTITAL {"\033[23m"};    //< Not italic
         static constexpr std::string_view NOC {"\033[0m"};         //< No Color
+        static constexpr std::string_view global_function_name {"GLOBAL"};
 
     public:
         /// @brief Access thread-local scope nesting level counter
@@ -96,8 +97,7 @@ namespace siddiqsoft
         /// @return Plain function name string view
         [[nodiscard]] static std::string_view extract_func_name(std::string_view full_signature) noexcept
         {
-            static constexpr std::string_view global {"GLOBAL"};
-            if (full_signature.empty()) return global;
+            if (full_signature.empty()) return global_function_name;
 
             // Find opening parenthesis of parameter list outside template angle brackets
             size_t param_start = std::string_view::npos;
@@ -124,7 +124,7 @@ namespace siddiqsoft
                 name_part.remove_suffix(1);
             }
 
-            if (name_part.empty()) return global;
+            if (name_part.empty()) return global_function_name;
 
             // Scan backwards to find start of plain function name (after last ':', space, '*', '&')
             size_t end_pos   = name_part.size();
