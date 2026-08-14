@@ -1,6 +1,6 @@
 # ScopeTrace
 
-![](https://dev.azure.com/siddiqsoft/siddiqsoft/_apis/build/status%2FSiddiqSoft.ScopeTrace?repoName=SiddiqSoft%2FScopeTrace&branchName=dev)
+![](https://dev.azure.com/siddiqsoft/siddiqsoft/_apis/build/status%2FSiddiqSoft.ScopeTrace?repoName=SiddiqSoft%2FScopeTrace&branchName=master)
 [![NuGet](https://img.shields.io/nuget/v/SiddiqSoft.ScopeTrace)](https://www.nuget.org/packages/SiddiqSoft.ScopeTrace/)
 ![](https://img.shields.io/nuget/v/SiddiqSoft.ScopeTrace)
 ![](https://img.shields.io/github/v/tag/SiddiqSoft/ScopeTrace)
@@ -12,9 +12,9 @@
 
 ## Key Highlights
 
-- **Zero-Boilerplate Tracing**: Automatically record function name, file path, and line numbers using `std::source_location`.
-- **Nesting Level Tracking**: Indents nested scope execution trees dynamically using thread-local scope depth.
-- **Structured Console Logging**: Methods for `msg()`, `warn()`, `err()`, and `exp()` with depth indentation and ANSI colors.
+- **Zero-Boilerplate Tracing**: Automatically record function name, file path, and line numbers using `std::source_location` and auto-extracted `__func__` names.
+- **Nesting Level Tracking**: Indents nested scope execution trees dynamically using thread-local scope depth and `nest()` scope creation.
+- **Structured Console Logging**: Specialized logging methods for `info()`, `trace()`, `warn()`, `err()`, and `exp()` with depth indentation, ANSI colors, and ISO 8601 UTC timestamps.
 - **C++23 Native Support**: Leverages `std::format`, `std::println`, and `std::ostream`.
 
 ---
@@ -28,7 +28,7 @@
 void process_request()
 {
     siddiqsoft::ScopeTrace scope("process_request");
-    scope.msg("Parsing incoming payload...");
+    scope.info("Parsing incoming payload...");
     // Work executed here...
 }
 
