@@ -922,18 +922,35 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#public-constructors-destructor" class="md-nav__link">
+  <a href="#helper-types" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Public Constructors &amp; Destructor
+        Helper Types
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Helper Types">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#template-typename-args-struct-source_location_format_string" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        template &lt;typename... Args&gt; struct source_location_format_string
       
     </span>
   </a>
   
 </li>
+        
+      </ul>
+    </nav>
+  
+</li>
       
         <li class="md-nav__item">
-  <a href="#public-constructors-destructor_1" class="md-nav__link">
+  <a href="#public-constructors-destructor" class="md-nav__link">
     <span class="md-ellipsis">
       
         Public Constructors &amp; Destructor
@@ -1183,10 +1200,32 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#template-typename-ex-stdexception-typename-args-void-err_throwsource_location_format_stringstdtype_identity_targs-fmt_loc-args-args-noexceptfalse" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        template &lt;typename EX = std::exception, typename... Args&gt; void err_throw(source_location_format_string&lt;std::type_identity_t&lt;Args&gt;...&gt; fmt_loc, Args&amp;&amp;... args) noexcept(false)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#void-expconst-stdexception-e" class="md-nav__link">
     <span class="md-ellipsis">
       
         void exp(const std::exception&amp; e)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#template-typename-args-void-expconst-stdexception-e-stdformat_stringargs-fmt-args-args" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        template &lt;typename... Args&gt; void exp(const std::exception&amp; e, std::format_string&lt;Args...&gt; fmt, Args&amp;&amp;... args)
       
     </span>
   </a>
@@ -1424,18 +1463,35 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#public-constructors-destructor" class="md-nav__link">
+  <a href="#helper-types" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Public Constructors &amp; Destructor
+        Helper Types
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Helper Types">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#template-typename-args-struct-source_location_format_string" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        template &lt;typename... Args&gt; struct source_location_format_string
       
     </span>
   </a>
   
 </li>
+        
+      </ul>
+    </nav>
+  
+</li>
       
         <li class="md-nav__item">
-  <a href="#public-constructors-destructor_1" class="md-nav__link">
+  <a href="#public-constructors-destructor" class="md-nav__link">
     <span class="md-ellipsis">
       
         Public Constructors &amp; Destructor
@@ -1685,10 +1741,32 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#template-typename-ex-stdexception-typename-args-void-err_throwsource_location_format_stringstdtype_identity_targs-fmt_loc-args-args-noexceptfalse" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        template &lt;typename EX = std::exception, typename... Args&gt; void err_throw(source_location_format_string&lt;std::type_identity_t&lt;Args&gt;...&gt; fmt_loc, Args&amp;&amp;... args) noexcept(false)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#void-expconst-stdexception-e" class="md-nav__link">
     <span class="md-ellipsis">
       
         void exp(const std::exception&amp; e)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#template-typename-args-void-expconst-stdexception-e-stdformat_stringargs-fmt-args-args" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        template &lt;typename... Args&gt; void exp(const std::exception&amp; e, std::format_string&lt;Args...&gt; fmt, Args&amp;&amp;... args)
       
     </span>
   </a>
@@ -1815,8 +1893,11 @@
 </span></code></pre></div>
 <p><code>siddiqsoft::ScopeTrace</code> is a modern C++23 RAII scope logging utility that measures duration, tracks nesting levels, records source locations, and formats diagnostic messages.</p>
 <hr />
+<h2 id="helper-types">Helper Types<a class="headerlink" href="#helper-types" title="Permanent link">&para;</a></h2>
+<h3 id="template-typename-args-struct-source_location_format_string"><code>template &lt;typename... Args&gt; struct source_location_format_string</code><a class="headerlink" href="#template-typename-args-struct-source_location_format_string" title="Permanent link">&para;</a></h3>
+<p>A specialized format string wrapper struct in <code>namespace siddiqsoft</code> that combines <code>std::format_string&lt;Args...&gt;</code> with a <code>consteval</code> constructor capturing caller <code>std::source_location::current()</code>. Used by <code>err_throw()</code> to capture exact call-site file and line numbers.</p>
+<hr />
 <h2 id="public-constructors-destructor">Public Constructors &amp; Destructor<a class="headerlink" href="#public-constructors-destructor" title="Permanent link">&para;</a></h2>
-<h2 id="public-constructors-destructor_1">Public Constructors &amp; Destructor<a class="headerlink" href="#public-constructors-destructor_1" title="Permanent link">&para;</a></h2>
 <h3 id="explicit-scopetracestdstring_view-sn-const-stdsource_location-sl-stdsource_locationcurrent"><code>explicit ScopeTrace(std::string_view sn = {}, const std::source_location&amp; sl = std::source_location::current())</code><a class="headerlink" href="#explicit-scopetracestdstring_view-sn-const-stdsource_location-sl-stdsource_locationcurrent" title="Permanent link">&para;</a></h3>
 <p>Constructs a scope logger with the specified scope name <code>sn</code> and caller source location <code>sl</code>. Increments the thread-local nesting depth. If <code>sn</code> is omitted or empty (<code>{}</code>), the scope name automatically defaults to the plain function name extracted via <code>extract_func_name(sl.function_name())</code> (evaluating to <code>"GLOBAL"</code> when declared in global scope outside of any function).</p>
 <ul>
@@ -1865,8 +1946,12 @@
 <p>Formats and outputs a warning message to <code>std::cerr</code> (colored yellow) prefixed by timestamp and depth-indented scope name. Active in all build modes.</p>
 <h3 id="template-typename-args-void-errstdformat_stringargs-fmt-args-args"><code>template &lt;typename... Args&gt; void err(std::format_string&lt;Args...&gt; fmt, Args&amp;&amp;... args)</code><a class="headerlink" href="#template-typename-args-void-errstdformat_stringargs-fmt-args-args" title="Permanent link">&para;</a></h3>
 <p>Formats and outputs an error message to <code>std::cerr</code> (colored red) prefixed by timestamp and depth-indented scope name. Active in all build modes.</p>
+<h3 id="template-typename-ex-stdexception-typename-args-void-err_throwsource_location_format_stringstdtype_identity_targs-fmt_loc-args-args-noexceptfalse"><code>template &lt;typename EX = std::exception, typename... Args&gt; void err_throw(source_location_format_string&lt;std::type_identity_t&lt;Args&gt;...&gt; fmt_loc, Args&amp;&amp;... args) noexcept(false)</code><a class="headerlink" href="#template-typename-ex-stdexception-typename-args-void-err_throwsource_location_format_stringstdtype_identity_targs-fmt_loc-args-args-noexceptfalse" title="Permanent link">&para;</a></h3>
+<p>Unified error logging and exception throwing shortcut. Uses <code>source_location_format_string</code> to capture the caller's exact call-site <code>std::source_location</code>. Formats and logs an error message to <code>std::cerr</code> (colored orange) with ISO 8601 UTC timestamp, depth-indented scope name, bold exception type name (<code>typeid(EX).name()</code>), formatted message in italics, and call-site <code>file:line</code> details. Then constructs and throws <code>EX(formatted_message)</code>. Active in all build modes.</p>
 <h3 id="void-expconst-stdexception-e"><code>void exp(const std::exception&amp; e)</code><a class="headerlink" href="#void-expconst-stdexception-e" title="Permanent link">&para;</a></h3>
-<p>Outputs caught exception details (<code>typeid(e).name()</code> and <code>e.what()</code>) to <code>std::cerr</code> (colored bold red) prefixed by timestamp and depth-indented scope name. Active in all build modes.</p>
+<p>Shortcut for logging caught exceptions in <code>catch</code> blocks. Outputs exception type (<code>typeid(e).name()</code>) in bold red and exception message (<code>e.what()</code>) to <code>std::cerr</code> prefixed by timestamp and depth-indented scope name. Active in all build modes.</p>
+<h3 id="template-typename-args-void-expconst-stdexception-e-stdformat_stringargs-fmt-args-args"><code>template &lt;typename... Args&gt; void exp(const std::exception&amp; e, std::format_string&lt;Args...&gt; fmt, Args&amp;&amp;... args)</code><a class="headerlink" href="#template-typename-args-void-expconst-stdexception-e-stdformat_stringargs-fmt-args-args" title="Permanent link">&para;</a></h3>
+<p>Enhanced exception logging shortcut for <code>catch</code> blocks. Outputs exception type (<code>typeid(e).name()</code>) in bold red, exception message (<code>e.what()</code>) in italic, followed by custom formatted contextual details (<code>fmt</code>, <code>args...</code>) to <code>std::cerr</code> prefixed by timestamp and depth-indented scope name. Active in all build modes.</p>
 <hr />
 <h2 id="formatting-stream-operations">Formatting &amp; Stream Operations<a class="headerlink" href="#formatting-stream-operations" title="Permanent link">&para;</a></h2>
 <h3 id="template-typename-chart-char-nodiscard-auto-to_string-const"><code>template &lt;typename charT = char&gt; [[nodiscard]] auto to_string() const</code><a class="headerlink" href="#template-typename-chart-char-nodiscard-auto-to_string-const" title="Permanent link">&para;</a></h3>
@@ -1968,7 +2053,7 @@
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.expand", "navigation.path", "navigation.top", "navigation.footer", "navigation.tracking", "search.suggest", "search.highlight", "search.share", "content.code.copy", "content.code.annotate"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": "0.10.1-1"}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.expand", "navigation.path", "navigation.top", "navigation.footer", "navigation.tracking", "search.suggest", "search.highlight", "search.share", "content.code.copy", "content.code.annotate"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": "0.20.0"}</script>
     
     
       <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>

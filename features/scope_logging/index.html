@@ -619,6 +619,45 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#unified-error-throwing-catching-patterns" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Unified Error Throwing &amp; Catching Patterns
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Unified Error Throwing &amp; Catching Patterns">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-throw-site-err_throw" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Throw Site (err_throw)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-catch-site-exp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Catch Site (exp)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1195,6 +1234,45 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#unified-error-throwing-catching-patterns" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Unified Error Throwing &amp; Catching Patterns
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Unified Error Throwing &amp; Catching Patterns">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-throw-site-err_throw" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Throw Site (err_throw)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-catch-site-exp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Catch Site (exp)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1297,8 +1375,37 @@
 <li><strong><code>scope.trace("...")</code></strong>: Trace diagnostic details (light gray, active in <code>DEBUG_TRACE</code> builds).</li>
 <li><strong><code>scope.warn("...")</code></strong>: Warning messages (colored yellow, active in all build modes).</li>
 <li><strong><code>scope.err("...")</code></strong>: Error messages (colored red, active in all build modes).</li>
-<li><strong><code>scope.exp(e)</code></strong>: Formatted exception log (colored bold red with exception type and <code>what()</code>, active in all build modes).</li>
+<li><strong><code>scope.err_throw&lt;EX&gt;("...")</code></strong>: Unified error logging &amp; exception throwing shortcut (colored orange, throws <code>EX(formatted_msg)</code>).</li>
+<li><strong><code>scope.exp(e)</code></strong>: Exception handler shortcut. Logs exception type (<code>typeid(e).name()</code>) in bold red and <code>e.what()</code> (active in all build modes).</li>
+<li><strong><code>scope.exp(e, "...")</code></strong>: Exception handler shortcut with context. Logs exception type, italicized <code>e.what()</code>, and custom formatted contextual details (active in all build modes).</li>
 </ul>
+<h2 id="unified-error-throwing-catching-patterns">Unified Error Throwing &amp; Catching Patterns<a class="headerlink" href="#unified-error-throwing-catching-patterns" title="Permanent link">&para;</a></h2>
+<p><code>ScopeTrace</code> simplifies error flow by combining console logging with exception throwing (<code>err_throw()</code>) and exception handling (<code>exp()</code>):</p>
+<h3 id="1-throw-site-err_throw">1. Throw Site (<code>err_throw</code>)<a class="headerlink" href="#1-throw-site-err_throw" title="Permanent link">&para;</a></h3>
+<p>Instead of separate log and throw statements, <code>err_throw&lt;EX&gt;(fmt, args...)</code> logs the formatted error message with timestamps, depth indentation, and exception type details, then immediately throws <code>EX</code>:</p>
+<div class="language-cpp highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">validate_input</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">value</span><span class="p">)</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="p">{</span>
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">    </span><span class="n">siddiqsoft</span><span class="o">::</span><span class="n">ScopeTrace</span><span class="w"> </span><span class="n">scope</span><span class="p">;</span>
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">value</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="w">        </span><span class="c1">// Logs orange error message and throws std::invalid_argument</span>
+</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="w">        </span><span class="n">scope</span><span class="p">.</span><span class="n">err_throw</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">invalid_argument</span><span class="o">&gt;</span><span class="p">(</span><span class="s">&quot;Value must be non-negative, got: {}&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">value</span><span class="p">);</span>
+</span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-2-9"><a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="p">}</span>
+</span></code></pre></div>
+<h3 id="2-catch-site-exp">2. Catch Site (<code>exp</code>)<a class="headerlink" href="#2-catch-site-exp" title="Permanent link">&para;</a></h3>
+<p>Inside <code>catch</code> blocks, <code>exp()</code> logs caught exception details with zero boilerplate:</p>
+<div class="language-cpp highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="k">try</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">    </span><span class="n">validate_input</span><span class="p">(</span><span class="mi">-5</span><span class="p">);</span>
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="p">}</span>
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">exception</span><span class="o">&amp;</span><span class="w"> </span><span class="n">e</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="w">    </span><span class="c1">// Basic exception log: outputs typeid name and e.what()</span>
+</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="w">    </span><span class="n">scope</span><span class="p">.</span><span class="n">exp</span><span class="p">(</span><span class="n">e</span><span class="p">);</span>
+</span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>
+</span><span id="__span-3-8"><a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="w">    </span><span class="c1">// Exception log with custom formatted contextual details:</span>
+</span><span id="__span-3-9"><a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="w">    </span><span class="n">scope</span><span class="p">.</span><span class="n">exp</span><span class="p">(</span><span class="n">e</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Validation failed during request ID: {}&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">request_id</span><span class="p">);</span>
+</span><span id="__span-3-10"><a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="p">}</span>
+</span></code></pre></div>
 
 
 
@@ -1394,7 +1501,7 @@
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.expand", "navigation.path", "navigation.top", "navigation.footer", "navigation.tracking", "search.suggest", "search.highlight", "search.share", "content.code.copy", "content.code.annotate"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": "0.10.1-1"}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.expand", "navigation.path", "navigation.top", "navigation.footer", "navigation.tracking", "search.suggest", "search.highlight", "search.share", "content.code.copy", "content.code.annotate"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": "0.20.0"}</script>
     
     
       <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
