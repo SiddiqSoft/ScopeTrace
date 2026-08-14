@@ -5,6 +5,8 @@
 #include <string>
 #include <thread>
 #include <vector>
+#include <future>
+
 
 #include "../include/siddiqsoft/ScopeTrace.hpp"
 
@@ -20,6 +22,19 @@ TEST(ScopeTraceTest, HelloWorld)
         std::this_thread::sleep_for(std::chrono::milliseconds(2));
     }
 }
+
+TEST(ScopeTraceTest, HelloWorld_Lambda)
+{
+    std::future<void> f = std::async(std::launch::async, []() {
+        auto scope = g_scope.nest("HelloWorld_Lambda");
+
+        scope.trace("Hello, World!");
+        std::this_thread::sleep_for(std::chrono::milliseconds(2));
+    });
+
+    f.get();
+}
+
 
 TEST(ScopeTraceTest, ScopeDepthNesting)
 {
@@ -80,4 +95,19 @@ TEST(ScopeTraceTest, ExceptionSafety)
     catch (const std::exception& e) {
         scope.exp(e, "Caught exception in outer scope at line: {}", __LINE__);
     }
+}
+
+
+TEST(ScopeTraceTest, ExceptionSafety_2)
+{
+    auto scope = g_scope.nest(__func__);
+
+    EXPECT_THROW(
+            {
+                auto inner = scope.nest("Nested");
+
+                inner.info("From the inner scope line: {}", __LINE__);
+                inner.err_throw<std::invalid_argument>("Deliberate error from here");
+            },
+            std::invalid_argument);
 }

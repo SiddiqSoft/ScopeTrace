@@ -51,6 +51,33 @@
 
 namespace siddiqsoft
 {
+    enum class LogLevel
+    {
+        None,
+        Error,
+        Warning,
+        Info,
+        Debug,
+        Trace
+    };
+
+    struct ScopeTraceType
+    {
+        std::source_location location;
+        LogLevel             level {LogLevel::None};
+
+        ScopeTraceType(LogLevel lvl, const std::source_location& loc = std::source_location::current())
+            : location(loc)
+            , level(lvl)
+        {
+        }
+
+        ScopeTraceType(const std::source_location& loc = std::source_location::current())
+            : location(loc)
+        {
+        }
+    };
+
     /// @brief Wrapper combining std::format_string with automatic caller std::source_location capture.
     template <typename... Args>
     struct source_location_format_string
@@ -242,6 +269,16 @@ namespace siddiqsoft
                          NOC);
 #endif
         }
+
+        template <LogLevel level = LogLevel::Info, typename... Args>
+        auto& log(std::format_string<Args...> fmt, Args&&... args)
+        {
+            std::string      indent(m_scope_depth * 2, ' ');
+            std::string_view scope_label = m_scope_name.empty() ? m_location.file_name() : m_scope_name;
+
+            return this;
+        }
+
 
         /// @brief Log a formatted warning message to std::cerr with indentation and scope label
         /// @tparam Args Format argument types
