@@ -270,49 +270,46 @@ namespace siddiqsoft
         ScopeTrace& operator=(const ScopeTrace&) = delete;
 
         /// @brief Move assignment is not supported
-        ScopeTrace& operator=(ScopeTrace&&) = delete;
+        ScopeTrace&                         operator=(ScopeTrace&&) = delete;
 
-        auto        indent_buffer(trace_level level) -> std::string
+        [[nodiscard]] static constexpr auto logline_start_color(trace_level level) noexcept -> std::string_view
+        {
+            switch (level) {
+                case trace_level::critical: return RED;
+                case trace_level::exception: return RED;
+                case trace_level::error: return ORN;
+                case trace_level::warning: return DKYLW;
+                case trace_level::info: return NOC;
+                case trace_level::debug: return LTGY;
+                case trace_level::trace: return LTGY;
+                default: return NOC;
+            }
+        }
+
+        [[nodiscard]] static constexpr auto logline_end_color(trace_level) noexcept -> std::string_view { return NOC; }
+
+        [[nodiscard]] auto                  indent_buffer(trace_level level) const -> std::string
         {
             return std::format(
                     "{}[{: <6}]{} {:<{}}", logline_start_color(level), level, logline_end_color(level), "", m_scope_depth * 2);
         }
 
-        auto logline_start_color(trace_level level) -> std::string
+        [[nodiscard]] auto logline_prefix(trace_level level) const -> std::string
         {
-            switch (level) {
-                case trace_level ::critical: return std::string(RED);
-                case trace_level ::exception: return std::string(RED);
-                case trace_level ::error: return std::string(ORN);
-                case trace_level ::warning: return std::string(DKYLW);
-                case trace_level ::info: return std::string(NOC);
-                case trace_level ::debug: return std::string(LTGY);
-                case trace_level ::trace: return std::string(LTGY);
-                default: return std::string(NOC);
-            }
-        }
-
-        auto logline_end_color(trace_level level) -> std::string
-        {
-            switch (level) {
-                case trace_level ::critical: return std::string(NOC);
-                case trace_level ::error: return std::string(NOC);
-                case trace_level ::warning: return std::string(NOC);
-                case trace_level ::info: return std::string(NOC);
-                case trace_level ::debug: return std::string(NOC);
-                case trace_level ::trace: return std::string(NOC);
-                default: return std::string(NOC);
-            }
-        }
-
-        auto logline_prefix(trace_level level) -> std::string
-        {
-            return std::format("{}{:%FT%TZ} {}{}  ", LTGY, std::chrono::system_clock::now(), indent_buffer(level), NOC);
+            return std::format("{}{:%FT%TZ} {} [{: <6}]{} {:<{}}",
+                               LTGY,
+                               std::chrono::system_clock::now(),
+                               logline_start_color(level),
+                               level,
+                               NOC,
+                               "",
+                               m_scope_depth * 2);
         }
 
 
         /// @brief Output formatted log message filtered by level threshold
-        /// @tparam level Message severity (defaults to trace_level::critical). Always logged if critical/exception/error; filtered by m_log_level for warning/info/debug/trace.
+        /// @tparam level Message severity (defaults to trace_level::critical). Always logged if critical/exception/error; filtered
+        /// by m_log_level for warning/info/debug/trace.
         /// @tparam Args Format argument types
         /// @param fmt Format string
         /// @param args Format arguments
@@ -408,21 +405,22 @@ namespace siddiqsoft
         void err_throw(source_location_format_string<std::type_identity_t<Args>...> fmt_loc, Args&&... args) noexcept(false)
         {
             const auto& loc = fmt_loc.location;
+            std::string msg = std::format(fmt_loc.fmt, std::forward<Args>(args)...);
 
-            log<siddiqsoft::trace_level ::exception>("{}{}{} - {}{}{}{} - {}from:{}@{}{}",
-                                                     BOLD,
-                                                     typeid(EX).name(),
-                                                     NOTBOLD,
-                                                     ITAL, // for the message
-                                                     std::format(fmt_loc.fmt, std::forward<Args>(args)...),
-                                                     NOTITAL,
-                                                     NOC, // - now for the filename and line
-                                                     UNDL,
-                                                     loc.file_name(),
-                                                     loc.line(),
-                                                     NOTUNDL);
+            log<siddiqsoft::trace_level::exception>("{}{}{} - {}{}{}{} - {}from:{}@{}{}",
+                                                    BOLD,
+                                                    typeid(EX).name(),
+                                                    NOTBOLD,
+                                                    ITAL,
+                                                    msg,
+                                                    NOTITAL,
+                                                    NOC,
+                                                    UNDL,
+                                                    loc.file_name(),
+                                                    loc.line(),
+                                                    NOTUNDL);
 
-            throw EX(std::format(fmt_loc.fmt, std::forward<Args>(args)...));
+            throw EX(msg);
         }
 
 
