@@ -234,7 +234,7 @@ namespace siddiqsoft
         /// @param level Logging threshold for this scope (defaults to trace_level::critical)
         /// @param sl Source location (defaults to caller site)
         explicit ScopeTrace(std::string_view            sn    = {},
-                            trace_level                 level = trace_level::critical,
+                            trace_level                 level = trace_level::none,
                             const std::source_location& sl    = std::source_location::current())
             : m_location(sl)
             , m_start_timestamp(std::chrono::system_clock::now())
@@ -243,22 +243,20 @@ namespace siddiqsoft
             , m_log_level(level)
         {
             if (sn.empty()) m_scope_name = extract_func_name(m_location.function_name());
-
-            std::println(std::cerr, "  Creating NEW SCOPE {}:{}", m_scope_name, static_cast<uint8_t>(m_log_level));
         }
 
         /// @brief Create a nested sub-scope with child scope name and logging threshold
+        /// @note The new nest scope will inherit the parent's logging threshold if the child level is set to trace_level::none.
         /// @param sn Custom sub-scope label (appended as "parent-child")
-        /// @param level Logging threshold for child scope (defaults to trace_level::critical)
+        /// @param level Logging threshold for child scope (defaults to trace_level::none)
         /// @param sl Source location (defaults to caller site)
         /// @return New ScopeTrace instance
-        ScopeTrace nest(std::string_view            sn,
-                        trace_level                 level = trace_level::critical,
+        ScopeTrace nest(std::string_view            sn, //< required sub-scope name
+                        trace_level                 level = trace_level::none,
                         const std::source_location& sl    = std::source_location::current())
         {
-            // The scope name is required when nesting.
             // We will add the function name and the scope name to the log message.
-            return ScopeTrace {std::format("{}-{}", m_scope_name, sn), level, sl};
+            return ScopeTrace {std::format("{}/{}", m_scope_name, sn), level == trace_level::none ? m_log_level : level, sl};
         }
 
         /// @brief Copying is not supported
@@ -271,8 +269,9 @@ namespace siddiqsoft
         ScopeTrace& operator=(const ScopeTrace&) = delete;
 
         /// @brief Move assignment is not supported
-        ScopeTrace&                         operator=(ScopeTrace&&) = delete;
+        ScopeTrace& operator=(ScopeTrace&&) = delete;
 
+    protected:
         [[nodiscard]] static constexpr auto logline_start_color(trace_level level) noexcept -> std::string_view
         {
             switch (level) {
@@ -292,7 +291,7 @@ namespace siddiqsoft
         [[nodiscard]] auto                  indent_buffer(trace_level level) const -> std::string
         {
             return std::format(
-                    "{}[{: <6}]{} {:<{}}", logline_start_color(level), level, logline_end_color(level), "", m_scope_depth * 2);
+                    "{}[{: <7}]{} {:<{}}", logline_start_color(level), level, logline_end_color(level), "", m_scope_depth * 2);
         }
 
         [[nodiscard]] auto logline_prefix(trace_level level) const -> std::string
@@ -307,7 +306,7 @@ namespace siddiqsoft
                                m_scope_depth * 2);
         }
 
-
+    public:
         /// @brief Output formatted log message filtered by level threshold
         /// @tparam level Message severity (defaults to trace_level::critical). Always logged if critical/exception/error; filtered
         /// by m_log_level for warning/info/debug/trace.
@@ -433,48 +432,6 @@ namespace siddiqsoft
         auto& info(std::format_string<Args...> fmt, Args&&... args)
         {
             return log<siddiqsoft::trace_level ::info>(fmt, std::forward<Args>(args)...);
-        }
-
-
-        /// @brief Format scope log as string representation
-        /// @tparam charT Character type (default char)
-        /// @return Formatted scope log description
-        template <typename charT = char>
-        [[nodiscard]] auto to_string() const
-        {
-            if constexpr (std::is_same_v<charT, char>) {
-                auto        us = std::chrono::duration_cast<std::chrono::microseconds>(elapsed()).count();
-                std::string indent(m_scope_depth * 2, ' ');
-                if (m_scope_name.empty()) {
-                    return std::format("{}{}[{}:{}] {} took {}us",
-                                       current_timestamp(),
-                                       indent,
-                                       m_location.file_name(),
-                                       m_location.line(),
-                                       m_location.function_name(),
-                                       us);
-                }
-                else {
-                    return std::format("{}{}[{}:{}] {} ({}) took {}us",
-                                       current_timestamp(),
-                                       indent,
-                                       m_location.file_name(),
-                                       m_location.line(),
-                                       m_location.function_name(),
-                                       m_scope_name,
-                                       us);
-                }
-            }
-            else {
-                static_assert(std::is_same_v<charT, char>, "ScopeTrace supports char formatting");
-            }
-        }
-
-        /// @brief Stream insertion operator for ScopeTrace
-        friend std::ostream& operator<<(std::ostream& os, const ScopeTrace& src)
-        {
-            os << src.to_string<char>();
-            return os;
         }
 
         /// @brief Update the logging threshold level for this scope

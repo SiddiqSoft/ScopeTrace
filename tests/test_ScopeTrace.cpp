@@ -63,25 +63,6 @@ TEST(ScopeTraceTest, ScopeDepthNesting)
 }
 
 
-TEST(ScopeTraceTest, FormattingAndStream)
-{
-    siddiqsoft::ScopeTrace scope;
-    {
-        std::string str = scope.to_string();
-        EXPECT_TRUE(str.contains("Test"));
-        EXPECT_TRUE(str.contains("took"));
-
-        std::ostringstream os;
-        os << scope;
-        EXPECT_TRUE(os.str().contains("Test"));
-        EXPECT_TRUE(os.str().contains("took"));
-
-        std::string formatted = std::format("{}", scope.to_string());
-        EXPECT_TRUE(formatted.contains("Test"));
-        EXPECT_TRUE(formatted.contains("took"));
-    }
-}
-
 TEST(ScopeTraceTest, ExceptionSafety)
 {
     auto scope = g_scope.nest(__func__);
