@@ -637,6 +637,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#log-level-colors-output-styling" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Log Level Colors &amp; Output Styling
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#in-scope-logging-sinks" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1280,6 +1291,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#log-level-colors-output-styling" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Log Level Colors &amp; Output Styling
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#in-scope-logging-sinks" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1435,19 +1457,89 @@
 <h3 id="filtering-rules">Filtering Rules<a class="headerlink" href="#filtering-rules" title="Permanent link">&para;</a></h3>
 <ul>
 <li><strong>Always Logged:</strong> Messages logged with <code>critical</code>, <code>exception</code>, or <code>error</code> level are <strong>always output</strong> regardless of <code>m_log_level</code>.</li>
-<li><strong><code>LogLevel::trace</code></strong>: Enables all diagnostic logs (<code>warning</code>, <code>info</code>, <code>debug</code>, <code>trace</code>).</li>
+<li><strong><code>LogLevel::trace</code></strong>: Enables all diagnostic logs (<code>warning</code>, <code>info</code>, <code>debug</code>, <code>trace</code>). Recommended for high-volume I/O operations.</li>
 <li><strong><code>LogLevel::debug</code></strong>: Enables <code>warning</code>, <code>info</code>, and <code>debug</code> logs (excludes <code>trace</code>).</li>
 <li><strong><code>LogLevel::info</code></strong>: Enables <code>warning</code> and <code>info</code> logs (excludes <code>debug</code> and <code>trace</code>).</li>
 <li><strong><code>LogLevel::warning</code></strong>: Enables <code>warning</code> logs only.</li>
 </ul>
+<h2 id="log-level-colors-output-styling">Log Level Colors &amp; Output Styling<a class="headerlink" href="#log-level-colors-output-styling" title="Permanent link">&para;</a></h2>
+<p><code>ScopeTrace</code> applies distinct ANSI color escape codes to each log level tag to make terminal output visually scannable:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Log Level / Method</th>
+<th style="text-align: left;">Tag Label</th>
+<th style="text-align: left;">Color Output</th>
+<th style="text-align: left;">ANSI Code</th>
+<th style="text-align: left;">Purpose &amp; Typical Use</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong><code>trace_level::critical</code></strong></td>
+<td style="text-align: left;"><code>[critical]</code></td>
+<td style="text-align: left;"><strong>Red</strong></td>
+<td style="text-align: left;"><code>\033[0;31m</code></td>
+<td style="text-align: left;">System-critical failures requiring immediate action. Always logged.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>trace_level::exception</code></strong></td>
+<td style="text-align: left;"><code>[exception]</code></td>
+<td style="text-align: left;"><strong>Red / Bold Red</strong></td>
+<td style="text-align: left;"><code>\033[0;31m</code></td>
+<td style="text-align: left;">Caught exception details and <code>err_throw()</code> events. Always logged.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>trace_level::error</code></strong></td>
+<td style="text-align: left;"><code>[error]</code></td>
+<td style="text-align: left;"><strong>Orange</strong></td>
+<td style="text-align: left;"><code>\033[38;5;208m</code></td>
+<td style="text-align: left;">Operational errors and failed preconditions. Always logged.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>trace_level::warning</code></strong></td>
+<td style="text-align: left;"><code>[warning]</code></td>
+<td style="text-align: left;"><strong>Dark Yellow / Gold</strong></td>
+<td style="text-align: left;"><code>\033[38;5;136m</code></td>
+<td style="text-align: left;">Recoverable warnings and degraded performance. Logged if threshold <code>&gt;= warning</code>.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>trace_level::info</code></strong></td>
+<td style="text-align: left;"><code>[info]</code></td>
+<td style="text-align: left;"><strong>Default / Neutral</strong></td>
+<td style="text-align: left;"><code>\033[0m</code></td>
+<td style="text-align: left;">General informational events and application state changes. Logged if threshold <code>&gt;= info</code>.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>trace_level::debug</code></strong></td>
+<td style="text-align: left;"><code>[debug]</code></td>
+<td style="text-align: left;"><strong>Light Gray</strong></td>
+<td style="text-align: left;"><code>\033[38;5;250m</code></td>
+<td style="text-align: left;">Detailed internal algorithm state and variable values. Logged if threshold <code>&gt;= debug</code>.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>trace_level::trace</code></strong></td>
+<td style="text-align: left;"><code>[trace]</code></td>
+<td style="text-align: left;"><strong>Light Gray</strong></td>
+<td style="text-align: left;"><code>\033[38;5;250m</code></td>
+<td style="text-align: left;">High-frequency I/O operations, raw packets, &amp; buffer dumps. Logged if threshold <code>&gt;= trace</code>.</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>[!TIP]
+<strong>Best Practice: High-Frequency I/O Operations Should Use <code>trace</code> (<code>scope.trace(...)</code>)</strong></p>
+<p>High-volume diagnostic logging — such as socket reads/writes, raw payload packet dumps, file stream buffer transfers, HTTP payload tracing, or inner loop iterations — should always use <code>trace_level::trace</code> (<code>scope.trace(...)</code>).</p>
+<p>When <code>m_log_level</code> is set to <code>LogLevel::debug</code> or <code>info</code>, all <code>scope.trace(...)</code> statements are bypassed via a zero-allocation threshold check (<code>level &lt;= m_log_level</code>), eliminating string formatting and stream output overhead during standard debugging while keeping log buffers clean.</p>
+</blockquote>
 <h2 id="in-scope-logging-sinks">In-Scope Logging Sinks<a class="headerlink" href="#in-scope-logging-sinks" title="Permanent link">&para;</a></h2>
 <p>Within an active scope, you can output formatted contextual messages to <code>std::cerr</code> with depth indentation and ANSI color coding:</p>
 <ul>
-<li><strong><code>scope.trace("...")</code></strong>: Trace diagnostic details (light gray, active when <code>m_log_level &gt;= trace</code>).</li>
+<li><strong><code>scope.trace("...")</code></strong>: Trace diagnostic details (light gray, active when <code>m_log_level &gt;= trace</code>). Ideal for I/O packet/buffer dumps.</li>
 <li><strong><code>scope.debug("...")</code></strong>: Debug diagnostic details (light gray, active when <code>m_log_level &gt;= debug</code>).</li>
 <li><strong><code>scope.info("...")</code></strong>: Informational messages (active when <code>m_log_level &gt;= info</code>).</li>
-<li><strong><code>scope.warn("...")</code></strong>: Warning messages (colored yellow, active when <code>m_log_level &gt;= warning</code>).</li>
-<li><strong><code>scope.err("...")</code></strong>: Error messages (colored red, always logged).</li>
+<li><strong><code>scope.warn("...")</code></strong>: Warning messages (colored dark yellow, active when <code>m_log_level &gt;= warning</code>).</li>
+<li><strong><code>scope.err("...")</code></strong>: Error messages (colored orange, always logged).</li>
 <li><strong><code>scope.err_throw&lt;EX&gt;("...")</code></strong>: Unified error logging &amp; exception throwing shortcut (colored orange, throws <code>EX(formatted_msg)</code>, always logged).</li>
 <li><strong><code>scope.exp(e)</code></strong>: Exception handler shortcut. Logs exception type (<code>typeid(e).name()</code>) in bold red and <code>e.what()</code> (always logged).</li>
 <li><strong><code>scope.exp(e, "...")</code></strong>: Exception handler shortcut with context. Logs exception type, italicized <code>e.what()</code>, and custom formatted contextual details (always logged).</li>
@@ -1574,7 +1666,7 @@
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.expand", "navigation.path", "navigation.top", "navigation.footer", "navigation.tracking", "search.suggest", "search.highlight", "search.share", "content.code.copy", "content.code.annotate"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": "0.21.0-alpha.18"}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.expand", "navigation.path", "navigation.top", "navigation.footer", "navigation.tracking", "search.suggest", "search.highlight", "search.share", "content.code.copy", "content.code.annotate"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": "0.21.0-alpha.19"}</script>
     
     
       <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
