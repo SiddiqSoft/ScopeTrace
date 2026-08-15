@@ -54,14 +54,14 @@ namespace siddiqsoft
 {
     enum class LogLevel : uint8_t
     {
-        none,
         critical  = 0,
         exception = 1,
         error     = 2,
         warning   = 3,
         info      = 4,
-        trace     = 5,
-        debug     = 9,
+        debug     = 5,
+        trace     = 6,
+        none      = 255,
     };
 } // namespace siddiqsoft
 
@@ -78,8 +78,9 @@ struct std::formatter<siddiqsoft::LogLevel> : std::formatter<std::string_view>
             case siddiqsoft::LogLevel::error: name = "error"; break;
             case siddiqsoft::LogLevel::warning: name = "warning"; break;
             case siddiqsoft::LogLevel::info: name = "info"; break;
-            case siddiqsoft::LogLevel::trace: name = "trace"; break;
             case siddiqsoft::LogLevel::debug: name = "debug"; break;
+            case siddiqsoft::LogLevel::trace: name = "trace"; break;
+            case siddiqsoft::LogLevel::none: name = "none"; break;
             default: break;
         }
         return std::formatter<std::string_view>::format(name, ctx);
@@ -110,20 +111,21 @@ namespace siddiqsoft
     class ScopeTrace
     {
         // Colors for output
-        static constexpr std::string_view LTGY {"\033[38;5;250m"}; //< Light gray
-        static constexpr std::string_view DKGY {"\033[1;40m"};     //< Dark gray
-        static constexpr std::string_view RED {"\033[0;31m"};      //< Red
-        static constexpr std::string_view ORN {"\033[38;5;208m"};  //< Orange
-        static constexpr std::string_view BLU {"\033[0;34m"};      //< Blue
-        static constexpr std::string_view GRN {"\033[0;32m"};      //< Green
-        static constexpr std::string_view YLW {"\033[1;33m"};      //< Yellow
-        static constexpr std::string_view BOLD {"\033[1m"};        //< Bold
-        static constexpr std::string_view ITAL {"\033[3m"};        //< Italic
-        static constexpr std::string_view UNDL {"\033[4m"};        //< Underline
-        static constexpr std::string_view NOTUNDL {"\033[24m"};    //< Not underline
-        static constexpr std::string_view NOTBOLD {"\033[22m"};    //< Not bold
-        static constexpr std::string_view NOTITAL {"\033[23m"};    //< Not italic
-        static constexpr std::string_view NOC {"\033[0m"};         //< No Color
+        static constexpr std::string_view LTGY {"\033[38;5;250m"};  //< Light gray
+        static constexpr std::string_view DKGY {"\033[1;40m"};      //< Dark gray
+        static constexpr std::string_view RED {"\033[0;31m"};       //< Red
+        static constexpr std::string_view ORN {"\033[38;5;208m"};   //< Orange
+        static constexpr std::string_view BLU {"\033[0;34m"};       //< Blue
+        static constexpr std::string_view GRN {"\033[0;32m"};       //< Green
+        static constexpr std::string_view YLW {"\033[1;33m"};       //< Yellow
+        static constexpr std::string_view DKYLW {"\033[38;5;136m"}; //< Dark Yellow
+        static constexpr std::string_view BOLD {"\033[1m"};         //< Bold
+        static constexpr std::string_view ITAL {"\033[3m"};         //< Italic
+        static constexpr std::string_view UNDL {"\033[4m"};         //< Underline
+        static constexpr std::string_view NOTUNDL {"\033[24m"};     //< Not underline
+        static constexpr std::string_view NOTBOLD {"\033[22m"};     //< Not bold
+        static constexpr std::string_view NOTITAL {"\033[23m"};     //< Not italic
+        static constexpr std::string_view NOC {"\033[0m"};          //< No Color
         static constexpr std::string_view global_function_name {"GLOBAL"};
 
     public:
@@ -245,12 +247,6 @@ namespace siddiqsoft
                         LogLevel                    level = LogLevel::critical,
                         const std::source_location& sl    = std::source_location::current())
         {
-            std::println(std::cerr,
-                         "  Creating nest from {}:{} for scope {}:{}",
-                         m_scope_name,
-                         static_cast<uint8_t>(m_log_level),
-                         sn,
-                         static_cast<uint8_t>(level));
             // The scope name is required when nesting.
             // We will add the function name and the scope name to the log message.
             return ScopeTrace {std::format("{}-{}", m_scope_name, sn), level, sl};
@@ -280,7 +276,7 @@ namespace siddiqsoft
                 case LogLevel::critical: return std::string(RED);
                 case LogLevel::exception: return std::string(RED);
                 case LogLevel::error: return std::string(ORN);
-                case LogLevel::warning: return std::string(YLW);
+                case LogLevel::warning: return std::string(DKYLW);
                 case LogLevel::info: return std::string(NOC);
                 case LogLevel::debug: return std::string(LTGY);
                 case LogLevel::trace: return std::string(LTGY);
@@ -310,71 +306,17 @@ namespace siddiqsoft
         template <LogLevel level = LogLevel::critical, typename... Args>
         auto& log(std::format_string<Args...> fmt, Args&&... args)
         {
-            switch (level) {
-                case LogLevel::exception:
-                case LogLevel::critical:
-                    std::println(std::cerr,
-                                 "{}{}{} - {}{}",
-                                 logline_prefix(m_log_level),
-                                 logline_start_color(m_log_level),
-                                 m_scope_name.empty() ? m_location.file_name() : m_scope_name,
-                                 std::format(fmt, std::forward<Args>(args)...),
-                                 logline_end_color(m_log_level));
-                    break;
-                case LogLevel::error:
-                    std::println(std::cerr,
-                                 "{}{}{} - {}{}",
-                                 logline_prefix(m_log_level),
-                                 logline_start_color(m_log_level),
-                                 m_scope_name.empty() ? m_location.file_name() : m_scope_name,
-                                 std::format(fmt, std::forward<Args>(args)...),
-                                 logline_end_color(m_log_level));
-                    break;
-                case LogLevel::warning:
-                    if (m_log_level <= LogLevel::warning) {
-                        std::println(std::cerr,
-                                     "{}{}{} - {}{}",
-                                     logline_prefix(m_log_level),
-                                     logline_start_color(m_log_level),
-                                     m_scope_name.empty() ? m_location.file_name() : m_scope_name,
-                                     std::format(fmt, std::forward<Args>(args)...),
-                                     logline_end_color(m_log_level));
-                    }
-                    break;
-                case LogLevel::info:
-                    if (m_log_level >= LogLevel::info) {
-                        std::println(std::cerr,
-                                     "{}{}{} - {}{}",
-                                     logline_prefix(m_log_level),
-                                     logline_start_color(m_log_level),
-                                     m_scope_name.empty() ? m_location.file_name() : m_scope_name,
-                                     std::format(fmt, std::forward<Args>(args)...),
-                                     logline_end_color(m_log_level));
-                    }
-                    break;
-                case LogLevel::debug:
-                    if (m_log_level >= LogLevel::debug) {
-                        std::println(std::cerr,
-                                     "{}{}{} - {}{}",
-                                     logline_prefix(m_log_level),
-                                     logline_start_color(m_log_level),
-                                     m_scope_name.empty() ? m_location.file_name() : m_scope_name,
-                                     std::format(fmt, std::forward<Args>(args)...),
-                                     logline_end_color(m_log_level));
-                    }
-                    break;
-                case LogLevel::trace:
-                    if (m_log_level >= LogLevel::trace) {
-                        std::println(std::cerr,
-                                     "{}{}{} - {}{}",
-                                     logline_prefix(m_log_level),
-                                     logline_start_color(m_log_level),
-                                     m_scope_name.empty() ? m_location.file_name() : m_scope_name,
-                                     std::format(fmt, std::forward<Args>(args)...),
-                                     logline_end_color(m_log_level));
-                    }
-                    break;
-                default: break;
+            constexpr bool is_always_logged =
+                    (level == LogLevel::critical || level == LogLevel::exception || level == LogLevel::error);
+
+            if (is_always_logged || level <= m_log_level) {
+                std::println(std::cerr,
+                             "{}{}{} - {}{}",
+                             logline_prefix(level),
+                             logline_start_color(level),
+                             m_scope_name.empty() ? m_location.file_name() : m_scope_name,
+                             std::format(fmt, std::forward<Args>(args)...),
+                             logline_end_color(level));
             }
 
             return *this;
@@ -465,23 +407,7 @@ namespace siddiqsoft
                                                  loc.file_name(),
                                                  loc.line(),
                                                  NOTUNDL);
-            /*std::println(std::cerr,
-                         "{}{}{}{} - {}{}{} - {}{}{}{} - {}from:{}@{}{}",
-                         current_timestamp(),
-                         indent,
-                         ORN,
-                         scope_label,
-                         BOLD,
-                         typeid(EX).name(),
-                         NOTBOLD,
-                         ITAL,
-                         std::format(fmt_loc.fmt, std::forward<Args>(args)...),
-                         NOTITAL,
-                         NOC,
-                         UNDL,
-                         loc.file_name(),
-                         loc.line(),
-                         NOTUNDL);*/
+
             throw EX(std::format(fmt_loc.fmt, std::forward<Args>(args)...));
         }
 
