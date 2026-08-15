@@ -675,6 +675,45 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#5-global-static-scopetrace-guidelines" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Global &amp; Static ScopeTrace Guidelines
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. Global &amp; Static ScopeTrace Guidelines">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#copy-move-prevention" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Copy &amp; Move Prevention
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#avoiding-header-defined-static-instantiation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Avoiding Header-Defined Static Instantiation
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1223,6 +1262,45 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#5-global-static-scopetrace-guidelines" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Global &amp; Static ScopeTrace Guidelines
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. Global &amp; Static ScopeTrace Guidelines">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#copy-move-prevention" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Copy &amp; Move Prevention
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#avoiding-header-defined-static-instantiation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Avoiding Header-Defined Static Instantiation
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1360,6 +1438,20 @@ When running with standard logging thresholds (<code>LogLevel::info</code> or <c
 </span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">    </span><span class="c1">// Asynchronous task logic...</span>
 </span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="p">});</span>
 </span></code></pre></div>
+<hr />
+<h2 id="5-global-static-scopetrace-guidelines">5. Global &amp; Static ScopeTrace Guidelines<a class="headerlink" href="#5-global-static-scopetrace-guidelines" title="Permanent link">&para;</a></h2>
+<h3 id="copy-move-prevention">Copy &amp; Move Prevention<a class="headerlink" href="#copy-move-prevention" title="Permanent link">&para;</a></h3>
+<p><code>ScopeTrace</code> explicitly <strong>deletes all copy and move constructors and assignment operators</strong> (<code>ScopeTrace(const ScopeTrace&amp;) = delete</code>, <code>ScopeTrace(ScopeTrace&amp;&amp;) = delete</code>). Instances cannot be copied or moved.</p>
+<h3 id="avoiding-header-defined-static-instantiation">Avoiding Header-Defined Static Instantiation<a class="headerlink" href="#avoiding-header-defined-static-instantiation" title="Permanent link">&para;</a></h3>
+<p>Defining a static instance in a header file (<code>static siddiqsoft::ScopeTrace Log;</code>) causes C++ internal linkage to create a distinct static object in <strong>every translation unit (<code>.cpp</code>)</strong> that includes the header:</p>
+<ul>
+<li><strong>Multiple Static Construction</strong>: Each translation unit runs the <code>ScopeTrace</code> constructor at static initialization time before <code>main()</code>, artificially bumping thread-local <code>current_depth()</code> offset.</li>
+<li><strong>Multiple Completion Messages</strong>: Each static instance emits a destructor completion message during program shutdown.</li>
+</ul>
+<blockquote>
+<p><strong>Recommended Pattern:</strong>
+Define global <code>ScopeTrace</code> instances in a single <code>.cpp</code> translation unit, declare them <code>extern</code> in shared headers, or instantiate automatic stack <code>ScopeTrace</code> variables locally within function scopes (<code>siddiqsoft::ScopeTrace scope;</code>). Avoid <code>static ScopeTrace</code> variables inside functions, as local static destructors run at program termination rather than function scope exit.</p>
+</blockquote>
 
 
 
@@ -1455,7 +1547,7 @@ When running with standard logging thresholds (<code>LogLevel::info</code> or <c
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.expand", "navigation.path", "navigation.top", "navigation.footer", "navigation.tracking", "search.suggest", "search.highlight", "search.share", "content.code.copy", "content.code.annotate"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": "0.32.0-alpha.0"}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.expand", "navigation.path", "navigation.top", "navigation.footer", "navigation.tracking", "search.suggest", "search.highlight", "search.share", "content.code.copy", "content.code.annotate"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": "0.32.0"}</script>
     
     
       <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
