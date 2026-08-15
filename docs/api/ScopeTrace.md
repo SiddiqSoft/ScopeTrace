@@ -4,6 +4,8 @@ Header: `<siddiqsoft/ScopeTrace.hpp>`
 
 ```cpp
 namespace siddiqsoft {
+    enum class trace_level : uint8_t;
+    using LogLevel = trace_level;
     class ScopeTrace;
 }
 ```
@@ -12,7 +14,23 @@ namespace siddiqsoft {
 
 ---
 
-## Helper Types
+## Helper Types & Enums
+
+### `enum class trace_level : uint8_t` (Alias: `LogLevel`)
+Defines message log levels and scope threshold levels:
+
+```cpp
+enum class trace_level : uint8_t {
+    critical  = 0,  // Always logged
+    exception = 1,  // Always logged
+    error     = 2,  // Always logged
+    warning   = 3,  // Logged if m_log_level >= warning
+    info      = 4,  // Logged if m_log_level >= info
+    debug     = 5,  // Logged if m_log_level >= debug (excludes trace)
+    trace     = 6,  // Logged if m_log_level >= trace (all logs)
+    none      = 255 // Disabled threshold
+};
+```
 
 ### `template <typename... Args> struct source_location_format_string`
 A specialized format string wrapper struct in `namespace siddiqsoft` that combines `std::format_string<Args...>` with a `consteval` constructor capturing caller `std::source_location::current()`. Used by `err_throw()` to capture exact call-site file and line numbers.
@@ -21,20 +39,22 @@ A specialized format string wrapper struct in `namespace siddiqsoft` that combin
 
 ## Public Constructors & Destructor
 
-### `explicit ScopeTrace(std::string_view sn = {}, const std::source_location& sl = std::source_location::current())`
-Constructs a scope logger with the specified scope name `sn` and caller source location `sl`. Increments the thread-local nesting depth. If `sn` is omitted or empty (`{}`), the scope name automatically defaults to the plain function name extracted via `extract_func_name(sl.function_name())` (evaluating to `"GLOBAL"` when declared in global scope outside of any function).
+### `explicit ScopeTrace(std::string_view sn = {}, trace_level level = trace_level::critical, const std::source_location& sl = std::source_location::current())`
+Constructs a scope logger with the specified scope name `sn`, logging threshold `level`, and caller source location `sl`. Increments the thread-local nesting depth. If `sn` is omitted or empty (`{}`), the scope name automatically defaults to the plain function name extracted via `extract_func_name(sl.function_name())` (evaluating to `"GLOBAL"` when declared in global scope outside of any function).
 
 - **`sn`**: Custom scope label or contextual identifier (defaults to `{}`).
+- **`level`**: Scope logging threshold (`LogLevel` / `trace_level`, defaults to `trace_level::critical`).
 - **`sl`**: Source location (defaults to caller site via `std::source_location::current()`).
 
-### `ScopeTrace nest(std::string_view sn, const std::source_location& sl = std::source_location::current())`
+### `ScopeTrace nest(std::string_view sn, trace_level level = trace_level::critical, const std::source_location& sl = std::source_location::current())`
 Creates and returns a new child `ScopeTrace` instance. The child scope name is automatically formatted as `"<parent_scope_name>-<sn>"`.
 
 - **`sn`**: Sub-scope label string.
+- **`level`**: Child scope logging threshold (`LogLevel` / `trace_level`, defaults to `trace_level::critical`).
 - **`sl`**: Source location (defaults to caller site).
 
 ### `~ScopeTrace() noexcept`
-Destructor. Decrements the thread-local nesting depth counter. In debug builds (`DEBUG`, `_DEBUG`, or `DEBUG_TRACE`), logs a scope completion message with elapsed duration in microseconds and ISO 8601 UTC timestamp to `std::cerr`.
+Destructor. Decrements the thread-local nesting depth counter. Logs a scope completion message with elapsed duration in microseconds and ISO 8601 UTC timestamp to `std::cerr`.
 
 ### Copy & Move Operations
 Copy construction, move construction, copy assignment, and move assignment operators are explicitly `= delete`.
@@ -54,7 +74,10 @@ Returns an ISO 8601 UTC timestamp string with microsecond precision e.g. `"2026-
 
 ---
 
-## Accessor Member Functions
+## Accessor & Modifier Member Functions
+
+### `auto& set_level(trace_level level) noexcept`
+Updates the scope's logging threshold level (`m_log_level`). Returns a reference to `*this`.
 
 ### `[[nodiscard]] auto elapsed() const noexcept`
 Calculates and returns the duration (`std::chrono::system_clock::duration`) elapsed since the `ScopeTrace` instance was constructed.
@@ -71,33 +94,38 @@ Returns the scope name string view passed at construction (or the auto-extracted
 ### `[[nodiscard]] std::string_view function_name() const noexcept`
 Returns the plain function name matching the `__func__` macro, extracted from `m_location.function_name()`.
 
-### `[[nodiscard]] std::string_view func_name() const noexcept`
-Shorthand alias for `function_name()`.
-
 ---
 
 ## Logging Member Functions
 
-### `template <typename... Args> void info(std::format_string<Args...> fmt, Args&&... args)`
-In debug builds (`DEBUG` / `_DEBUG`), formats and outputs an informational message to `std::cerr` prefixed by timestamp and depth-indented scope name.
+### `template <trace_level level = trace_level::critical, typename... Args> auto& log(std::format_string<Args...> fmt, Args&&... args)`
+Core formatted logging template. Formats and outputs a diagnostic message to `std::cerr`.
+- **Filtering Logic**: Messages with `level` equal to `critical`, `exception`, or `error` are **always logged** regardless of `m_log_level`. For other levels (`warning`, `info`, `debug`, `trace`), the message is logged if `level <= m_log_level`.
+- **Formatting**: Output line includes ISO 8601 UTC timestamp, formatted level tag (e.g. `[critical]`, `[warning]`, `[debug]`), nesting depth spaces, ANSI colors, scope name, and the formatted message.
 
-### `template <typename... Args> void trace(std::format_string<Args...> fmt, Args&&... args)`
-In trace debug builds (`DEBUG_TRACE`), formats and outputs a trace-level diagnostic message to `std::cerr` (colored light gray) prefixed by timestamp and depth-indented scope name.
+### `template <typename... Args> auto& trace(std::format_string<Args...> fmt, Args&&... args)`
+Logs a trace message (`log<trace_level::trace>`). Active if `m_log_level >= trace_level::trace`.
 
-### `template <typename... Args> void warn(std::format_string<Args...> fmt, Args&&... args)`
-Formats and outputs a warning message to `std::cerr` (colored yellow) prefixed by timestamp and depth-indented scope name. Active in all build modes.
+### `template <typename... Args> auto& debug(std::format_string<Args...> fmt, Args&&... args)`
+Logs a debug message (`log<trace_level::debug>`). Active if `m_log_level >= trace_level::debug`. Excludes `trace` level logs.
 
-### `template <typename... Args> void err(std::format_string<Args...> fmt, Args&&... args)`
-Formats and outputs an error message to `std::cerr` (colored red) prefixed by timestamp and depth-indented scope name. Active in all build modes.
+### `template <typename... Args> auto& info(std::format_string<Args...> fmt, Args&&... args)`
+Logs an info message (`log<trace_level::info>`). Active if `m_log_level >= trace_level::info`. Excludes `debug` and `trace` logs.
+
+### `template <typename... Args> auto& warn(std::format_string<Args...> fmt, Args&&... args)`
+Logs a warning message (`log<trace_level::warning>`). Active if `m_log_level >= trace_level::warning`.
+
+### `template <typename... Args> auto& err(std::format_string<Args...> fmt, Args&&... args)`
+Logs an error message (`log<trace_level::error>`). Always logged regardless of `m_log_level`.
 
 ### `template <typename EX = std::exception, typename... Args> void err_throw(source_location_format_string<std::type_identity_t<Args>...> fmt_loc, Args&&... args) noexcept(false)`
-Unified error logging and exception throwing shortcut. Uses `source_location_format_string` to capture the caller's exact call-site `std::source_location`. Formats and logs an error message to `std::cerr` (colored orange) with ISO 8601 UTC timestamp, depth-indented scope name, bold exception type name (`typeid(EX).name()`), formatted message in italics, and call-site `file:line` details. Then constructs and throws `EX(formatted_message)`. Active in all build modes.
+Unified error logging and exception throwing shortcut. Uses `source_location_format_string` to capture the caller's exact call-site `std::source_location`. Formats and logs an error message to `std::cerr` (colored orange) with ISO 8601 UTC timestamp, depth-indented scope name, bold exception type name (`typeid(EX).name()`), formatted message in italics, and call-site `file:line` details. Then constructs and throws `EX(formatted_message)`. Always logged.
 
 ### `void exp(const std::exception& e)`
-Shortcut for logging caught exceptions in `catch` blocks. Outputs exception type (`typeid(e).name()`) in bold red and exception message (`e.what()`) to `std::cerr` prefixed by timestamp and depth-indented scope name. Active in all build modes.
+Shortcut for logging caught exceptions in `catch` blocks. Outputs exception type (`typeid(e).name()`) in bold red and exception message (`e.what()`) to `std::cerr` prefixed by timestamp and depth-indented scope name. Always logged.
 
 ### `template <typename... Args> void exp(const std::exception& e, std::format_string<Args...> fmt, Args&&... args)`
-Enhanced exception logging shortcut for `catch` blocks. Outputs exception type (`typeid(e).name()`) in bold red, exception message (`e.what()`) in italic, followed by custom formatted contextual details (`fmt`, `args...`) to `std::cerr` prefixed by timestamp and depth-indented scope name. Active in all build modes.
+Enhanced exception logging shortcut for `catch` blocks. Outputs exception type (`typeid(e).name()`) in bold red, exception message (`e.what()`) in italic, followed by custom formatted contextual details (`fmt`, `args...`) to `std::cerr` prefixed by timestamp and depth-indented scope name. Always logged.
 
 ---
 
@@ -108,3 +136,4 @@ Formats the scope log as a string containing ISO 8601 UTC timestamp, line indent
 
 ### `friend std::ostream& operator<<(std::ostream& os, const ScopeTrace& src)`
 Stream insertion operator. Writes `src.to_string<char>()` to the standard output stream `os`.
+

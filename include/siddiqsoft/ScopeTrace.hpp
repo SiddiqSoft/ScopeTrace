@@ -52,7 +52,7 @@
 
 namespace siddiqsoft
 {
-    enum class LogLevel : uint8_t
+    enum class trace_level : uint8_t
     {
         critical  = 0,
         exception = 1,
@@ -63,24 +63,26 @@ namespace siddiqsoft
         trace     = 6,
         none      = 255,
     };
+
+    using LogLevel = trace_level;
 } // namespace siddiqsoft
 
-// Specialize std::formatter for LogLevel
+// Specialize std::formatter for trace_level
 template <>
-struct std::formatter<siddiqsoft::LogLevel> : std::formatter<std::string_view>
+struct std::formatter<siddiqsoft::trace_level> : std::formatter<std::string_view>
 {
-    auto format(const siddiqsoft::LogLevel& c, auto& ctx) const
+    auto format(const siddiqsoft::trace_level& c, auto& ctx) const
     {
         std::string_view name = "unknown";
         switch (c) {
-            case siddiqsoft::LogLevel::critical: name = "critical"; break;
-            case siddiqsoft::LogLevel::exception: name = "exception"; break;
-            case siddiqsoft::LogLevel::error: name = "error"; break;
-            case siddiqsoft::LogLevel::warning: name = "warning"; break;
-            case siddiqsoft::LogLevel::info: name = "info"; break;
-            case siddiqsoft::LogLevel::debug: name = "debug"; break;
-            case siddiqsoft::LogLevel::trace: name = "trace"; break;
-            case siddiqsoft::LogLevel::none: name = "none"; break;
+            case siddiqsoft::trace_level ::critical: name = "critical"; break;
+            case siddiqsoft::trace_level ::exception: name = "exception"; break;
+            case siddiqsoft::trace_level ::error: name = "error"; break;
+            case siddiqsoft::trace_level ::warning: name = "warning"; break;
+            case siddiqsoft::trace_level ::info: name = "info"; break;
+            case siddiqsoft::trace_level ::debug: name = "debug"; break;
+            case siddiqsoft::trace_level ::trace: name = "trace"; break;
+            case siddiqsoft::trace_level ::none: name = "none"; break;
             default: break;
         }
         return std::formatter<std::string_view>::format(name, ctx);
@@ -226,11 +228,12 @@ namespace siddiqsoft
         [[nodiscard]] std::string_view function_name() const noexcept { return extract_func_name(m_location.function_name()); }
 
     public:
-        /// @brief Construct a ScopeTrace with a scope name and optional source location
-        /// @param sn Custom scope label or context name
+        /// @brief Construct a ScopeTrace with a scope name, log level threshold, and optional source location
+        /// @param sn Custom scope label or context name (defaults to function name)
+        /// @param level Logging threshold for this scope (defaults to trace_level::critical)
         /// @param sl Source location (defaults to caller site)
         explicit ScopeTrace(std::string_view            sn    = {},
-                            LogLevel                    level = LogLevel::critical,
+                            trace_level                 level = trace_level::critical,
                             const std::source_location& sl    = std::source_location::current())
             : m_location(sl)
             , m_start_timestamp(std::chrono::system_clock::now())
@@ -243,8 +246,13 @@ namespace siddiqsoft
             std::println(std::cerr, "  Creating NEW SCOPE {}:{}", m_scope_name, static_cast<uint8_t>(m_log_level));
         }
 
+        /// @brief Create a nested sub-scope with child scope name and logging threshold
+        /// @param sn Custom sub-scope label (appended as "parent-child")
+        /// @param level Logging threshold for child scope (defaults to trace_level::critical)
+        /// @param sl Source location (defaults to caller site)
+        /// @return New ScopeTrace instance
         ScopeTrace nest(std::string_view            sn,
-                        LogLevel                    level = LogLevel::critical,
+                        trace_level                 level = trace_level::critical,
                         const std::source_location& sl    = std::source_location::current())
         {
             // The scope name is required when nesting.
@@ -264,50 +272,56 @@ namespace siddiqsoft
         /// @brief Move assignment is not supported
         ScopeTrace& operator=(ScopeTrace&&) = delete;
 
-        auto        indent_buffer(LogLevel level) -> std::string
+        auto        indent_buffer(trace_level level) -> std::string
         {
             return std::format(
                     "{}[{: <6}]{} {:<{}}", logline_start_color(level), level, logline_end_color(level), "", m_scope_depth * 2);
         }
 
-        auto logline_start_color(LogLevel level) -> std::string
+        auto logline_start_color(trace_level level) -> std::string
         {
             switch (level) {
-                case LogLevel::critical: return std::string(RED);
-                case LogLevel::exception: return std::string(RED);
-                case LogLevel::error: return std::string(ORN);
-                case LogLevel::warning: return std::string(DKYLW);
-                case LogLevel::info: return std::string(NOC);
-                case LogLevel::debug: return std::string(LTGY);
-                case LogLevel::trace: return std::string(LTGY);
+                case trace_level ::critical: return std::string(RED);
+                case trace_level ::exception: return std::string(RED);
+                case trace_level ::error: return std::string(ORN);
+                case trace_level ::warning: return std::string(DKYLW);
+                case trace_level ::info: return std::string(NOC);
+                case trace_level ::debug: return std::string(LTGY);
+                case trace_level ::trace: return std::string(LTGY);
                 default: return std::string(NOC);
             }
         }
 
-        auto logline_end_color(LogLevel level) -> std::string
+        auto logline_end_color(trace_level level) -> std::string
         {
             switch (level) {
-                case LogLevel::critical: return std::string(NOC);
-                case LogLevel::error: return std::string(NOC);
-                case LogLevel::warning: return std::string(NOC);
-                case LogLevel::info: return std::string(NOC);
-                case LogLevel::debug: return std::string(NOC);
-                case LogLevel::trace: return std::string(NOC);
+                case trace_level ::critical: return std::string(NOC);
+                case trace_level ::error: return std::string(NOC);
+                case trace_level ::warning: return std::string(NOC);
+                case trace_level ::info: return std::string(NOC);
+                case trace_level ::debug: return std::string(NOC);
+                case trace_level ::trace: return std::string(NOC);
                 default: return std::string(NOC);
             }
         }
 
-        auto logline_prefix(LogLevel level) -> std::string
+        auto logline_prefix(trace_level level) -> std::string
         {
             return std::format("{}{:%FT%TZ} {}{}  ", LTGY, std::chrono::system_clock::now(), indent_buffer(level), NOC);
         }
 
 
-        template <LogLevel level = LogLevel::critical, typename... Args>
+        /// @brief Output formatted log message filtered by level threshold
+        /// @tparam level Message severity (defaults to trace_level::critical). Always logged if critical/exception/error; filtered by m_log_level for warning/info/debug/trace.
+        /// @tparam Args Format argument types
+        /// @param fmt Format string
+        /// @param args Format arguments
+        /// @return Reference to this ScopeTrace instance
+        template <trace_level level = trace_level::critical, typename... Args>
         auto& log(std::format_string<Args...> fmt, Args&&... args)
         {
             constexpr bool is_always_logged =
-                    (level == LogLevel::critical || level == LogLevel::exception || level == LogLevel::error);
+                    (level == trace_level ::critical || level == trace_level ::exception || level == trace_level ::error);
 
             if (is_always_logged || level <= m_log_level) {
                 std::println(std::cerr,
@@ -330,7 +344,7 @@ namespace siddiqsoft
         template <typename... Args>
         auto& warn(std::format_string<Args...> fmt, Args&&... args)
         {
-            return log<siddiqsoft::LogLevel::warning>(fmt, std::forward<Args>(args)...);
+            return log<siddiqsoft::trace_level ::warning>(fmt, std::forward<Args>(args)...);
         }
 
         /// @brief Log a formatted warning message to std::cerr with indentation and scope label
@@ -340,7 +354,7 @@ namespace siddiqsoft
         template <typename... Args>
         auto& trace(std::format_string<Args...> fmt, Args&&... args)
         {
-            return log<siddiqsoft::LogLevel::trace>(fmt, std::forward<Args>(args)...);
+            return log<siddiqsoft::trace_level ::trace>(fmt, std::forward<Args>(args)...);
         }
 
         /// @brief Log a formatted warning message to std::cerr with indentation and scope label
@@ -350,7 +364,7 @@ namespace siddiqsoft
         template <typename... Args>
         auto& debug(std::format_string<Args...> fmt, Args&&... args)
         {
-            return log<siddiqsoft::LogLevel::debug>(fmt, std::forward<Args>(args)...);
+            return log<siddiqsoft::trace_level ::debug>(fmt, std::forward<Args>(args)...);
         }
 
 
@@ -361,27 +375,27 @@ namespace siddiqsoft
         template <typename... Args>
         auto& err(std::format_string<Args...> fmt, Args&&... args)
         {
-            return log<siddiqsoft::LogLevel::error>(fmt, std::forward<Args>(args)...);
+            return log<siddiqsoft::trace_level ::error>(fmt, std::forward<Args>(args)...);
         }
 
         /// @brief Log exception details (type and message) to std::cerr with indentation and scope label
         /// @param e Reference to caught exception
         void exp(const std::exception& e)
         {
-            log<siddiqsoft::LogLevel::exception>("{}{}{}{}", BOLD, typeid(e).name(), NOTBOLD, e.what());
+            log<siddiqsoft::trace_level ::exception>("{}{}{}{}", BOLD, typeid(e).name(), NOTBOLD, e.what());
         }
 
         template <typename... Args>
         void exp(const std::exception& e, std::format_string<Args...> fmt, Args&&... args)
         {
-            log<siddiqsoft::LogLevel::exception>("{}{}{} - {}{}{} - {}",
-                                                 BOLD,
-                                                 typeid(e).name(),
-                                                 NOTBOLD,
-                                                 ITAL,
-                                                 e.what(),
-                                                 NOTITAL,
-                                                 std::format(fmt, std::forward<Args>(args)...));
+            log<siddiqsoft::trace_level ::exception>("{}{}{} - {}{}{} - {}",
+                                                     BOLD,
+                                                     typeid(e).name(),
+                                                     NOTBOLD,
+                                                     ITAL,
+                                                     e.what(),
+                                                     NOTITAL,
+                                                     std::format(fmt, std::forward<Args>(args)...));
         }
 
 
@@ -395,18 +409,18 @@ namespace siddiqsoft
         {
             const auto& loc = fmt_loc.location;
 
-            log<siddiqsoft::LogLevel::exception>("{}{}{} - {}{}{}{} - {}from:{}@{}{}",
-                                                 BOLD,
-                                                 typeid(EX).name(),
-                                                 NOTBOLD,
-                                                 ITAL, // for the message
-                                                 std::format(fmt_loc.fmt, std::forward<Args>(args)...),
-                                                 NOTITAL,
-                                                 NOC, // - now for the filename and line
-                                                 UNDL,
-                                                 loc.file_name(),
-                                                 loc.line(),
-                                                 NOTUNDL);
+            log<siddiqsoft::trace_level ::exception>("{}{}{} - {}{}{}{} - {}from:{}@{}{}",
+                                                     BOLD,
+                                                     typeid(EX).name(),
+                                                     NOTBOLD,
+                                                     ITAL, // for the message
+                                                     std::format(fmt_loc.fmt, std::forward<Args>(args)...),
+                                                     NOTITAL,
+                                                     NOC, // - now for the filename and line
+                                                     UNDL,
+                                                     loc.file_name(),
+                                                     loc.line(),
+                                                     NOTUNDL);
 
             throw EX(std::format(fmt_loc.fmt, std::forward<Args>(args)...));
         }
@@ -419,7 +433,7 @@ namespace siddiqsoft
         template <typename... Args>
         auto& info(std::format_string<Args...> fmt, Args&&... args)
         {
-            return log<siddiqsoft::LogLevel::info>(fmt, std::forward<Args>(args)...);
+            return log<siddiqsoft::trace_level ::info>(fmt, std::forward<Args>(args)...);
         }
 
 
@@ -464,7 +478,10 @@ namespace siddiqsoft
             return os;
         }
 
-        auto& set_level(LogLevel level) noexcept
+        /// @brief Update the logging threshold level for this scope
+        /// @param level New trace_level / LogLevel threshold
+        /// @return Reference to this ScopeTrace instance
+        auto& set_level(trace_level level) noexcept
         {
             m_log_level = level;
             return *this;
@@ -479,11 +496,11 @@ namespace siddiqsoft
                 --current_depth();
             }
 
-            log<siddiqsoft::LogLevel::debug>("COMPLETED: time:{}{}us{}", GRN, us, NOC);
+            log<siddiqsoft::trace_level ::debug>("COMPLETED: time:{}{}us{}", GRN, us, NOC);
         }
 
     private:
-        LogLevel                              m_log_level {LogLevel::error};
+        trace_level                           m_log_level {trace_level ::error};
         std::source_location                  m_location;
         std::chrono::system_clock::time_point m_start_timestamp;
         std::string                           m_scope_name {};

@@ -10,15 +10,15 @@
 
 #include "../include/siddiqsoft/ScopeTrace.hpp"
 
-siddiqsoft::ScopeTrace g_scope{"test_ScopeTrace", siddiqsoft::LogLevel::debug, std::source_location::current()};
+siddiqsoft::ScopeTrace g_scope {"test_ScopeTrace", siddiqsoft::trace_level::debug, std::source_location::current()};
 
 
 TEST(ScopeTraceTest, HelloWorld)
 {
     {
-        auto scope = g_scope.nest(__func__, siddiqsoft::LogLevel::trace);
+        auto scope = g_scope.nest(__func__, siddiqsoft::trace_level::trace);
 
-        scope.log<siddiqsoft::LogLevel::info>("Hello, World!");
+        scope.log<siddiqsoft::trace_level::info>("Hello, World!");
         std::this_thread::sleep_for(std::chrono::milliseconds(2));
     }
 }
@@ -87,10 +87,10 @@ TEST(ScopeTraceTest, ExceptionSafety)
     auto scope = g_scope.nest(__func__);
 
     try {
-        auto inner = scope.nest("Nested", siddiqsoft::LogLevel::warning);
+        auto inner = scope.nest("Nested", siddiqsoft::trace_level::warning);
 
         inner.info("From the inner scope line: {} -- FILTERED", __LINE__);
-        inner.log<siddiqsoft::LogLevel::warning>("From the inner scope line: {}", __LINE__);
+        inner.log<siddiqsoft::trace_level::warning>("From the inner scope line: {}", __LINE__);
         inner.err_throw<std::runtime_error>("Deliberate error from here");
     }
     catch (const std::exception& e) {
@@ -101,13 +101,13 @@ TEST(ScopeTraceTest, ExceptionSafety)
 
 TEST(ScopeTraceTest, ExceptionSafety_2)
 {
-    auto scope = g_scope.nest("ExceptionSafety_2", siddiqsoft::LogLevel::info);
+    auto scope = g_scope.nest("ExceptionSafety_2", siddiqsoft::trace_level::info);
 
     EXPECT_THROW(
             {
                 auto inner = scope.nest("inner");
 
-                inner.log<siddiqsoft::LogLevel::info>("From the inner scope line: {}", __LINE__);
+                inner.log<siddiqsoft::trace_level::info>("From the inner scope line: {}", __LINE__);
                 inner.err_throw<std::invalid_argument>("Deliberate error from here");
             },
             std::invalid_argument);
@@ -116,14 +116,14 @@ TEST(ScopeTraceTest, ExceptionSafety_2)
 
 TEST(ScopeTraceTest, LogLevelFiltering)
 {
-    auto test_filter = [](siddiqsoft::LogLevel config_level) {
+    auto test_filter = [](siddiqsoft::trace_level config_level) {
         std::stringstream buffer;
         auto*             old_cerr = std::cerr.rdbuf(buffer.rdbuf());
 
         {
-            siddiqsoft::ScopeTrace scope{"FilterTest", config_level};
-            scope.log<siddiqsoft::LogLevel::critical>("CRIT_MSG");
-            scope.log<siddiqsoft::LogLevel::error>("ERR_MSG");
+            siddiqsoft::ScopeTrace scope {"FilterTest", config_level};
+            scope.log<siddiqsoft::trace_level::critical>("CRIT_MSG");
+            scope.log<siddiqsoft::trace_level::error>("ERR_MSG");
             scope.warn("WARN_MSG");
             scope.info("INFO_MSG");
             scope.debug("DEBG_MSG");
@@ -135,7 +135,7 @@ TEST(ScopeTraceTest, LogLevelFiltering)
     };
 
     // 1. LogLevel::warning -> logs critical, error, warning; excludes info, debug, trace
-    std::string warn_output = test_filter(siddiqsoft::LogLevel::warning);
+    std::string warn_output = test_filter(siddiqsoft::trace_level::warning);
     EXPECT_TRUE(warn_output.contains("CRIT_MSG"));
     EXPECT_TRUE(warn_output.contains("ERR_MSG"));
     EXPECT_TRUE(warn_output.contains("WARN_MSG"));
@@ -144,7 +144,7 @@ TEST(ScopeTraceTest, LogLevelFiltering)
     EXPECT_FALSE(warn_output.contains("TRCE_MSG"));
 
     // 2. LogLevel::info -> logs critical, error, warning, info; excludes debug, trace
-    std::string info_output = test_filter(siddiqsoft::LogLevel::info);
+    std::string info_output = test_filter(siddiqsoft::trace_level::info);
     EXPECT_TRUE(info_output.contains("CRIT_MSG"));
     EXPECT_TRUE(info_output.contains("ERR_MSG"));
     EXPECT_TRUE(info_output.contains("WARN_MSG"));
@@ -153,7 +153,7 @@ TEST(ScopeTraceTest, LogLevelFiltering)
     EXPECT_FALSE(info_output.contains("TRCE_MSG"));
 
     // 3. LogLevel::debug -> logs critical, error, warning, info, debug; excludes trace
-    std::string debug_output = test_filter(siddiqsoft::LogLevel::debug);
+    std::string debug_output = test_filter(siddiqsoft::trace_level::debug);
     EXPECT_TRUE(debug_output.contains("CRIT_MSG"));
     EXPECT_TRUE(debug_output.contains("ERR_MSG"));
     EXPECT_TRUE(debug_output.contains("WARN_MSG"));
@@ -162,7 +162,7 @@ TEST(ScopeTraceTest, LogLevelFiltering)
     EXPECT_FALSE(debug_output.contains("TRCE_MSG"));
 
     // 4. LogLevel::trace -> logs everything including trace
-    std::string trace_output = test_filter(siddiqsoft::LogLevel::trace);
+    std::string trace_output = test_filter(siddiqsoft::trace_level::trace);
     EXPECT_TRUE(trace_output.contains("CRIT_MSG"));
     EXPECT_TRUE(trace_output.contains("ERR_MSG"));
     EXPECT_TRUE(trace_output.contains("WARN_MSG"));
@@ -170,4 +170,3 @@ TEST(ScopeTraceTest, LogLevelFiltering)
     EXPECT_TRUE(trace_output.contains("DEBG_MSG"));
     EXPECT_TRUE(trace_output.contains("TRCE_MSG"));
 }
-

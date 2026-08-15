@@ -2,36 +2,42 @@
 
 ## Cheat Sheet
 
-### Scope Instantiation
+### Scope Instantiation & Log Level Threshold
 ```cpp
-// Explicit scope label
-siddiqsoft::ScopeTrace scope("step_name");
+// Explicit scope label with log level threshold (e.g. LogLevel::debug)
+siddiqsoft::ScopeTrace scope("step_name", siddiqsoft::LogLevel::debug);
 
-// Default scope label (extracts plain function name, or "GLOBAL" if declared in global scope)
+// Default scope label (defaults to plain function name, LogLevel::critical threshold)
 siddiqsoft::ScopeTrace scope;
 
+// Update threshold dynamically
+scope.set_level(siddiqsoft::LogLevel::trace);
+
 // Nested scope creation (automatically formatted as "<parent_name>-<child_name>")
-auto inner = scope.nest("sub_task");
+auto inner = scope.nest("sub_task", siddiqsoft::LogLevel::info);
 ```
 
 ### Structured Console Logging
 ```cpp
-// Info log (active in DEBUG / _DEBUG builds)
-scope.info("Processing item {} of {}", current, total);
-
-// Trace log (light gray output, active in DEBUG_TRACE builds)
+// Trace log (light gray output, active when threshold >= LogLevel::trace)
 scope.trace("Low-level trace data: addr={:p}", ptr);
 
-// Warning log (yellow output, active in all build modes)
+// Debug log (active when threshold >= LogLevel::debug, excludes trace)
+scope.debug("Debugging state: count={}", count);
+
+// Info log (active when threshold >= LogLevel::info)
+scope.info("Processing item {} of {}", current, total);
+
+// Warning log (yellow output, active when threshold >= LogLevel::warning)
 scope.warn("Cache miss for key: {}", key);
 
-// Error log (red output, active in all build modes)
+// Error log (red output, always logged regardless of threshold)
 scope.err("Failed to open connection to host: {}", host);
 
-// Unified Error & Throw shortcut (orange output, active in all build modes)
+// Unified Error & Throw shortcut (orange output, always logged)
 scope.err_throw<std::runtime_error>("Fatal database connection timeout: {}s", timeout);
 
-// Exception log shortcuts (active in all build modes)
+// Exception log shortcuts (always logged)
 try {
     // ...
 } catch (const std::exception& e) {
