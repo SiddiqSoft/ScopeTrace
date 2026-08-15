@@ -220,7 +220,7 @@ def generate_markdown(dependencies, project_name="project"):
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Extract CMake dependencies into dependencies.md with Mermaid diagram."
+        description="Extract CMake dependencies into docs/integration/dependencies.md with Mermaid diagram."
     )
     parser.add_argument(
         "--root",
@@ -231,14 +231,8 @@ def main():
     parser.add_argument(
         "--output",
         type=str,
-        default="dependencies.md",
-        help="Path to output markdown file (default: dependencies.md)",
-    )
-    parser.add_argument(
-        "--also-output",
-        type=str,
         default="docs/integration/dependencies.md",
-        help="Additional file path to write to (default: docs/integration/dependencies.md)",
+        help="Path to output markdown file (default: docs/integration/dependencies.md)",
     )
 
     args = parser.parse_args()
@@ -258,16 +252,12 @@ def main():
     proj_name = detect_project_name(root_path)
     markdown_content = generate_markdown(all_deps, project_name=proj_name)
 
-    outputs = [Path(args.output)]
-    if args.also_output:
-        outputs.append(Path(args.also_output))
-
-    for out_path in outputs:
-        full_out_path = root_path / out_path if not out_path.is_absolute() else out_path
-        full_out_path.parent.mkdir(parents=True, exist_ok=True)
-        with open(full_out_path, "w", encoding="utf-8") as f:
-            f.write(markdown_content)
-        print(f"[generate_dependencies_md] Wrote dependency documentation to: {full_out_path}")
+    out_path = Path(args.output)
+    full_out_path = root_path / out_path if not out_path.is_absolute() else out_path
+    full_out_path.parent.mkdir(parents=True, exist_ok=True)
+    with open(full_out_path, "w", encoding="utf-8") as f:
+        f.write(markdown_content)
+    print(f"[generate_dependencies_md] Wrote dependency documentation to: {full_out_path}")
 
 
 if __name__ == "__main__":

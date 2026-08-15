@@ -42,10 +42,10 @@ How many of us have had to write code that is surrounded by `#if defined(DEBUG).
 
     ```cpp
     void foo() {
-        siddiqsoft::ScopeTrace scope; // defaults name to plain __func__ ("foo")
+        siddiqsoft::ScopeTrace scope("foo", siddiqsoft::LogLevel::info); // Scope threshold set to LogLevel::info
 
         try {
-            auto inner = scope.nest("Nested"); // explicit inner scope label ("foo-Nested")
+            auto inner = scope.nest("Nested", siddiqsoft::LogLevel::info); // Inner scope label ("foo-Nested")
 
             inner.info("From the inner scope line: {}", __LINE__);
             // We log information and throw in one shot!
@@ -77,7 +77,7 @@ How many of us have had to write code that is surrounded by `#if defined(DEBUG).
 
 void process_request()
 {
-    siddiqsoft::ScopeTrace scope("process_request");
+    siddiqsoft::ScopeTrace scope("process_request", siddiqsoft::LogLevel::info);
     scope.info("Parsing incoming payload...");
     scope.warn("Payload buffer usage: 82%");
     // Work executed here...
@@ -85,7 +85,7 @@ void process_request()
 
 int main()
 {
-    siddiqsoft::ScopeTrace scope("main");
+    siddiqsoft::ScopeTrace scope("main", siddiqsoft::LogLevel::info);
     process_request();
     return 0;
 }

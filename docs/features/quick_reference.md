@@ -93,5 +93,5 @@ size_t thread_depth = siddiqsoft::ScopeTrace::current_depth();
 std::string ts = siddiqsoft::ScopeTrace::current_timestamp();
 
 // Extract plain function name matching __func__
-std::string_view func = scope.func_name();
+std::string_view func = scope.function_name();
 ```

@@ -80,6 +80,7 @@ nav:
       - Overview: features/index.md
       - Scope Logging: features/scope_logging.md
       - Quick Reference: features/quick_reference.md
+      - Best Practices: features/best_practices.md
       - Security: features/security.md
   - Integration:
       - Overview: integration/index.md

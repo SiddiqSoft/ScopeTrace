@@ -16,7 +16,7 @@ void compute()
     auto sub = scope.nest("stage1");
     
     sub.info("Processing stage 1 payload...");
-} // Destructors log completion status and elapsed duration automatically in debug builds
+} // Destructors automatically log completion status and elapsed duration at LogLevel::debug severity upon scope exit
 ```
 
 ## Source Location & Function Name Extraction
@@ -26,7 +26,7 @@ Using `std::source_location::current()`, `ScopeTrace` captures caller details au
 - Line number (`location().line()`)
 - Enclosing function signature (`location().function_name()`)
 
-`ScopeTrace` also includes built-in parsing (`extract_func_name()` / `func_name()`) to extract clean plain function names matching `__func__` from full signature strings. When `ScopeTrace` is declared in the global scope (outside of any enclosing function), `extract_func_name()` evaluates to `"GLOBAL"`.
+`ScopeTrace` also includes built-in parsing (`extract_func_name()` / `function_name()`) to extract clean plain function names matching `__func__` from full signature strings. When `ScopeTrace` is declared in the global scope (outside of any enclosing function), `extract_func_name()` evaluates to `"GLOBAL"`.
 
 ## Nesting Depth & ISO 8601 Timestamps
 
