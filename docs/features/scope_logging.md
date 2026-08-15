@@ -32,10 +32,20 @@ Using `std::source_location::current()`, `ScopeTrace` captures caller details au
 
 `ScopeTrace` automatically tracks nested scopes using a thread-local counter (`current_depth()`), producing formatted visual indentation for hierarchical log trees. Each output line is prefixed with an ISO 8601 UTC timestamp (`current_timestamp()`):
 
-```text
-2026-08-13T23:16:00.519049Z   GLOBAL - COMPLETED - time:150us
-2026-08-13T23:16:00.519100Z     GLOBAL-stage1 - COMPLETED - time:40us
-```
+<div class="terminal-window" style="background-color: #1b1d24; border-radius: 8px; border: 1px solid #2e3240; margin: 1.5rem 0; overflow: hidden; font-family: 'JetBrains Mono', Consolas, monospace;">
+  <div class="terminal-header" style="background-color: #242836; padding: 8px 14px; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid #2e3240;">
+    <span class="terminal-dot red" style="width: 12px; height: 12px; border-radius: 50%; background-color: #ff5f56; display: inline-block;"></span>
+    <span class="terminal-dot yellow" style="width: 12px; height: 12px; border-radius: 50%; background-color: #ffbd2e; display: inline-block;"></span>
+    <span class="terminal-dot green" style="width: 12px; height: 12px; border-radius: 50%; background-color: #27c93f; display: inline-block;"></span>
+    <span class="terminal-title" style="color: #8b949e; font-size: 12px; margin-left: 6px; font-family: sans-serif;">Console Output (Hierarchical Indentation)</span>
+  </div>
+  <pre class="terminal-body" style="padding: 14px 18px; color: #e6edf3; font-size: 13px; line-height: 1.65; overflow-x: auto; margin: 0; background: transparent;"><span style="color: #6e7681;">  Creating NEW SCOPE compute:6</span>
+<span style="color: #8b949e;">2026-08-15T20:49:27.060564Z</span>  <span style="color: #e6edf3;">[info  ]</span> compute - Outer computation started
+<span style="color: #6e7681;">  Creating NEW SCOPE compute-stage1:4</span>
+<span style="color: #8b949e;">2026-08-15T20:49:27.060600Z</span>  <span style="color: #e6edf3;">[info  ]</span>   compute-stage1 - Processing stage 1 payload...
+<span style="color: #8b949e;">2026-08-15T20:49:27.061250Z</span>  <span style="color: #8b949e;">[debug ]</span>   <span style="color: #8b949e;">compute-stage1 - COMPLETED: time:</span><span style="color: #3fb950; font-weight: 600;">650us</span>
+<span style="color: #8b949e;">2026-08-15T20:49:27.061300Z</span>  <span style="color: #8b949e;">[debug ]</span> compute - COMPLETED: time:<span style="color: #3fb950; font-weight: 600;">1200us</span></pre>
+</div>
 
 ## Dynamic Log Level Filtering
 
@@ -61,15 +71,16 @@ scope.set_level(siddiqsoft::LogLevel::trace);
 
 `ScopeTrace` applies distinct ANSI color escape codes to each log level tag to make terminal output visually scannable:
 
-| Log Level / Method | Tag Label | Color Output | ANSI Code | Purpose & Typical Use |
+| Log Level / Method | Tag Label | Color Output | ANSI Escape Code | Visual Terminal Preview |
 | :--- | :--- | :--- | :--- | :--- |
-| **`trace_level::critical`** | `[critical]` | **Red** | `\033[0;31m` | System-critical failures requiring immediate action. Always logged. |
-| **`trace_level::exception`** | `[exception]` | **Red / Bold Red** | `\033[0;31m` | Caught exception details and `err_throw()` events. Always logged. |
-| **`trace_level::error`** | `[error]` | **Orange** | `\033[38;5;208m` | Operational errors and failed preconditions. Always logged. |
-| **`trace_level::warning`** | `[warning]` | **Dark Yellow / Gold** | `\033[38;5;136m` | Recoverable warnings and degraded performance. Logged if threshold `>= warning`. |
-| **`trace_level::info`** | `[info]` | **Default / Neutral** | `\033[0m` | General informational events and application state changes. Logged if threshold `>= info`. |
-| **`trace_level::debug`** | `[debug]` | **Light Gray** | `\033[38;5;250m` | Detailed internal algorithm state and variable values. Logged if threshold `>= debug`. |
-| **`trace_level::trace`** | `[trace]` | **Light Gray** | `\033[38;5;250m` | High-frequency I/O operations, raw packets, & buffer dumps. Logged if threshold `>= trace`. |
+| **`trace_level::critical`** | `[critical]` | **Red** | `\033[0;31m` | <span style="color: #ff7b72; font-weight: 600;">[critical] System memory exhaustion</span> |
+| **`trace_level::exception`** | `[exception]` | **Red / Bold Red** | `\033[0;31m` | <span style="color: #ff7b72; font-weight: 600;">[exception] std::runtime_error - Timeout</span> |
+| **`trace_level::error`** | `[error]` | **Orange** | `\033[38;5;208m` | <span style="color: #ffa657; font-weight: 600;">[error  ] Failed to connect to db host</span> |
+| **`trace_level::warning`** | `[warning]` | **Dark Yellow / Gold** | `\033[38;5;136m` | <span style="color: #d29922; font-weight: 600;">[warning] Cache capacity reached 92%</span> |
+| **`trace_level::info`** | `[info]` | **Default / Neutral** | `\033[0m` | <span style="color: #e6edf3;">[info   ] Processing batch item 42</span> |
+| **`trace_level::debug`** | `[debug]` | **Light Gray** | `\033[38;5;250m` | <span style="color: #8b949e;">[debug  ] Worker thread pool depth: 4</span> |
+| **`trace_level::trace`** | `[trace]` | **Dark Blue** | `\033[38;5;19m` | <span style="color: #58a6ff;">[trace  ] RX buffer dump: 0x41 0x42 0x43</span> |
+| **Scope Exit** | `COMPLETED` | **Green Time** | `\033[0;32m` | <span style="color: #8b949e;">COMPLETED: time:</span><span style="color: #3fb950; font-weight: 600;">450us</span> |
 
 > [!TIP]
 > **Best Practice: High-Frequency I/O Operations Should Use `trace` (`scope.trace(...)`)**

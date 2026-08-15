@@ -129,3 +129,64 @@ code, kbd, pre {
   border-radius: 0.5rem;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
 }
+
+/* Terminal Window & Output Styling */
+.terminal-window {
+  background-color: #1b1d24;
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+  border: 1px solid #2e3240;
+  margin: 1.5rem 0;
+  overflow: hidden;
+  font-family: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
+}
+
+.terminal-header {
+  background-color: #242836;
+  padding: 8px 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-bottom: 1px solid #2e3240;
+}
+
+.terminal-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  display: inline-block;
+}
+.terminal-dot.red { background-color: #ff5f56; }
+.terminal-dot.yellow { background-color: #ffbd2e; }
+.terminal-dot.green { background-color: #27c93f; }
+
+.terminal-title {
+  color: #8b949e;
+  font-size: 0.75rem;
+  font-weight: 600;
+  margin-left: 6px;
+  letter-spacing: 0.5px;
+}
+
+.terminal-body {
+  padding: 14px 18px;
+  color: #e6edf3;
+  font-size: 0.85rem;
+  line-height: 1.65;
+  overflow-x: auto;
+  white-space: pre;
+  margin: 0;
+}
+
+/* Terminal Color Tokens */
+.term-timestamp { color: #8b949e; }
+.term-create    { color: #6e7681; font-style: italic; }
+.term-crit      { color: #ff7b72; font-weight: 600; }
+.term-exp       { color: #ff7b72; font-weight: 600; }
+.term-err       { color: #ffa657; font-weight: 600; }
+.term-warn      { color: #d29922; font-weight: 600; }
+.term-info      { color: #e6edf3; }
+.term-debug     { color: #8b949e; }
+.term-trace     { color: #58a6ff; }
+.term-time      { color: #3fb950; font-weight: 600; }
+

@@ -79,6 +79,7 @@ void process_request()
 {
     siddiqsoft::ScopeTrace scope("process_request");
     scope.info("Parsing incoming payload...");
+    scope.warn("Payload buffer usage: 82%");
     // Work executed here...
 }
 
@@ -89,6 +90,23 @@ int main()
     return 0;
 }
 ```
+
+### Output & Coloring Preview
+
+<div class="terminal-window" style="background-color: #1b1d24; border-radius: 8px; border: 1px solid #2e3240; margin: 1.5rem 0; overflow: hidden; font-family: 'JetBrains Mono', Consolas, monospace;">
+  <div class="terminal-header" style="background-color: #242836; padding: 8px 14px; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid #2e3240;">
+    <span class="terminal-dot red" style="width: 12px; height: 12px; border-radius: 50%; background-color: #ff5f56; display: inline-block;"></span>
+    <span class="terminal-dot yellow" style="width: 12px; height: 12px; border-radius: 50%; background-color: #ffbd2e; display: inline-block;"></span>
+    <span class="terminal-dot green" style="width: 12px; height: 12px; border-radius: 50%; background-color: #27c93f; display: inline-block;"></span>
+    <span class="terminal-title" style="color: #8b949e; font-size: 12px; margin-left: 6px; font-family: sans-serif;">Console Output (std::cerr)</span>
+  </div>
+  <pre class="terminal-body" style="padding: 14px 18px; color: #e6edf3; font-size: 13px; line-height: 1.65; overflow-x: auto; margin: 0; background: transparent;"><span style="color: #6e7681;">  Creating NEW SCOPE main:0</span>
+<span style="color: #6e7681;">  Creating NEW SCOPE process_request:0</span>
+<span style="color: #8b949e;">2026-08-15T20:49:27.060564Z</span>  <span style="color: #e6edf3;">[info  ]</span>   process_request - Parsing incoming payload...
+<span style="color: #8b949e;">2026-08-15T20:49:27.060912Z</span>  <span style="color: #d29922;">[warning]</span>   <span style="color: #d29922;">process_request - Payload buffer usage: 82%</span>
+<span style="color: #8b949e;">2026-08-15T20:49:27.061250Z</span>  <span style="color: #8b949e;">[debug ]</span>   <span style="color: #8b949e;">process_request - COMPLETED: time:</span><span style="color: #3fb950; font-weight: 600;">688us</span>
+<span style="color: #8b949e;">2026-08-15T20:49:27.061300Z</span>  <span style="color: #8b949e;">[debug ]</span> main - COMPLETED: time:<span style="color: #3fb950; font-weight: 600;">1240us</span></pre>
+</div>
 
 ---
 

@@ -19,7 +19,7 @@ auto inner = scope.nest("sub_task", siddiqsoft::LogLevel::info);
 
 ### Structured Console Logging & Colors
 ```cpp
-// Trace log (light gray output, active when threshold >= LogLevel::trace)
+// Trace log (dark blue output, active when threshold >= LogLevel::trace)
 // RECOMMENDED FOR HIGH-VOLUME I/O: Socket reads/writes, packet dumps, buffer transfers
 scope.trace("Socket read {} bytes from {}:{:d}", bytes, host, port);
 
@@ -49,6 +49,25 @@ try {
     scope.exp(e, "Operation failed for request ID: {}", req_id);
 }
 ```
+
+#### Terminal Color Output Preview
+
+<div class="terminal-window" style="background-color: #1b1d24; border-radius: 8px; border: 1px solid #2e3240; margin: 1.5rem 0; overflow: hidden; font-family: 'JetBrains Mono', Consolas, monospace;">
+  <div class="terminal-header" style="background-color: #242836; padding: 8px 14px; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid #2e3240;">
+    <span class="terminal-dot red" style="width: 12px; height: 12px; border-radius: 50%; background-color: #ff5f56; display: inline-block;"></span>
+    <span class="terminal-dot yellow" style="width: 12px; height: 12px; border-radius: 50%; background-color: #ffbd2e; display: inline-block;"></span>
+    <span class="terminal-dot green" style="width: 12px; height: 12px; border-radius: 50%; background-color: #27c93f; display: inline-block;"></span>
+    <span class="terminal-title" style="color: #8b949e; font-size: 12px; margin-left: 6px; font-family: sans-serif;">Console Log Colors</span>
+  </div>
+  <pre class="terminal-body" style="padding: 14px 18px; color: #e6edf3; font-size: 13px; line-height: 1.65; overflow-x: auto; margin: 0; background: transparent;"><span style="color: #8b949e;">2026-08-15T20:49:27.060564Z</span>  <span style="color: #58a6ff;">[trace ]</span> scope - Socket read 1024 bytes from 127.0.0.1:8080
+<span style="color: #8b949e;">2026-08-15T20:49:27.060600Z</span>  <span style="color: #8b949e;">[debug ]</span> scope - Debugging state: count=42
+<span style="color: #8b949e;">2026-08-15T20:49:27.060620Z</span>  <span style="color: #e6edf3;">[info  ]</span> scope - Processing item 1 of 100
+<span style="color: #8b949e;">2026-08-15T20:49:27.060700Z</span>  <span style="color: #d29922;">[warning]</span> <span style="color: #d29922;">scope - Cache miss for key: user_123</span>
+<span style="color: #8b949e;">2026-08-15T20:49:27.060800Z</span>  <span style="color: #ffa657;">[error  ]</span> <span style="color: #ffa657;">scope - Failed to open connection to host: db.internal</span>
+<span style="color: #8b949e;">2026-08-15T20:49:27.060900Z</span>  <span style="color: #ff7b72;">[exception]</span> <span style="color: #ff7b72;">scope - <b>std::runtime_error</b> - <i>Fatal database connection timeout: 5s</i> - from:main.cpp@39</span>
+<span style="color: #8b949e;">2026-08-15T20:49:27.061000Z</span>  <span style="color: #ff7b72;">[exception]</span> <span style="color: #ff7b72;">scope - <b>std::exception</b> - <i>Device I/O error</i> - Operation failed for request ID: REQ-99</span>
+<span style="color: #8b949e;">2026-08-15T20:49:27.061100Z</span>  <span style="color: #8b949e;">[debug ]</span> scope - COMPLETED: time:<span style="color: #3fb950; font-weight: 600;">540us</span></pre>
+</div>
 
 ### Formatting & Streaming
 ```cpp
