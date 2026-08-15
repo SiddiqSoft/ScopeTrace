@@ -36,6 +36,27 @@ TEST(ScopeTraceTest, HelloWorld_Lambda)
     f.get();
 }
 
+TEST(ScopeTraceTest, ParentageDepthNesting)
+{
+    // g_scope is depth 0.
+    // Multiple sibling nest() calls directly on g_scope must all produce depth = 1
+    auto childA = g_scope.nest("childA");
+    auto childB = g_scope.nest("childB");
+    auto childC = g_scope.nest("childC");
+
+    EXPECT_EQ(1, childA.depth());
+    EXPECT_EQ(1, childB.depth());
+    EXPECT_EQ(1, childC.depth());
+
+    // Nesting from childA (depth 1) must produce depth 2
+    auto grandChildA = childA.nest("grandChildA");
+    EXPECT_EQ(2, grandChildA.depth());
+
+    // Sibling nesting from childA must also produce depth 2
+    auto grandChildA2 = childA.nest("grandChildA2");
+    EXPECT_EQ(2, grandChildA2.depth());
+}
+
 TEST(ScopeTraceTest, ScopeDepthNesting)
 {
     std::vector<size_t> depths;

@@ -231,35 +231,50 @@ namespace siddiqsoft
         /// @return Plain function name string view
         [[nodiscard]] std::string_view function_name() const noexcept { return extract_func_name(m_location.function_name()); }
 
-    public:
-        /// @brief Construct a ScopeTrace with a scope name, log level threshold, and optional source location
-        /// @param sn Custom scope label or context name (defaults to function name)
-        /// @param level Logging threshold for this scope (defaults to trace_level::critical)
-        /// @param sl Source location (defaults to caller site)
-        explicit ScopeTrace(std::string_view            sn    = {},
-                            trace_level                 level = trace_level::none,
-                            const std::source_location& sl    = std::source_location::current())
+    protected:
+        /// @brief Helper constructor for creating child scopes with explicit parent depth
+        ScopeTrace(std::string_view            sn,
+                   trace_level                 level,
+                   size_t                      depth_val,
+                   const std::source_location& sl = std::source_location::current())
             : m_location(sl)
             , m_start_timestamp(std::chrono::system_clock::now())
             , m_scope_name(sn)
-            , m_scope_depth(current_depth()++)
+            , m_scope_depth(depth_val)
             , m_log_level(level)
         {
             if (sn.empty()) m_scope_name = extract_func_name(m_location.function_name());
         }
 
+    public:
+        /// @brief Construct a ScopeTrace with a scope name, log level threshold, and optional source location
+        /// @param sn Custom scope label or context name (defaults to function name)
+        /// @param level Logging threshold for this scope (defaults to trace_level::none)
+        /// @param sl Source location (defaults to caller site)
+        explicit ScopeTrace(std::string_view            sn    = {},
+                            trace_level                 level = trace_level::none,
+                            const std::source_location& sl    = std::source_location::current())
+            : ScopeTrace(sn, level, 0, sl)
+        {
+        }
+
         /// @brief Create a nested sub-scope with child scope name and logging threshold
         /// @note The new nest scope will inherit the parent's logging threshold if the child level is set to trace_level::none.
-        /// @param sn Custom sub-scope label (appended as "parent-child")
+        /// The child scope depth is derived directly from the parent's depth (parent.depth() + 1).
+        /// @param sn Custom sub-scope label (appended as "parent/child")
         /// @param level Logging threshold for child scope (defaults to trace_level::none)
         /// @param sl Source location (defaults to caller site)
         /// @return New ScopeTrace instance
         ScopeTrace nest(std::string_view            sn, //< required sub-scope name
                         trace_level                 level = trace_level::none,
-                        const std::source_location& sl    = std::source_location::current())
+                        const std::source_location& sl    = std::source_location::current()) const
         {
-            // We will add the function name and the scope name to the log message.
-            return ScopeTrace {std::format("{}/{}", m_scope_name, sn), level == trace_level::none ? m_log_level : level, sl};
+            return ScopeTrace {
+                m_scope_name.empty() ? std::string(sn) : std::format("{}/{}", m_scope_name, sn),
+                level == trace_level::none ? m_log_level : level,
+                m_scope_depth + 1,
+                sl
+            };
         }
 
         /// @brief Copying is not supported
@@ -446,16 +461,12 @@ namespace siddiqsoft
             return *this;
         }
 
-        /// @brief Destructor logs scope completion in debug builds and updates depth counter
+        /// @brief Destructor logs scope completion in debug builds
         ~ScopeTrace() noexcept
         {
             auto us = std::chrono::duration_cast<std::chrono::microseconds>(elapsed()).count();
 
-            if (current_depth() > 0) {
-                --current_depth();
-            }
-
-            log<siddiqsoft::trace_level ::debug>("COMPLETED: time:{}{}us{}", GRN, us, NOC);
+            log<siddiqsoft::trace_level::debug>("COMPLETED: time:{}{}us{}", GRN, us, NOC);
         }
 
     private:

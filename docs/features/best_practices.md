@@ -87,3 +87,19 @@ std::thread worker_thread([order_id]() {
     // Asynchronous task logic...
 });
 ```
+
+---
+
+## 5. Global & Static ScopeTrace Guidelines
+
+### Copy & Move Prevention
+`ScopeTrace` explicitly **deletes all copy and move constructors and assignment operators** (`ScopeTrace(const ScopeTrace&) = delete`, `ScopeTrace(ScopeTrace&&) = delete`). Instances cannot be copied or moved.
+
+### Avoiding Header-Defined Static Instantiation
+Defining a static instance in a header file (`static siddiqsoft::ScopeTrace Log;`) causes C++ internal linkage to create a distinct static object in **every translation unit (`.cpp`)** that includes the header:
+
+- **Multiple Static Construction**: Each translation unit runs the `ScopeTrace` constructor at static initialization time before `main()`, artificially bumping thread-local `current_depth()` offset.
+- **Multiple Completion Messages**: Each static instance emits a destructor completion message during program shutdown.
+
+> **Recommended Pattern:**
+> Define global `ScopeTrace` instances in a single `.cpp` translation unit, declare them `extern` in shared headers, or instantiate automatic stack `ScopeTrace` variables locally within function scopes (`siddiqsoft::ScopeTrace scope;`). Avoid `static ScopeTrace` variables inside functions, as local static destructors run at program termination rather than function scope exit.
