@@ -569,6 +569,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../features/best_practices/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Best Practices
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../features/security/" class="md-nav__link">
         
   
@@ -1971,7 +1999,7 @@
 </span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">    </span><span class="n">warning</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w">  </span><span class="c1">// Logged if m_log_level &gt;= warning (Dark Yellow / Gold output)</span>
 </span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">    </span><span class="n">info</span><span class="w">      </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w">  </span><span class="c1">// Logged if m_log_level &gt;= info (Default/Neutral output)</span>
 </span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="w">    </span><span class="n">debug</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w">  </span><span class="c1">// Logged if m_log_level &gt;= debug (Light Gray output, excludes trace)</span>
-</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="w">    </span><span class="n">trace</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="mi">6</span><span class="p">,</span><span class="w">  </span><span class="c1">// Logged if m_log_level &gt;= trace (Light Gray output, all logs)</span>
+</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="w">    </span><span class="n">trace</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="mi">6</span><span class="p">,</span><span class="w">  </span><span class="c1">// Logged if m_log_level &gt;= trace (Dark Blue output, all logs)</span>
 </span><span id="__span-1-9"><a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="w">    </span><span class="n">none</span><span class="w">      </span><span class="o">=</span><span class="w"> </span><span class="mi">255</span><span class="w"> </span><span class="c1">// Disabled threshold</span>
 </span><span id="__span-1-10"><a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="p">};</span>
 </span></code></pre></div>
@@ -1981,6 +2009,7 @@
 <th style="text-align: left;">Log Level</th>
 <th style="text-align: left;">Color Output</th>
 <th style="text-align: left;">ANSI Escape Sequence</th>
+<th style="text-align: left;">Visual Terminal Preview</th>
 <th style="text-align: left;">Standard Use Case</th>
 </tr>
 </thead>
@@ -1989,42 +2018,49 @@
 <td style="text-align: left;"><code>critical</code></td>
 <td style="text-align: left;"><strong>Red</strong></td>
 <td style="text-align: left;"><code>\033[0;31m</code></td>
+<td style="text-align: left;"><span style="color: #ff7b72; font-weight: 600;">[critical] Out of memory</span></td>
 <td style="text-align: left;">Fatal system failures</td>
 </tr>
 <tr>
 <td style="text-align: left;"><code>exception</code></td>
 <td style="text-align: left;"><strong>Red</strong></td>
 <td style="text-align: left;"><code>\033[0;31m</code></td>
+<td style="text-align: left;"><span style="color: #ff7b72; font-weight: 600;">[exception] std::runtime_error</span></td>
 <td style="text-align: left;">Exception handler logging (<code>exp()</code>)</td>
 </tr>
 <tr>
 <td style="text-align: left;"><code>error</code></td>
 <td style="text-align: left;"><strong>Orange</strong></td>
 <td style="text-align: left;"><code>\033[38;5;208m</code></td>
+<td style="text-align: left;"><span style="color: #ffa657; font-weight: 600;">[error  ] Network unreachable</span></td>
 <td style="text-align: left;">Operational errors (<code>err()</code>, <code>err_throw()</code>)</td>
 </tr>
 <tr>
 <td style="text-align: left;"><code>warning</code></td>
 <td style="text-align: left;"><strong>Dark Yellow / Gold</strong></td>
 <td style="text-align: left;"><code>\033[38;5;136m</code></td>
+<td style="text-align: left;"><span style="color: #d29922; font-weight: 600;">[warning] High memory usage</span></td>
 <td style="text-align: left;">Recoverable warnings (<code>warn()</code>)</td>
 </tr>
 <tr>
 <td style="text-align: left;"><code>info</code></td>
 <td style="text-align: left;"><strong>Default / Neutral</strong></td>
 <td style="text-align: left;"><code>\033[0m</code></td>
+<td style="text-align: left;"><span style="color: #e6edf3;">[info   ] Task starting...</span></td>
 <td style="text-align: left;">Application status changes (<code>info()</code>)</td>
 </tr>
 <tr>
 <td style="text-align: left;"><code>debug</code></td>
 <td style="text-align: left;"><strong>Light Gray</strong></td>
 <td style="text-align: left;"><code>\033[38;5;250m</code></td>
+<td style="text-align: left;"><span style="color: #8b949e;">[debug  ] Step 3 complete</span></td>
 <td style="text-align: left;">General debug inspection (<code>debug()</code>)</td>
 </tr>
 <tr>
 <td style="text-align: left;"><code>trace</code></td>
-<td style="text-align: left;"><strong>Light Gray</strong></td>
-<td style="text-align: left;"><code>\033[38;5;250m</code></td>
+<td style="text-align: left;"><strong>Dark Blue</strong></td>
+<td style="text-align: left;"><code>\033[38;5;19m</code></td>
+<td style="text-align: left;"><span style="color: #58a6ff;">[trace  ] RX 1024 bytes</span></td>
 <td style="text-align: left;">High-frequency I/O operations &amp; packet/buffer dumps (<code>trace()</code>)</td>
 </tr>
 </tbody>
@@ -2200,7 +2236,7 @@ High-frequency operations — such as socket data transfers, stream packet dumps
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.expand", "navigation.path", "navigation.top", "navigation.footer", "navigation.tracking", "search.suggest", "search.highlight", "search.share", "content.code.copy", "content.code.annotate"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": "0.30.0"}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.expand", "navigation.path", "navigation.top", "navigation.footer", "navigation.tracking", "search.suggest", "search.highlight", "search.share", "content.code.copy", "content.code.annotate"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": "0.31.0-alpha.3"}</script>
     
     
       <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
