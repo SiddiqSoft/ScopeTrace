@@ -1480,9 +1480,9 @@
   </div>
   <pre class="terminal-body" style="padding: 14px 18px; color: #e6edf3; font-size: 13px; line-height: 1.65; overflow-x: auto; margin: 0; background: transparent;"><span style="color: #6e7681;">  Creating NEW SCOPE compute:6</span>
 <span style="color: #8b949e;">2026-08-15T20:49:27.060564Z</span>  <span style="color: #e6edf3;">[info  ]</span> compute - Outer computation started
-<span style="color: #6e7681;">  Creating NEW SCOPE compute-stage1:4</span>
-<span style="color: #8b949e;">2026-08-15T20:49:27.060600Z</span>  <span style="color: #e6edf3;">[info  ]</span>   compute-stage1 - Processing stage 1 payload...
-<span style="color: #8b949e;">2026-08-15T20:49:27.061250Z</span>  <span style="color: #8b949e;">[debug ]</span>   <span style="color: #8b949e;">compute-stage1 - COMPLETED: time:</span><span style="color: #3fb950; font-weight: 600;">650us</span>
+<span style="color: #6e7681;">  Creating NEW SCOPE compute/stage1:4</span>
+<span style="color: #8b949e;">2026-08-15T20:49:27.060600Z</span>  <span style="color: #e6edf3;">[info  ]</span>   compute/stage1 - Processing stage 1 payload...
+<span style="color: #8b949e;">2026-08-15T20:49:27.061250Z</span>  <span style="color: #8b949e;">[debug ]</span>   <span style="color: #8b949e;">compute/stage1 - COMPLETED: time:</span><span style="color: #3fb950; font-weight: 600;">650us</span>
 <span style="color: #8b949e;">2026-08-15T20:49:27.061300Z</span>  <span style="color: #8b949e;">[debug ]</span> compute - COMPLETED: time:<span style="color: #3fb950; font-weight: 600;">1200us</span></pre>
 </div>
 
@@ -1517,52 +1517,52 @@
 <tbody>
 <tr>
 <td style="text-align: left;"><strong><code>trace_level::critical</code></strong></td>
-<td style="text-align: left;"><code>[critical]</code></td>
+<td style="text-align: left;"><code>[crit  ]</code></td>
 <td style="text-align: left;"><strong>Red</strong></td>
 <td style="text-align: left;"><code>\033[0;31m</code></td>
-<td style="text-align: left;"><span style="color: #ff7b72; font-weight: 600;">[critical] System memory exhaustion</span></td>
+<td style="text-align: left;"><span style="color: #ff7b72; font-weight: 600;">[crit  ] System memory exhaustion</span></td>
 </tr>
 <tr>
 <td style="text-align: left;"><strong><code>trace_level::exception</code></strong></td>
-<td style="text-align: left;"><code>[exception]</code></td>
+<td style="text-align: left;"><code>[except]</code></td>
 <td style="text-align: left;"><strong>Red / Bold Red</strong></td>
 <td style="text-align: left;"><code>\033[0;31m</code></td>
-<td style="text-align: left;"><span style="color: #ff7b72; font-weight: 600;">[exception] std::runtime_error - Timeout</span></td>
+<td style="text-align: left;"><span style="color: #ff7b72; font-weight: 600;">[except] std::runtime_error - Timeout</span></td>
 </tr>
 <tr>
 <td style="text-align: left;"><strong><code>trace_level::error</code></strong></td>
-<td style="text-align: left;"><code>[error]</code></td>
+<td style="text-align: left;"><code>[error ]</code></td>
 <td style="text-align: left;"><strong>Orange</strong></td>
 <td style="text-align: left;"><code>\033[38;5;208m</code></td>
-<td style="text-align: left;"><span style="color: #ffa657; font-weight: 600;">[error  ] Failed to connect to db host</span></td>
+<td style="text-align: left;"><span style="color: #ffa657; font-weight: 600;">[error ] Failed to connect to db host</span></td>
 </tr>
 <tr>
 <td style="text-align: left;"><strong><code>trace_level::warning</code></strong></td>
-<td style="text-align: left;"><code>[warning]</code></td>
+<td style="text-align: left;"><code>[warn  ]</code></td>
 <td style="text-align: left;"><strong>Dark Yellow / Gold</strong></td>
 <td style="text-align: left;"><code>\033[38;5;136m</code></td>
-<td style="text-align: left;"><span style="color: #d29922; font-weight: 600;">[warning] Cache capacity reached 92%</span></td>
+<td style="text-align: left;"><span style="color: #d29922; font-weight: 600;">[warn  ] Cache capacity reached 92%</span></td>
 </tr>
 <tr>
 <td style="text-align: left;"><strong><code>trace_level::info</code></strong></td>
-<td style="text-align: left;"><code>[info]</code></td>
+<td style="text-align: left;"><code>[info  ]</code></td>
 <td style="text-align: left;"><strong>Default / Neutral</strong></td>
 <td style="text-align: left;"><code>\033[0m</code></td>
-<td style="text-align: left;"><span style="color: #e6edf3;">[info   ] Processing batch item 42</span></td>
+<td style="text-align: left;"><span style="color: #e6edf3;">[info  ] Processing batch item 42</span></td>
 </tr>
 <tr>
 <td style="text-align: left;"><strong><code>trace_level::debug</code></strong></td>
-<td style="text-align: left;"><code>[debug]</code></td>
+<td style="text-align: left;"><code>[debug ]</code></td>
 <td style="text-align: left;"><strong>Light Gray</strong></td>
 <td style="text-align: left;"><code>\033[38;5;250m</code></td>
-<td style="text-align: left;"><span style="color: #8b949e;">[debug  ] Worker thread pool depth: 4</span></td>
+<td style="text-align: left;"><span style="color: #8b949e;">[debug ] Worker thread pool depth: 4</span></td>
 </tr>
 <tr>
 <td style="text-align: left;"><strong><code>trace_level::trace</code></strong></td>
-<td style="text-align: left;"><code>[trace]</code></td>
+<td style="text-align: left;"><code>[trace ]</code></td>
 <td style="text-align: left;"><strong>Dark Blue</strong></td>
 <td style="text-align: left;"><code>\033[38;5;19m</code></td>
-<td style="text-align: left;"><span style="color: #58a6ff;">[trace  ] RX buffer dump: 0x41 0x42 0x43</span></td>
+<td style="text-align: left;"><span style="color: #58a6ff;">[trace ] RX buffer dump: 0x41 0x42 0x43</span></td>
 </tr>
 <tr>
 <td style="text-align: left;"><strong>Scope Exit</strong></td>
@@ -1713,7 +1713,7 @@
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.expand", "navigation.path", "navigation.top", "navigation.footer", "navigation.tracking", "search.suggest", "search.highlight", "search.share", "content.code.copy", "content.code.annotate"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": "0.33.0-alpha.0"}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.expand", "navigation.path", "navigation.top", "navigation.footer", "navigation.tracking", "search.suggest", "search.highlight", "search.share", "content.code.copy", "content.code.annotate"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": "0.41.0-alpha.0"}</script>
     
     
       <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>

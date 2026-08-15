@@ -989,22 +989,22 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#public-constructors-destructor" class="md-nav__link">
+  <a href="#process-singleton-nesting-api" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Public Constructors &amp; Destructor
+        Process Singleton &amp; Nesting API
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Public Constructors &amp; Destructor">
+    <nav class="md-nav" aria-label="Process Singleton &amp; Nesting API">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#explicit-scopetracestdstring_view-sn-trace_level-level-trace_levelnone-const-stdsource_location-sl-stdsource_locationcurrent" class="md-nav__link">
+  <a href="#static-scopetrace-createinstancestdstring_view-sn-trace_level-level-trace_levelnone-const-stdsource_location-sl-stdsource_locationcurrent" class="md-nav__link">
     <span class="md-ellipsis">
       
-        explicit ScopeTrace(std::string_view sn = {}, trace_level level = trace_level::none, const std::source_location&amp; sl = std::source_location::current())
+        static ScopeTrace&amp; CreateInstance(std::string_view sn = {}, trace_level level = trace_level::none, const std::source_location&amp; sl = std::source_location::current())
       
     </span>
   </a>
@@ -1012,10 +1012,21 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#scopetrace-neststdstring_view-sn-trace_level-level-trace_levelnone-const-stdsource_location-sl-stdsource_locationcurrent" class="md-nav__link">
+  <a href="#scopetrace-neststdstring_view-sn-trace_level-level-trace_levelnone-const-stdsource_location-sl-stdsource_locationcurrent-const" class="md-nav__link">
     <span class="md-ellipsis">
       
-        ScopeTrace nest(std::string_view sn, trace_level level = trace_level::none, const std::source_location&amp; sl = std::source_location::current())
+        ScopeTrace nest(std::string_view sn, trace_level level = trace_level::none, const std::source_location&amp; sl = std::source_location::current()) const
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#protected-constructors" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Protected Constructors
       
     </span>
   </a>
@@ -1469,22 +1480,22 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#public-constructors-destructor" class="md-nav__link">
+  <a href="#process-singleton-nesting-api" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Public Constructors &amp; Destructor
+        Process Singleton &amp; Nesting API
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Public Constructors &amp; Destructor">
+    <nav class="md-nav" aria-label="Process Singleton &amp; Nesting API">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#explicit-scopetracestdstring_view-sn-trace_level-level-trace_levelnone-const-stdsource_location-sl-stdsource_locationcurrent" class="md-nav__link">
+  <a href="#static-scopetrace-createinstancestdstring_view-sn-trace_level-level-trace_levelnone-const-stdsource_location-sl-stdsource_locationcurrent" class="md-nav__link">
     <span class="md-ellipsis">
       
-        explicit ScopeTrace(std::string_view sn = {}, trace_level level = trace_level::none, const std::source_location&amp; sl = std::source_location::current())
+        static ScopeTrace&amp; CreateInstance(std::string_view sn = {}, trace_level level = trace_level::none, const std::source_location&amp; sl = std::source_location::current())
       
     </span>
   </a>
@@ -1492,10 +1503,21 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#scopetrace-neststdstring_view-sn-trace_level-level-trace_levelnone-const-stdsource_location-sl-stdsource_locationcurrent" class="md-nav__link">
+  <a href="#scopetrace-neststdstring_view-sn-trace_level-level-trace_levelnone-const-stdsource_location-sl-stdsource_locationcurrent-const" class="md-nav__link">
     <span class="md-ellipsis">
       
-        ScopeTrace nest(std::string_view sn, trace_level level = trace_level::none, const std::source_location&amp; sl = std::source_location::current())
+        ScopeTrace nest(std::string_view sn, trace_level level = trace_level::none, const std::source_location&amp; sl = std::source_location::current()) const
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#protected-constructors" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Protected Constructors
       
     </span>
   </a>
@@ -1819,6 +1841,7 @@
 <thead>
 <tr>
 <th style="text-align: left;">Log Level</th>
+<th style="text-align: left;">Abbreviated Tag</th>
 <th style="text-align: left;">Color Output</th>
 <th style="text-align: left;">ANSI Escape Sequence</th>
 <th style="text-align: left;">Visual Terminal Preview</th>
@@ -1828,51 +1851,58 @@
 <tbody>
 <tr>
 <td style="text-align: left;"><code>critical</code></td>
+<td style="text-align: left;"><code>crit</code></td>
 <td style="text-align: left;"><strong>Red</strong></td>
 <td style="text-align: left;"><code>\033[0;31m</code></td>
-<td style="text-align: left;"><span style="color: #ff7b72; font-weight: 600;">[critical] Out of memory</span></td>
+<td style="text-align: left;"><span style="color: #ff7b72; font-weight: 600;">[crit  ] Out of memory</span></td>
 <td style="text-align: left;">Fatal system failures</td>
 </tr>
 <tr>
 <td style="text-align: left;"><code>exception</code></td>
+<td style="text-align: left;"><code>except</code></td>
 <td style="text-align: left;"><strong>Red</strong></td>
 <td style="text-align: left;"><code>\033[0;31m</code></td>
-<td style="text-align: left;"><span style="color: #ff7b72; font-weight: 600;">[exception] std::runtime_error</span></td>
+<td style="text-align: left;"><span style="color: #ff7b72; font-weight: 600;">[except] std::runtime_error</span></td>
 <td style="text-align: left;">Exception handler logging (<code>exp()</code>)</td>
 </tr>
 <tr>
 <td style="text-align: left;"><code>error</code></td>
+<td style="text-align: left;"><code>error</code></td>
 <td style="text-align: left;"><strong>Orange</strong></td>
 <td style="text-align: left;"><code>\033[38;5;208m</code></td>
-<td style="text-align: left;"><span style="color: #ffa657; font-weight: 600;">[error  ] Network unreachable</span></td>
+<td style="text-align: left;"><span style="color: #ffa657; font-weight: 600;">[error ] Network unreachable</span></td>
 <td style="text-align: left;">Operational errors (<code>err()</code>, <code>err_throw()</code>)</td>
 </tr>
 <tr>
 <td style="text-align: left;"><code>warning</code></td>
+<td style="text-align: left;"><code>warn</code></td>
 <td style="text-align: left;"><strong>Dark Yellow / Gold</strong></td>
 <td style="text-align: left;"><code>\033[38;5;136m</code></td>
-<td style="text-align: left;"><span style="color: #d29922; font-weight: 600;">[warning] High memory usage</span></td>
+<td style="text-align: left;"><span style="color: #d29922; font-weight: 600;">[warn  ] High memory usage</span></td>
 <td style="text-align: left;">Recoverable warnings (<code>warn()</code>)</td>
 </tr>
 <tr>
 <td style="text-align: left;"><code>info</code></td>
+<td style="text-align: left;"><code>info</code></td>
 <td style="text-align: left;"><strong>Default / Neutral</strong></td>
 <td style="text-align: left;"><code>\033[0m</code></td>
-<td style="text-align: left;"><span style="color: #e6edf3;">[info   ] Task starting...</span></td>
+<td style="text-align: left;"><span style="color: #e6edf3;">[info  ] Task starting...</span></td>
 <td style="text-align: left;">Application status changes (<code>info()</code>)</td>
 </tr>
 <tr>
 <td style="text-align: left;"><code>debug</code></td>
+<td style="text-align: left;"><code>debug</code></td>
 <td style="text-align: left;"><strong>Light Gray</strong></td>
 <td style="text-align: left;"><code>\033[38;5;250m</code></td>
-<td style="text-align: left;"><span style="color: #8b949e;">[debug  ] Step 3 complete</span></td>
+<td style="text-align: left;"><span style="color: #8b949e;">[debug ] Step 3 complete</span></td>
 <td style="text-align: left;">General debug inspection (<code>debug()</code>)</td>
 </tr>
 <tr>
 <td style="text-align: left;"><code>trace</code></td>
+<td style="text-align: left;"><code>trace</code></td>
 <td style="text-align: left;"><strong>Dark Blue</strong></td>
 <td style="text-align: left;"><code>\033[38;5;19m</code></td>
-<td style="text-align: left;"><span style="color: #58a6ff;">[trace  ] RX 1024 bytes</span></td>
+<td style="text-align: left;"><span style="color: #58a6ff;">[trace ] RX 1024 bytes</span></td>
 <td style="text-align: left;">High-frequency I/O operations &amp; packet/buffer dumps (<code>trace()</code>)</td>
 </tr>
 </tbody>
@@ -1884,23 +1914,27 @@ High-frequency operations — such as socket data transfers, stream packet dumps
 <h3 id="template-typename-args-struct-source_location_format_string"><code>template &lt;typename... Args&gt; struct source_location_format_string</code><a class="headerlink" href="#template-typename-args-struct-source_location_format_string" title="Permanent link">&para;</a></h3>
 <p>A specialized format string wrapper struct in <code>namespace siddiqsoft</code> that combines <code>std::format_string&lt;Args...&gt;</code> with a <code>consteval</code> constructor capturing caller <code>std::source_location::current()</code>. Used by <code>err_throw()</code> to capture exact call-site file and line numbers.</p>
 <hr />
-<h2 id="public-constructors-destructor">Public Constructors &amp; Destructor<a class="headerlink" href="#public-constructors-destructor" title="Permanent link">&para;</a></h2>
-<h3 id="explicit-scopetracestdstring_view-sn-trace_level-level-trace_levelnone-const-stdsource_location-sl-stdsource_locationcurrent"><code>explicit ScopeTrace(std::string_view sn = {}, trace_level level = trace_level::none, const std::source_location&amp; sl = std::source_location::current())</code><a class="headerlink" href="#explicit-scopetracestdstring_view-sn-trace_level-level-trace_levelnone-const-stdsource_location-sl-stdsource_locationcurrent" title="Permanent link">&para;</a></h3>
-<p>Constructs a scope logger with the specified scope name <code>sn</code>, logging threshold <code>level</code>, and caller source location <code>sl</code>. Increments the thread-local nesting depth. If <code>sn</code> is omitted or empty (<code>{}</code>), the scope name automatically defaults to the plain function name extracted via <code>extract_func_name(sl.function_name())</code> (evaluating to <code>"GLOBAL"</code> when declared in global scope outside of any function).</p>
+<h2 id="process-singleton-nesting-api">Process Singleton &amp; Nesting API<a class="headerlink" href="#process-singleton-nesting-api" title="Permanent link">&para;</a></h2>
+<h3 id="static-scopetrace-createinstancestdstring_view-sn-trace_level-level-trace_levelnone-const-stdsource_location-sl-stdsource_locationcurrent"><code>static ScopeTrace&amp; CreateInstance(std::string_view sn = {}, trace_level level = trace_level::none, const std::source_location&amp; sl = std::source_location::current())</code><a class="headerlink" href="#static-scopetrace-createinstancestdstring_view-sn-trace_level-level-trace_levelnone-const-stdsource_location-sl-stdsource_locationcurrent" title="Permanent link">&para;</a></h3>
+<p>Static factory method for obtaining or initializing the process-wide singleton <code>ScopeTrace</code> instance.
+- <strong>Process Singleton</strong>: Ensures only one process-wide root scope instance exists (<code>depth = 0</code>).
+- <strong>Initialization &amp; Updates</strong>: First invocation constructs the process singleton with <code>sn</code>, threshold <code>level</code>, and <code>sl</code>. Subsequent calls return the same singleton reference (updating process scope name or <code>m_log_level</code> if non-default parameters are supplied).</p>
 <ul>
-<li><strong><code>sn</code></strong>: Custom scope label or contextual identifier (defaults to <code>{}</code>).</li>
-<li><strong><code>level</code></strong>: Scope logging threshold (<code>LogLevel</code> / <code>trace_level</code>, defaults to <code>trace_level::none</code>).</li>
+<li><strong><code>sn</code></strong>: Process scope label or contextual identifier (defaults to caller plain function name).</li>
+<li><strong><code>level</code></strong>: Logging threshold (<code>LogLevel</code> / <code>trace_level</code>, defaults to <code>trace_level::none</code>).</li>
 <li><strong><code>sl</code></strong>: Source location (defaults to caller site via <code>std::source_location::current()</code>).</li>
 </ul>
-<h3 id="scopetrace-neststdstring_view-sn-trace_level-level-trace_levelnone-const-stdsource_location-sl-stdsource_locationcurrent"><code>ScopeTrace nest(std::string_view sn, trace_level level = trace_level::none, const std::source_location&amp; sl = std::source_location::current())</code><a class="headerlink" href="#scopetrace-neststdstring_view-sn-trace_level-level-trace_levelnone-const-stdsource_location-sl-stdsource_locationcurrent" title="Permanent link">&para;</a></h3>
-<p>Creates and returns a new child <code>ScopeTrace</code> instance. The child scope name is automatically formatted as <code>"&lt;parent_scope_name&gt;/&lt;sn&gt;"</code>. If <code>level</code> is set to <code>trace_level::none</code> (default), the child scope automatically inherits the parent's logging threshold (<code>m_log_level</code>).</p>
+<h3 id="scopetrace-neststdstring_view-sn-trace_level-level-trace_levelnone-const-stdsource_location-sl-stdsource_locationcurrent-const"><code>ScopeTrace nest(std::string_view sn, trace_level level = trace_level::none, const std::source_location&amp; sl = std::source_location::current()) const</code><a class="headerlink" href="#scopetrace-neststdstring_view-sn-trace_level-level-trace_levelnone-const-stdsource_location-sl-stdsource_locationcurrent-const" title="Permanent link">&para;</a></h3>
+<p>Creates and returns a new child <code>ScopeTrace</code> instance. The child scope name is automatically formatted as <code>"&lt;parent_scope_name&gt;/&lt;sn&gt;"</code>. Child scope depth is derived directly from parent depth (<code>child.depth() = parent.depth() + 1</code>). If <code>level</code> is set to <code>trace_level::none</code> (default), the child scope inherits the parent's logging threshold (<code>m_log_level</code>).</p>
 <ul>
 <li><strong><code>sn</code></strong>: Sub-scope label string (required).</li>
 <li><strong><code>level</code></strong>: Child scope logging threshold (<code>LogLevel</code> / <code>trace_level</code>, defaults to <code>trace_level::none</code> to inherit parent threshold).</li>
 <li><strong><code>sl</code></strong>: Source location (defaults to caller site).</li>
 </ul>
+<h3 id="protected-constructors">Protected Constructors<a class="headerlink" href="#protected-constructors" title="Permanent link">&para;</a></h3>
+<p>Direct constructors <code>ScopeTrace(...)</code> are <code>protected:</code>. Direct stack instantiation (e.g. <code>ScopeTrace scope;</code>) is disabled in production code; instances must be obtained via <code>ScopeTrace::CreateInstance(...)</code> or <code>parent.nest(...)</code>.</p>
 <h3 id="scopetrace-noexcept"><code>~ScopeTrace() noexcept</code><a class="headerlink" href="#scopetrace-noexcept" title="Permanent link">&para;</a></h3>
-<p>Destructor. Decrements the thread-local nesting depth counter. Logs a scope completion message with elapsed duration in microseconds (<code>COMPLETED: time:...us</code>) at <code>trace_level::debug</code> severity.</p>
+<p>Destructor. Logs a scope completion message with elapsed duration in microseconds (<code>COMPLETED: time:...us</code>) at <code>trace_level::debug</code> severity.</p>
 <h3 id="copy-move-operations">Copy &amp; Move Operations<a class="headerlink" href="#copy-move-operations" title="Permanent link">&para;</a></h3>
 <p>Copy construction, move construction, copy assignment, and move assignment operators are explicitly <code>= delete</code>.</p>
 <hr />
@@ -2159,7 +2193,7 @@ High-frequency operations — such as socket data transfers, stream packet dumps
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.expand", "navigation.path", "navigation.top", "navigation.footer", "navigation.tracking", "search.suggest", "search.highlight", "search.share", "content.code.copy", "content.code.annotate"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": "0.33.0-alpha.0"}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.expand", "navigation.path", "navigation.top", "navigation.footer", "navigation.tracking", "search.suggest", "search.highlight", "search.share", "content.code.copy", "content.code.annotate"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": "0.41.0-alpha.0"}</script>
     
     
       <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
