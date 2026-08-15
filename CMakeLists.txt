@@ -31,6 +31,9 @@ project(ScopeTrace
         LANGUAGES       CXX
         HOMEPAGE_URL    "%%myurl%%")
 
+set(CMAKE_CXX_STANDARD 23)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
 # Build options
 option(${PROJECT_NAME}_BUILD_TESTS "Build tests for ${PROJECT_NAME}" OFF)
 # Decides whether to use a std::recursive_mutex for the std::deque inside the resource_pool
