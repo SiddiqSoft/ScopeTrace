@@ -10,6 +10,56 @@
 
 ---
 
+## Motivation
+
+How many of us have had to write code that is surrounded by `#if defined(DEBUG)..` and `std::println(std::cerr, ..)` through out your code.
+
+=== "Before: Using macros.."
+
+    You had to add guards and litter your code with macros..
+
+    ```cpp
+    void foo() {
+    #if defined(DEBUG)
+            std::println(std::cerr, "{} - Something or the other", __func__);
+    #endif
+
+        try {
+            ...
+        } catch(std::exception& e) {
+            std::println(std::cerr, "{} - Exception: {}", __func__, e.what());
+        }
+
+    #if defined(DEBUG)
+            std::println(std::cerr, "{} - COMPLETED", __func__);
+    #endif
+    }
+    ```
+
+=== "With ScopeTrace.."
+
+    Focus on your code and write your message/comments without worrying about formatting strings, colors, indentation and calculating the timings..
+
+    ```cpp
+    void foo() {
+        siddiqsoft::ScopeTrace scope; // defaults name to plain __func__ ("foo")
+
+        try {
+            auto inner = scope.nest("Nested"); // explicit inner scope label ("foo-Nested")
+
+            inner.info("From the inner scope line: {}", __LINE__);
+            // We log information and throw in one shot!
+            inner.err_throw<std::runtime_error>("Deliberate error");
+        }
+        catch (const std::exception& e) {
+            // Catch an error and log
+            scope.exp(e);
+        }
+    }
+    ```
+
+---
+
 ## Key Highlights
 
 - **Zero-Boilerplate Tracing**: Automatically record function name, file path, and line numbers using `std::source_location` and auto-extracted `__func__` names.

@@ -17,71 +17,7 @@
 
 ---
 
-## Motivation
-
-How many of us have had to write
-
-=== "Before: Using macros.."
-
-    You had to add guards and litter your code with macros..
-
-    ```cpp
-    void foo() {
-    #if defined(DEBUG)
-            std::println(std::cerr, "{} - Something or the other", __func__);
-    #endif
-
-        try {
-            ...
-        } catch(std::exception& e) {
-            std::println(std::cerr, "{} - Exception: {}", __func__, e.what());
-        }
-
-    #if defined(DEBUG)
-            std::println(std::cerr, "{} - COMPLETED", __func__);
-    #endif
-    }
-    ```
-
-=== "With ScopeTrace.."
-
-    Focus on your code and write your message/comments without worrying about formatting strings, colors, indentation and calculating the timings..
-
-    ```cpp
-    void foo() {
-        siddiqsoft::ScopeTrace scope; // automatically defaults scope name to plain __func__ ("foo")
-
-        try {
-            auto inner = scope.nest("Nested"); // explicit inner scope label ("foo-Nested")
-
-            inner.info("From the inner scope line: {}", __LINE__);
-            inner.err_throw<std::runtime_error>("Deliberate error from line: {}", __LINE__);
-        }
-        catch (const std::exception& e) {
-            scope.exp(e);
-        }
-    }
-    ```
-
-    === "ScopeTrace output in `DEBUG` mode"
-
-        Note the ISO 8601 UTC timestamp, nesting, and color output
-        ```
-        2026-08-13T23:16:00.519049Z    foo-Nested - From the inner scope line: 56
-        2026-08-13T23:16:00.519100Z    foo-Nested - COMPLETED - time:71us
-        2026-08-13T23:16:00.519120Z  foo - St13runtime_error - Deliberate error from line: 57
-        2026-08-13T23:16:00.519150Z  foo - COMPLETED - time:138us
-        ```
-
-    === "ScopeTrace output in `RELEASE` mode"
-
-        ```
-        2026-08-13T23:16:00.519120Z  foo - St13runtime_error - Deliberate error from line: 57
-        ```
-
----
-
-## 📚 Documentation Site Links
+## Documentation Site Links
 
 For full detailed documentation, integration guides, and API specifications, visit our MkDocs documentation site:
 
@@ -93,31 +29,46 @@ For full detailed documentation, integration guides, and API specifications, vis
 
 ---
 
-## ⚡ Quick Start
+## Quick Start
 
 ```cpp
 #include <iostream>
 #include <siddiqsoft/ScopeTrace.hpp>
 
+// This is the global instance and configured to log warnings, errors, exceptions
+static siddiqsoft::ScopeTrace Log{"MYPROJECT", siddiqsoft::LogLevel::trace};
+
 void sub_task()
 {
-    siddiqsoft::ScopeTrace inner;
-    inner.info("Processing items...");
-    // Perform work...
+    // This will create a nested context with the function name and
+    // logs all events with info and higher
+    auto inner= Log.nest(__func__, siddiqsoft::LogLevel::info);
+    auto last_line= __LINE__;
+
+    try {
+        last_line= __LINE__;
+        inner.info("Processing items...");
+
+        // Perform work...
+        last_line= __LINE__;
+        ..
+        ..
+        last_line= __LINE__;
+        call_something(); // throws exception
+    } catch (std::exception& ex) {
+        // Logs the exception as well as our contextual message.
+        inner.exp(ex, "Got exception last_line: {}", last_line);
+    }
+
+    // when this scope ends, we end up logging a completed message
+    // listing this method and time taken to execute it.
 }
 
 int main()
 {
-    siddiqsoft::ScopeTrace scope;
+    Log.info("Starting application execution");
 
-    scope.info("Starting application execution");
-
-    try {
-        sub_task();
-    }
-    catch (const std::exception& e) {
-        scope.exp(e);
-    }
+    sub_task();
 
     return 0;
 }
@@ -125,30 +76,7 @@ int main()
 
 ---
 
-## 🔍 Function Name Extraction (`__func__`)
-
-`ScopeTrace` provides built-in utilities to extract the clean function name matching `__func__` from verbose `std::source_location::function_name()` signatures:
-
-```cpp
-void MyClass::process_data()
-{
-    siddiqsoft::ScopeTrace scope;
-
-    // Returns "process_data"
-    std::string_view name1 = scope.function_name();
-    std::string_view name2 = scope.func_name(); // Alias
-
-    // Static helper for any signature string
-    std::string_view name3 = siddiqsoft::ScopeTrace::extract_func_name("virtual void MyClass::process_data(int) const");
-}
-
-// When declared in global scope (outside of any function):
-static siddiqsoft::ScopeTrace g_scope; // Scope name defaults to "GLOBAL"
-```
-
----
-
-## 📦 Installation & Integration
+## Installation & Integration
 
 Integrate via [CPM.cmake](https://github.com/cpm-cmake/CPM.cmake):
 
@@ -164,7 +92,7 @@ For more details, see the [CMake & Integration Documentation](https://SiddiqSoft
 
 ---
 
-## 🛠️ Requirements & Building
+## Requirements & Building
 
 - **C++ Compiler**: C++23 compliant compiler (MSVC 2022 v17.10+, GCC 13+, Clang 17+).
 - **CMake**: Version >= 3.29.
@@ -184,7 +112,7 @@ ctest --test-dir build/Darwin
 
 ---
 
-## 📄 License
+## License
 
 Distributed under the [BSD 3-Clause License](LICENSE).
 Copyright (c) 2026 Siddiq Software LLC.
