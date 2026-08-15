@@ -13,7 +13,6 @@
 - **Nesting Level Tracking**: Indents nested scope execution trees dynamically using thread-local depth counter (`current_depth()`) and `nest()` method.
 - **Dynamic Log Level Filtering**: Fine-grained threshold control (`LogLevel` / `trace_level`). Critical, exception, and error logs are always output, while warning, info, debug, and trace are filtered according to threshold (`m_log_level`).
 - **Structured Console Logging**: Specialized `info()`, `debug()`, `trace()`, `warn()`, `err()`, `err_throw()`, and `exp()` methods for formatted console logging with ANSI colors and ISO 8601 UTC timestamps.
-- **String Formatting & Stream Support**: Native `to_string()` formatting and `operator<<` stream insertion support.
 
 ---
 

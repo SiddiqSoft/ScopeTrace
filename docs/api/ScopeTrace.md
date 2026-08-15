@@ -52,64 +52,36 @@ A specialized format string wrapper struct in `namespace siddiqsoft` that combin
 
 ## Public Constructors & Destructor
 
-### `explicit ScopeTrace(std::string_view sn = {}, trace_level level = trace_level::critical, const std::source_location& sl = std::source_location::current())`
+### `explicit ScopeTrace(std::string_view sn = {}, trace_level level = trace_level::none, const std::source_location& sl = std::source_location::current())`
 Constructs a scope logger with the specified scope name `sn`, logging threshold `level`, and caller source location `sl`. Increments the thread-local nesting depth. If `sn` is omitted or empty (`{}`), the scope name automatically defaults to the plain function name extracted via `extract_func_name(sl.function_name())` (evaluating to `"GLOBAL"` when declared in global scope outside of any function).
 
 - **`sn`**: Custom scope label or contextual identifier (defaults to `{}`).
-- **`level`**: Scope logging threshold (`LogLevel` / `trace_level`, defaults to `trace_level::critical`).
+- **`level`**: Scope logging threshold (`LogLevel` / `trace_level`, defaults to `trace_level::none`).
 - **`sl`**: Source location (defaults to caller site via `std::source_location::current()`).
 
-### `ScopeTrace nest(std::string_view sn, trace_level level = trace_level::critical, const std::source_location& sl = std::source_location::current())`
-Creates and returns a new child `ScopeTrace` instance. The child scope name is automatically formatted as `"<parent_scope_name>-<sn>"`.
+### `ScopeTrace nest(std::string_view sn, trace_level level = trace_level::none, const std::source_location& sl = std::source_location::current())`
+Creates and returns a new child `ScopeTrace` instance. The child scope name is automatically formatted as `"<parent_scope_name>/<sn>"`. If `level` is set to `trace_level::none` (default), the child scope automatically inherits the parent's logging threshold (`m_log_level`).
 
-- **`sn`**: Sub-scope label string.
-- **`level`**: Child scope logging threshold (`LogLevel` / `trace_level`, defaults to `trace_level::critical`).
+- **`sn`**: Sub-scope label string (required).
+- **`level`**: Child scope logging threshold (`LogLevel` / `trace_level`, defaults to `trace_level::none` to inherit parent threshold).
 - **`sl`**: Source location (defaults to caller site).
 
 ### `~ScopeTrace() noexcept`
-Destructor. Decrements the thread-local nesting depth counter. Logs a scope completion message with elapsed duration in microseconds and ISO 8601 UTC timestamp to `std::cerr`.
+Destructor. Decrements the thread-local nesting depth counter. Logs a scope completion message with elapsed duration in microseconds (`COMPLETED: time:...us`) at `trace_level::debug` severity.
 
 ### Copy & Move Operations
 Copy construction, move construction, copy assignment, and move assignment operators are explicitly `= delete`.
 
 ---
 
-## Static Methods
-
-### `static size_t& current_depth() noexcept`
-Accesses the thread-local scope depth counter. Returns a reference to the current thread's nesting depth index (`size_t`).
-
-### `[[nodiscard]] static std::string_view extract_func_name(std::string_view full_signature) noexcept`
-Extracts the plain function name (matching the `__func__` macro) from a full function signature string (such as `std::source_location::function_name()`). Returns `"GLOBAL"` if `full_signature` is empty or instantiated in global scope outside of a function.
-
-### `[[nodiscard]] static std::string current_timestamp() noexcept`
-Returns an ISO 8601 UTC timestamp string with microsecond precision e.g. `"2026-08-13T23:16:00.519049Z  "` (styled with ANSI light gray color codes).
-
----
-
-## Accessor & Modifier Member Functions
+## Public Accessor & Modifier Member Functions
 
 ### `auto& set_level(trace_level level) noexcept`
 Updates the scope's logging threshold level (`m_log_level`). Returns a reference to `*this`.
 
-### `[[nodiscard]] auto elapsed() const noexcept`
-Calculates and returns the duration (`std::chrono::system_clock::duration`) elapsed since the `ScopeTrace` instance was constructed.
-
-### `[[nodiscard]] size_t depth() const noexcept`
-Returns the nesting depth index of this scope instance (`0` for top-level scopes).
-
-### `[[nodiscard]] const std::source_location& location() const noexcept`
-Returns the `std::source_location` object captured at construction.
-
-### `[[nodiscard]] std::string_view name() const noexcept`
-Returns the scope name string view passed at construction (or the auto-extracted plain function name if `sn` was empty).
-
-### `[[nodiscard]] std::string_view function_name() const noexcept`
-Returns the plain function name matching the `__func__` macro, extracted from `m_location.function_name()`.
-
 ---
 
-## Logging Member Functions
+## Public Logging Member Functions
 
 ### `template <trace_level level = trace_level::critical, typename... Args> auto& log(std::format_string<Args...> fmt, Args&&... args)`
 Core formatted logging template. Formats and outputs a diagnostic message to `std::cerr`.
@@ -142,11 +114,61 @@ Enhanced exception logging shortcut for `catch` blocks. Outputs exception type (
 
 ---
 
-## Formatting & Stream Operations
+## Protected & Non-Public Implementation Details
 
-### `template <typename charT = char> [[nodiscard]] auto to_string() const`
-Formats the scope log as a string containing ISO 8601 UTC timestamp, line indentation, source location, function name, scope name, and elapsed duration in microseconds.
+The following internal helper methods, formatting functions, constants, and data members are declared `protected:` (exposed as `public:` to unit test suites only when `SCOPETRACE_PRIVATE_TESTING` is defined):
 
-### `friend std::ostream& operator<<(std::ostream& os, const ScopeTrace& src)`
-Stream insertion operator. Writes `src.to_string<char>()` to the standard output stream `os`.
+### Protected Helper Methods (`protected:`)
+
+- **`static size_t& current_depth() noexcept`**  
+  Accesses reference to thread-local scope nesting depth index (`thread_local size_t depth = 0`).
+- **`[[nodiscard]] auto elapsed() const noexcept`**  
+  Calculates duration (`std::chrono::system_clock::duration`) elapsed since scope construction.
+- **`[[nodiscard]] size_t depth() const noexcept`**  
+  Returns nesting depth index of this scope (`0` for top-level scope).
+- **`[[nodiscard]] const std::source_location& location() const noexcept`**  
+  Returns `std::source_location` captured at scope entry.
+- **`[[nodiscard]] std::string_view name() const noexcept`**  
+  Returns scope name string view (`m_scope_name`).
+- **`[[nodiscard]] static std::string_view extract_func_name(std::string_view full_signature) noexcept`**  
+  Extracts plain function name matching `__func__` from full signature (returns `"GLOBAL"` if empty).
+- **`[[nodiscard]] static std::string current_timestamp() noexcept`**  
+  Returns ISO 8601 UTC timestamp string with microsecond precision e.g. `"2026-08-13T23:16:00.519049Z  "` (styled with `LTGY` color).
+- **`[[nodiscard]] std::string_view function_name() const noexcept`**  
+  Returns plain function name matching `__func__` extracted from `m_location.function_name()`.
+- **`[[nodiscard]] static constexpr std::string_view logline_start_color(trace_level level) noexcept`**  
+  Maps a `trace_level` severity tag to its corresponding ANSI start escape sequence (`RED`, `ORN`, `DKYLW`, `NOC`, `LTGY`, or `DRKBLU`).
+- **`[[nodiscard]] static constexpr std::string_view logline_end_color(trace_level) noexcept`**  
+  Returns the ANSI color reset escape sequence `NOC` (`\033[0m`).
+- **`[[nodiscard]] std::string indent_buffer(trace_level level) const`**  
+  Formats a colored `[level]` tag padded to 7 characters followed by `m_scope_depth * 2` spaces indentation.
+- **`[[nodiscard]] std::string logline_prefix(trace_level level) const`**  
+  Generates line prefix string containing ISO 8601 UTC timestamp in light gray (`LTGY`), colored `[level]` severity tag, and depth-indented spaces (`m_scope_depth * 2`).
+
+### Private Color & String Constants (`private:`)
+
+| Constant | Type | Value | Description |
+| :--- | :--- | :--- | :--- |
+| `LTGY` | `std::string_view` | `\033[38;5;250m` | Light gray color sequence for timestamps and caller details |
+| `DKGY` | `std::string_view` | `\033[1;40m` | Dark gray background sequence |
+| `RED` | `std::string_view` | `\033[0;31m` | Red sequence for `critical` and `exception` levels |
+| `ORN` | `std::string_view` | `\033[38;5;208m` | Orange sequence for `error` level |
+| `BLU` | `std::string_view` | `\033[0;34m` | Standard blue sequence |
+| `DRKBLU` | `std::string_view` | `\033[38;5;19m` | Dark blue sequence for `trace` level |
+| `GRN` | `std::string_view` | `\033[0;32m` | Green sequence for scope completion duration (`COMPLETED: time:...us`) |
+| `YLW` | `std::string_view` | `\033[1;33m` | Yellow sequence modifier |
+| `DKYLW` | `std::string_view` | `\033[38;5;136m` | Dark yellow sequence for `warning` level |
+| `BOLD` / `NOTBOLD` | `std::string_view` | `\033[1m` / `\033[22m` | Bold text toggle sequences |
+| `ITAL` / `NOTITAL` | `std::string_view` | `\033[3m` / `\033[23m` | Italic text toggle sequences |
+| `UNDL` / `NOTUNDL` | `std::string_view` | `\033[4m` / `\033[24m` | Underline text toggle sequences |
+| `NOC` | `std::string_view` | `\033[0m` | Reset all ANSI styles |
+| `global_function_name` | `std::string_view` | `"GLOBAL"` | Fallback function name when instantiated in global scope |
+
+### Private Member Variables (`private:`)
+
+- **`trace_level m_log_level`**: Threshold filter level (`trace_level::error` default).
+- **`std::source_location m_location`**: Caller source location recorded upon scope entry.
+- **`std::chrono::system_clock::time_point m_start_timestamp`**: Entry timestamp for calculating `elapsed()`.
+- **`std::string m_scope_name`**: Custom scope label or auto-extracted plain function name (`"GLOBAL"` or `__func__`).
+- **`size_t m_scope_depth`**: Scope nesting depth level captured from `current_depth()`.
 

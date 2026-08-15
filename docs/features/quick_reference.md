@@ -69,18 +69,11 @@ try {
 <span style="color: #8b949e;">2026-08-15T20:49:27.061100Z</span>  <span style="color: #8b949e;">[debug ]</span> scope - COMPLETED: time:<span style="color: #3fb950; font-weight: 600;">540us</span></pre>
 </div>
 
-### Formatting & Streaming
+### Internal Scope Metrics & Helpers (Protected Methods)
 ```cpp
-// Format as std::string (includes ISO 8601 UTC timestamp and location)
-std::string formatted = scope.to_string();
+// Protected implementation helpers (accessible in derived classes or when SCOPETRACE_PRIVATE_TESTING is defined):
 
-// Stream insertion operator
-std::cout << scope << std::endl;
-```
-
-### Scope Metrics & Nesting
-```cpp
-// Elapsed time since scope entry
+// Elapsed duration since scope entry
 auto duration = scope.elapsed();
 
 // Instance nesting depth level

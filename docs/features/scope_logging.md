@@ -21,12 +21,12 @@ void compute()
 
 ## Source Location & Function Name Extraction
 
-Using `std::source_location::current()`, `ScopeTrace` captures caller details automatically:
-- Source file path (`location().file_name()`)
-- Line number (`location().line()`)
-- Enclosing function signature (`location().function_name()`)
+Using `std::source_location::current()`, `ScopeTrace` captures caller details automatically upon construction:
+- Source file path (`m_location.file_name()`)
+- Line number (`m_location.line()`)
+- Enclosing function signature (`m_location.function_name()`)
 
-`ScopeTrace` also includes built-in parsing (`extract_func_name()` / `function_name()`) to extract clean plain function names matching `__func__` from full signature strings. When `ScopeTrace` is declared in the global scope (outside of any enclosing function), `extract_func_name()` evaluates to `"GLOBAL"`.
+`ScopeTrace` also includes internal protected helper routines (`extract_func_name()` / `function_name()`) to extract clean plain function names matching `__func__` from full signature strings. When `ScopeTrace` is declared in the global scope (outside of any enclosing function), `extract_func_name()` evaluates to `"GLOBAL"`.
 
 ## Nesting Depth & ISO 8601 Timestamps
 

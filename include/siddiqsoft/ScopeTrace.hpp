@@ -91,8 +91,6 @@ struct std::formatter<siddiqsoft::trace_level> : std::formatter<std::string_view
 
 namespace siddiqsoft
 {
-
-
     /// @brief Wrapper combining std::format_string with automatic caller std::source_location capture.
     template <typename... Args>
     struct source_location_format_string
@@ -131,7 +129,12 @@ namespace siddiqsoft
         static constexpr std::string_view NOC {"\033[0m"};          //< No Color
         static constexpr std::string_view global_function_name {"GLOBAL"};
 
+        // We're using this to allow unit tests to access protected members of ScopeTrace for testing purposes.
+#if defined(SCOPETRACE_PRIVATE_TESTING)
     public:
+#else
+    protected:
+#endif
         /// @brief Access thread-local scope nesting level counter
         /// @return Reference to current thread scope depth
         static size_t& current_depth() noexcept

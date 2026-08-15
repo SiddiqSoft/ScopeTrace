@@ -43,9 +43,6 @@ int main()
 
     perform_operation();
 
-    // Stream formatting example
-    std::cout << "Scope summary: " << scope << std::endl;
-
     return 0;
 }
 ```
@@ -61,7 +58,7 @@ Executing the example above outputs formatted log entries to `std::cerr` with dy
     <span class="terminal-dot red" style="width: 12px; height: 12px; border-radius: 50%; background-color: #ff5f56; display: inline-block;"></span>
     <span class="terminal-dot yellow" style="width: 12px; height: 12px; border-radius: 50%; background-color: #ffbd2e; display: inline-block;"></span>
     <span class="terminal-dot green" style="width: 12px; height: 12px; border-radius: 50%; background-color: #27c93f; display: inline-block;"></span>
-    <span class="terminal-title" style="color: #8b949e; font-size: 12px; margin-left: 6px; font-family: sans-serif;">Console Output (std::cerr & std::cout)</span>
+    <span class="terminal-title" style="color: #8b949e; font-size: 12px; margin-left: 6px; font-family: sans-serif;">Console Output (std::cerr)</span>
   </div>
   <pre class="terminal-body" style="padding: 14px 18px; color: #e6edf3; font-size: 13px; line-height: 1.65; overflow-x: auto; margin: 0; background: transparent;"><span style="color: #6e7681;">  Creating NEW SCOPE main:6</span>
 <span style="color: #8b949e;">2026-08-15T20:49:27.060564Z</span>  <span style="color: #e6edf3;">[info  ]</span> main - Application initialization complete
@@ -75,7 +72,6 @@ Executing the example above outputs formatted log entries to `std::cerr` with dy
 <span style="color: #8b949e;">2026-08-15T20:49:27.070900Z</span>  <span style="color: #8b949e;">[debug ]</span>     <span style="color: #8b949e;">worker - COMPLETED: time:</span><span style="color: #3fb950; font-weight: 600;">10310us</span>
 <span style="color: #8b949e;">2026-08-15T20:49:27.071000Z</span>  <span style="color: #ff7b72;">[exception]</span>   <span style="color: #ff7b72;">perform_operation - <b>std::runtime_error</b> - <i>Simulated failure in sub-system</i> - Error encountered during operation execution</span>
 <span style="color: #8b949e;">2026-08-15T20:49:27.071050Z</span>  <span style="color: #8b949e;">[debug ]</span>   <span style="color: #8b949e;">perform_operation - COMPLETED: time:</span><span style="color: #3fb950; font-weight: 600;">10500us</span>
-Scope summary: 2026-08-15T20:49:27.071100Z [main.cpp:41] main (main) took 10600us
 <span style="color: #8b949e;">2026-08-15T20:49:27.071120Z</span>  <span style="color: #8b949e;">[debug ]</span> main - COMPLETED: time:<span style="color: #3fb950; font-weight: 600;">10620us</span></pre>
 </div>
 

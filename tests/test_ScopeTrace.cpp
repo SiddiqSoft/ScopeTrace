@@ -7,6 +7,7 @@
 #include <vector>
 #include <future>
 
+#define SCOPETRACE_PRIVATE_TESTING 1
 
 #include "../include/siddiqsoft/ScopeTrace.hpp"
 
@@ -34,7 +35,6 @@ TEST(ScopeTraceTest, HelloWorld_Lambda)
 
     f.get();
 }
-
 
 TEST(ScopeTraceTest, ScopeDepthNesting)
 {
