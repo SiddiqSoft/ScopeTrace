@@ -2,19 +2,19 @@
 
 ## Cheat Sheet
 
-### Scope Instantiation & Log Level Threshold
+### Process Singleton Instantiation & Nesting
 ```cpp
-// Explicit scope label with log level threshold (e.g. LogLevel::debug)
-siddiqsoft::ScopeTrace scope("step_name", siddiqsoft::LogLevel::debug);
+// Access or initialize process-wide singleton ScopeTrace instance
+auto& log = siddiqsoft::ScopeTrace::CreateInstance("my_app", siddiqsoft::LogLevel::debug);
 
-// Default scope label (defaults to plain function name, LogLevel::critical threshold)
-siddiqsoft::ScopeTrace scope;
+// Access process singleton without arguments
+auto& root = siddiqsoft::ScopeTrace::CreateInstance();
 
-// Update threshold dynamically
-scope.set_level(siddiqsoft::LogLevel::trace);
+// Update process threshold dynamically
+root.set_level(siddiqsoft::LogLevel::trace);
 
-// Nested scope creation (automatically formatted as "<parent_name>-<child_name>")
-auto inner = scope.nest("sub_task", siddiqsoft::LogLevel::info);
+// Nested scope creation (automatically formatted as "<parent_name>/<child_name>")
+auto inner = root.nest("sub_task", siddiqsoft::LogLevel::info);
 ```
 
 ### Structured Console Logging & Colors

@@ -11,8 +11,21 @@
 
 #include "../include/siddiqsoft/ScopeTrace.hpp"
 
-siddiqsoft::ScopeTrace g_scope {"test_ScopeTrace", siddiqsoft::trace_level::debug, std::source_location::current()};
+auto& g_scope = siddiqsoft::ScopeTrace::CreateInstance("test_ScopeTrace", siddiqsoft::trace_level::debug);
 
+
+TEST(ScopeTraceTest, CreateInstanceSingleton)
+{
+    auto& instance1 = siddiqsoft::ScopeTrace::CreateInstance("SingletonApp", siddiqsoft::LogLevel::debug);
+    auto& instance2 = siddiqsoft::ScopeTrace::CreateInstance();
+
+    // Must refer to the exact same process singleton instance
+    EXPECT_EQ(&instance1, &instance2);
+    EXPECT_EQ(0, instance1.depth());
+
+    auto child = instance1.nest("worker");
+    EXPECT_EQ(1, child.depth());
+}
 
 TEST(ScopeTraceTest, HelloWorld)
 {
@@ -123,7 +136,7 @@ TEST(ScopeTraceTest, LogLevelFiltering)
         auto*             old_cerr = std::cerr.rdbuf(buffer.rdbuf());
 
         {
-            siddiqsoft::ScopeTrace scope {"FilterTest", config_level};
+            auto scope = siddiqsoft::ScopeTrace::CreateInstance().nest("FilterTest", config_level);
             scope.log<siddiqsoft::trace_level::critical>("CRIT_MSG");
             scope.log<siddiqsoft::trace_level::error>("ERR_MSG");
             scope.warn("WARN_MSG");

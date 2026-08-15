@@ -10,12 +10,12 @@ This example demonstrates how to use `siddiqsoft::ScopeTrace` for scope tracing,
 
 void worker()
 {
-    // Initialize scope with plain function name ("worker") and trace threshold
-    siddiqsoft::ScopeTrace scope("worker", siddiqsoft::LogLevel::trace);
+    // Create nested scope from process singleton
+    auto scope = siddiqsoft::ScopeTrace::CreateInstance().nest("worker", siddiqsoft::LogLevel::trace);
     scope.info("Worker starting task with ID={}", 42);
     scope.trace("Low-level trace details for worker setup");
 
-    // Create a child nested scope ("worker-subtask") with warning threshold
+    // Create a child nested scope ("worker/subtask") with warning threshold
     auto sub = scope.nest("subtask", siddiqsoft::LogLevel::warning);
     std::this_thread::sleep_for(std::chrono::milliseconds(10));
 
@@ -24,7 +24,7 @@ void worker()
 
 void perform_operation()
 {
-    siddiqsoft::ScopeTrace scope("perform_operation", siddiqsoft::LogLevel::trace);
+    auto scope = siddiqsoft::ScopeTrace::CreateInstance().nest("perform_operation", siddiqsoft::LogLevel::trace);
     worker();
 
     try {
@@ -38,7 +38,8 @@ void perform_operation()
 
 int main()
 {
-    siddiqsoft::ScopeTrace scope("main", siddiqsoft::LogLevel::trace);
+    // Obtain process-wide singleton ScopeTrace instance
+    auto& scope = siddiqsoft::ScopeTrace::CreateInstance("main", siddiqsoft::LogLevel::trace);
     scope.info("Application initialization complete");
 
     perform_operation();
@@ -66,11 +67,11 @@ Executing the example above outputs formatted log entries to `std::cerr` with dy
 <span style="color: #6e7681;">  Creating NEW SCOPE worker:6</span>
 <span style="color: #8b949e;">2026-08-15T20:49:27.060600Z</span>  <span style="color: #e6edf3;">[info  ]</span>     worker - Worker starting task with ID=42
 <span style="color: #8b949e;">2026-08-15T20:49:27.060620Z</span>  <span style="color: #58a6ff;">[trace ]</span>     worker - Low-level trace details for worker setup
-<span style="color: #6e7681;">  Creating NEW SCOPE worker-subtask:3</span>
-<span style="color: #8b949e;">2026-08-15T20:49:27.070800Z</span>  <span style="color: #d29922;">[warning]</span>       <span style="color: #d29922;">worker-subtask - Resource usage reached 85%</span>
-<span style="color: #8b949e;">2026-08-15T20:49:27.070850Z</span>  <span style="color: #8b949e;">[debug ]</span>       <span style="color: #8b949e;">worker-subtask - COMPLETED: time:</span><span style="color: #3fb950; font-weight: 600;">10210us</span>
+<span style="color: #6e7681;">  Creating NEW SCOPE worker/subtask:3</span>
+<span style="color: #8b949e;">2026-08-15T20:49:27.070800Z</span>  <span style="color: #d29922;">[warn  ]</span>       <span style="color: #d29922;">worker/subtask - Resource usage reached 85%</span>
+<span style="color: #8b949e;">2026-08-15T20:49:27.070850Z</span>  <span style="color: #8b949e;">[debug ]</span>       <span style="color: #8b949e;">worker/subtask - COMPLETED: time:</span><span style="color: #3fb950; font-weight: 600;">10210us</span>
 <span style="color: #8b949e;">2026-08-15T20:49:27.070900Z</span>  <span style="color: #8b949e;">[debug ]</span>     <span style="color: #8b949e;">worker - COMPLETED: time:</span><span style="color: #3fb950; font-weight: 600;">10310us</span>
-<span style="color: #8b949e;">2026-08-15T20:49:27.071000Z</span>  <span style="color: #ff7b72;">[exception]</span>   <span style="color: #ff7b72;">perform_operation - <b>std::runtime_error</b> - <i>Simulated failure in sub-system</i> - Error encountered during operation execution</span>
+<span style="color: #8b949e;">2026-08-15T20:49:27.071000Z</span>  <span style="color: #ff7b72;">[except]</span>   <span style="color: #ff7b72;">perform_operation - <b>std::runtime_error</b> - <i>Simulated failure in sub-system</i> - Error encountered during operation execution</span>
 <span style="color: #8b949e;">2026-08-15T20:49:27.071050Z</span>  <span style="color: #8b949e;">[debug ]</span>   <span style="color: #8b949e;">perform_operation - COMPLETED: time:</span><span style="color: #3fb950; font-weight: 600;">10500us</span>
 <span style="color: #8b949e;">2026-08-15T20:49:27.071120Z</span>  <span style="color: #8b949e;">[debug ]</span> main - COMPLETED: time:<span style="color: #3fb950; font-weight: 600;">10620us</span></pre>
 </div>

@@ -75,14 +75,14 @@ struct std::formatter<siddiqsoft::trace_level> : std::formatter<std::string_view
     {
         std::string_view name = "unknown";
         switch (c) {
-            case siddiqsoft::trace_level ::critical: name = "critical"; break;
-            case siddiqsoft::trace_level ::exception: name = "exception"; break;
-            case siddiqsoft::trace_level ::error: name = "error"; break;
-            case siddiqsoft::trace_level ::warning: name = "warning"; break;
-            case siddiqsoft::trace_level ::info: name = "info"; break;
-            case siddiqsoft::trace_level ::debug: name = "debug"; break;
-            case siddiqsoft::trace_level ::trace: name = "trace"; break;
-            case siddiqsoft::trace_level ::none: name = "none"; break;
+            case siddiqsoft::trace_level::critical: name = "crit"; break;
+            case siddiqsoft::trace_level::exception: name = "except"; break;
+            case siddiqsoft::trace_level::error: name = "error"; break;
+            case siddiqsoft::trace_level::warning: name = "warn"; break;
+            case siddiqsoft::trace_level::info: name = "info"; break;
+            case siddiqsoft::trace_level::debug: name = "debug"; break;
+            case siddiqsoft::trace_level::trace: name = "trace"; break;
+            case siddiqsoft::trace_level::none: name = "none"; break;
             default: break;
         }
         return std::formatter<std::string_view>::format(name, ctx);
@@ -231,7 +231,6 @@ namespace siddiqsoft
         /// @return Plain function name string view
         [[nodiscard]] std::string_view function_name() const noexcept { return extract_func_name(m_location.function_name()); }
 
-    protected:
         /// @brief Helper constructor for creating child scopes with explicit parent depth
         ScopeTrace(std::string_view            sn,
                    trace_level                 level,
@@ -246,16 +245,28 @@ namespace siddiqsoft
             if (sn.empty()) m_scope_name = extract_func_name(m_location.function_name());
         }
 
-    public:
         /// @brief Construct a ScopeTrace with a scope name, log level threshold, and optional source location
-        /// @param sn Custom scope label or context name (defaults to function name)
-        /// @param level Logging threshold for this scope (defaults to trace_level::none)
-        /// @param sl Source location (defaults to caller site)
+        /// @note Direct construction is protected; obtain the process singleton via ScopeTrace::CreateInstance(...) or
+        /// parent.nest(...)
         explicit ScopeTrace(std::string_view            sn    = {},
                             trace_level                 level = trace_level::none,
                             const std::source_location& sl    = std::source_location::current())
             : ScopeTrace(sn, level, 0, sl)
         {
+        }
+
+    public:
+        /// @brief Obtain the process-wide singleton ScopeTrace instance
+        /// @param sn Custom scope label for the process (defaults to plain function name on first initialization)
+        /// @param level Process-wide logging threshold (defaults to trace_level::none on first initialization)
+        /// @param sl Source location (defaults to caller site on first initialization)
+        /// @return Reference to the single process-wide ScopeTrace instance
+        static ScopeTrace& CreateInstance(std::string_view            sn    = {},
+                                          trace_level                 level = trace_level::none,
+                                          const std::source_location& sl    = std::source_location::current())
+        {
+            static ScopeTrace instance {sn, level, 0, sl};
+            return instance;
         }
 
         /// @brief Create a nested sub-scope with child scope name and logging threshold
@@ -269,12 +280,10 @@ namespace siddiqsoft
                         trace_level                 level = trace_level::none,
                         const std::source_location& sl    = std::source_location::current()) const
         {
-            return ScopeTrace {
-                m_scope_name.empty() ? std::string(sn) : std::format("{}/{}", m_scope_name, sn),
-                level == trace_level::none ? m_log_level : level,
-                m_scope_depth + 1,
-                sl
-            };
+            return ScopeTrace {m_scope_name.empty() ? std::string(sn) : std::format("{}/{}", m_scope_name, sn),
+                               level == trace_level::none ? m_log_level : level,
+                               m_scope_depth + 1,
+                               sl};
         }
 
         /// @brief Copying is not supported

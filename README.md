@@ -10,7 +10,8 @@
 
 - **RAII Scope Timing**: Automatic duration measurement upon scope exit.
 - **`std::source_location` Integration**: Capture file, line, and function automatically.
-- **Nesting Level Tracking**: Indents nested scope execution trees dynamically using thread-local depth counter (`current_depth()`) and `nest()` method.
+- **Process Singleton Entry**: Instantiated exclusively via static `ScopeTrace::CreateInstance()` process singleton.
+- **Nesting Level Tracking**: Indents nested scope execution trees dynamically using parentage depth inheritance (`nest()`).
 - **Dynamic Log Level Filtering**: Fine-grained threshold control (`LogLevel` / `trace_level`). Critical, exception, and error logs are always output, while warning, info, debug, and trace are filtered according to threshold (`m_log_level`).
 - **Structured Console Logging**: Specialized `info()`, `debug()`, `trace()`, `warn()`, `err()`, `err_throw()`, and `exp()` methods for formatted console logging with ANSI colors and ISO 8601 UTC timestamps.
 
@@ -81,10 +82,10 @@ When running the quick start application, `siddiqsoft::ScopeTrace` outputs depth
   </div>
   <pre class="terminal-body" style="padding: 14px 18px; color: #e6edf3; font-size: 13px; line-height: 1.65; overflow-x: auto; margin: 0; background: transparent;"><span style="color: #6e7681;">  Creating NEW SCOPE MYPROJECT:6</span>
 <span style="color: #8b949e;">2026-08-15T20:49:27.060564Z</span>  <span style="color: #e6edf3;">[info  ]</span> MYPROJECT - Starting application execution
-<span style="color: #6e7681;">  Creating NEW SCOPE MYPROJECT-sub_task:4</span>
-<span style="color: #8b949e;">2026-08-15T20:49:27.060600Z</span>  <span style="color: #e6edf3;">[info  ]</span>   MYPROJECT-sub_task - Processing items...
-<span style="color: #8b949e;">2026-08-15T20:49:27.061200Z</span>  <span style="color: #ff7b72;">[exception]</span>   <span style="color: #ff7b72;">MYPROJECT-sub_task - <b>std::runtime_error</b> - <i>Device non-responsive</i> - Got exception last_line: 54</span>
-<span style="color: #8b949e;">2026-08-15T20:49:27.061250Z</span>  <span style="color: #8b949e;">[debug ]</span>   <span style="color: #8b949e;">MYPROJECT-sub_task - COMPLETED: time:</span><span style="color: #3fb950; font-weight: 600;">650us</span>
+<span style="color: #6e7681;">  Creating NEW SCOPE MYPROJECT/sub_task:4</span>
+<span style="color: #8b949e;">2026-08-15T20:49:27.060600Z</span>  <span style="color: #e6edf3;">[info  ]</span>   MYPROJECT/sub_task - Processing items...
+<span style="color: #8b949e;">2026-08-15T20:49:27.061200Z</span>  <span style="color: #ff7b72;">[except]</span>   <span style="color: #ff7b72;">MYPROJECT/sub_task - <b>std::runtime_error</b> - <i>Device non-responsive</i> - Got exception last_line: 54</span>
+<span style="color: #8b949e;">2026-08-15T20:49:27.061250Z</span>  <span style="color: #8b949e;">[debug ]</span>   <span style="color: #8b949e;">MYPROJECT/sub_task - COMPLETED: time:</span><span style="color: #3fb950; font-weight: 600;">650us</span>
 <span style="color: #8b949e;">2026-08-15T20:49:27.061300Z</span>  <span style="color: #8b949e;">[debug ]</span> MYPROJECT - COMPLETED: time:<span style="color: #3fb950; font-weight: 600;">7360us</span></pre>
 </div>
 
@@ -92,13 +93,13 @@ When running the quick start application, `siddiqsoft::ScopeTrace` outputs depth
 
 | Log Level / Method | Tag Label | Color Output | ANSI Code | Visual Output Preview |
 | :--- | :--- | :--- | :--- | :--- |
-| **`trace_level::critical`** | `[critical]` | **Red** | `\033[0;31m` | <span style="color: #ff7b72; font-weight: 600;">[critical] System memory exhaustion</span> |
-| **`trace_level::exception`** | `[exception]` | **Red** | `\033[0;31m` | <span style="color: #ff7b72; font-weight: 600;">[exception] std::runtime_error - Connection refused</span> |
-| **`trace_level::error`** | `[error]` | **Orange** | `\033[38;5;208m` | <span style="color: #ffa657; font-weight: 600;">[error  ] Failed to open configuration file</span> |
-| **`trace_level::warning`** | `[warning]` | **Dark Yellow** | `\033[38;5;136m` | <span style="color: #d29922; font-weight: 600;">[warning] Cache capacity reached 92%</span> |
-| **`trace_level::info`** | `[info]` | **Default / Neutral** | `\033[0m` | <span style="color: #e6edf3;">[info   ] Server listening on port 8080</span> |
-| **`trace_level::debug`** | `[debug]` | **Light Gray** | `\033[38;5;250m` | <span style="color: #8b949e;">[debug  ] Worker thread depth: 2</span> |
-| **`trace_level::trace`** | `[trace]` | **Dark Blue** | `\033[38;5;19m` | <span style="color: #58a6ff;">[trace  ] RX payload: 0x41 0x42 0x43</span> |
+| **`trace_level::critical`** | `[crit  ]` | **Red** | `\033[0;31m` | <span style="color: #ff7b72; font-weight: 600;">[crit  ] System memory exhaustion</span> |
+| **`trace_level::exception`** | `[except]` | **Red** | `\033[0;31m` | <span style="color: #ff7b72; font-weight: 600;">[except] std::runtime_error - Connection refused</span> |
+| **`trace_level::error`** | `[error ]` | **Orange** | `\033[38;5;208m` | <span style="color: #ffa657; font-weight: 600;">[error ] Failed to open configuration file</span> |
+| **`trace_level::warning`** | `[warn  ]` | **Dark Yellow** | `\033[38;5;136m` | <span style="color: #d29922; font-weight: 600;">[warn  ] Cache capacity reached 92%</span> |
+| **`trace_level::info`** | `[info  ]` | **Default / Neutral** | `\033[0m` | <span style="color: #e6edf3;">[info  ] Server listening on port 8080</span> |
+| **`trace_level::debug`** | `[debug ]` | **Light Gray** | `\033[38;5;250m` | <span style="color: #8b949e;">[debug ] Worker thread depth: 2</span> |
+| **`trace_level::trace`** | `[trace ]` | **Dark Blue** | `\033[38;5;19m` | <span style="color: #58a6ff;">[trace ] RX payload: 0x41 0x42 0x43</span> |
 | **Scope Exit** | `COMPLETED` | **Green Time** | `\033[0;32m` | <span style="color: #8b949e;">COMPLETED: time:</span><span style="color: #3fb950; font-weight: 600;">450us</span> |
 
 ---

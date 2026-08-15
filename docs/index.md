@@ -42,10 +42,11 @@ How many of us have had to write code that is surrounded by `#if defined(DEBUG).
 
     ```cpp
     void foo() {
-        siddiqsoft::ScopeTrace scope("foo", siddiqsoft::LogLevel::info); // Scope threshold set to LogLevel::info
+        // Access process singleton with LogLevel::info threshold
+        auto& root = siddiqsoft::ScopeTrace::CreateInstance("foo", siddiqsoft::LogLevel::info);
 
         try {
-            auto inner = scope.nest("Nested", siddiqsoft::LogLevel::info); // Inner scope label ("foo-Nested")
+            auto inner = root.nest("Nested", siddiqsoft::LogLevel::info); // Inner scope label ("foo/Nested")
 
             inner.info("From the inner scope line: {}", __LINE__);
             // We log information and throw in one shot!
@@ -53,7 +54,7 @@ How many of us have had to write code that is surrounded by `#if defined(DEBUG).
         }
         catch (const std::exception& e) {
             // Catch an error and log
-            scope.exp(e);
+            root.exp(e);
         }
     }
     ```
@@ -63,7 +64,8 @@ How many of us have had to write code that is surrounded by `#if defined(DEBUG).
 ## Key Highlights
 
 - **Zero-Boilerplate Tracing**: Automatically record function name, file path, and line numbers using `std::source_location` and auto-extracted `__func__` names.
-- **Nesting Level Tracking**: Indents nested scope execution trees dynamically using thread-local scope depth and `nest()` scope creation.
+- **Process Singleton Entry**: Instantiated exclusively via static `ScopeTrace::CreateInstance()` process singleton.
+- **Nesting Level Tracking**: Indents nested scope execution trees dynamically using parentage depth inheritance (`nest()`).
 - **Structured Console Logging**: Specialized logging methods for `info()`, `trace()`, `warn()`, `err()`, and `exp()` with depth indentation, ANSI colors, and ISO 8601 UTC timestamps.
 - **C++23 Native Support**: Leverages `std::format` and `std::println` to `std::cerr`.
 
@@ -77,7 +79,8 @@ How many of us have had to write code that is surrounded by `#if defined(DEBUG).
 
 void process_request()
 {
-    siddiqsoft::ScopeTrace scope("process_request", siddiqsoft::LogLevel::info);
+    // Create nested scope from process singleton
+    auto scope = siddiqsoft::ScopeTrace::CreateInstance().nest("process_request", siddiqsoft::LogLevel::info);
     scope.info("Parsing incoming payload...");
     scope.warn("Payload buffer usage: 82%");
     // Work executed here...
@@ -85,7 +88,8 @@ void process_request()
 
 int main()
 {
-    siddiqsoft::ScopeTrace scope("main", siddiqsoft::LogLevel::info);
+    // Access process singleton root
+    auto& scope = siddiqsoft::ScopeTrace::CreateInstance("main", siddiqsoft::LogLevel::info);
     process_request();
     return 0;
 }

@@ -32,15 +32,15 @@ enum class trace_level : uint8_t {
 };
 ```
 
-| Log Level | Color Output | ANSI Escape Sequence | Visual Terminal Preview | Standard Use Case |
-| :--- | :--- | :--- | :--- | :--- |
-| `critical` | **Red** | `\033[0;31m` | <span style="color: #ff7b72; font-weight: 600;">[critical] Out of memory</span> | Fatal system failures |
-| `exception` | **Red** | `\033[0;31m` | <span style="color: #ff7b72; font-weight: 600;">[exception] std::runtime_error</span> | Exception handler logging (`exp()`) |
-| `error` | **Orange** | `\033[38;5;208m` | <span style="color: #ffa657; font-weight: 600;">[error  ] Network unreachable</span> | Operational errors (`err()`, `err_throw()`) |
-| `warning` | **Dark Yellow / Gold** | `\033[38;5;136m` | <span style="color: #d29922; font-weight: 600;">[warning] High memory usage</span> | Recoverable warnings (`warn()`) |
-| `info` | **Default / Neutral** | `\033[0m` | <span style="color: #e6edf3;">[info   ] Task starting...</span> | Application status changes (`info()`) |
-| `debug` | **Light Gray** | `\033[38;5;250m` | <span style="color: #8b949e;">[debug  ] Step 3 complete</span> | General debug inspection (`debug()`) |
-| `trace` | **Dark Blue** | `\033[38;5;19m` | <span style="color: #58a6ff;">[trace  ] RX 1024 bytes</span> | High-frequency I/O operations & packet/buffer dumps (`trace()`) |
+| Log Level | Abbreviated Tag | Color Output | ANSI Escape Sequence | Visual Terminal Preview | Standard Use Case |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| `critical` | `crit` | **Red** | `\033[0;31m` | <span style="color: #ff7b72; font-weight: 600;">[crit  ] Out of memory</span> | Fatal system failures |
+| `exception` | `except` | **Red** | `\033[0;31m` | <span style="color: #ff7b72; font-weight: 600;">[except] std::runtime_error</span> | Exception handler logging (`exp()`) |
+| `error` | `error` | **Orange** | `\033[38;5;208m` | <span style="color: #ffa657; font-weight: 600;">[error ] Network unreachable</span> | Operational errors (`err()`, `err_throw()`) |
+| `warning` | `warn` | **Dark Yellow / Gold** | `\033[38;5;136m` | <span style="color: #d29922; font-weight: 600;">[warn  ] High memory usage</span> | Recoverable warnings (`warn()`) |
+| `info` | `info` | **Default / Neutral** | `\033[0m` | <span style="color: #e6edf3;">[info  ] Task starting...</span> | Application status changes (`info()`) |
+| `debug` | `debug` | **Light Gray** | `\033[38;5;250m` | <span style="color: #8b949e;">[debug ] Step 3 complete</span> | General debug inspection (`debug()`) |
+| `trace` | `trace` | **Dark Blue** | `\033[38;5;19m` | <span style="color: #58a6ff;">[trace ] RX 1024 bytes</span> | High-frequency I/O operations & packet/buffer dumps (`trace()`) |
 
 > **Advice for High-Volume I/O Logging:**
 > High-frequency operations — such as socket data transfers, stream packet dumps, HTTP body payload dumps, or file buffer reads/writes — should **always** use `trace_level::trace` (`scope.trace(...)`). This allows I/O diagnostic noise to be cleanly filtered out when running at `LogLevel::debug` or `info` thresholds without incurring string formatting costs.
@@ -50,24 +50,29 @@ A specialized format string wrapper struct in `namespace siddiqsoft` that combin
 
 ---
 
-## Public Constructors & Destructor
+## Process Singleton & Nesting API
 
-### `explicit ScopeTrace(std::string_view sn = {}, trace_level level = trace_level::none, const std::source_location& sl = std::source_location::current())`
-Constructs a scope logger with the specified scope name `sn`, logging threshold `level`, and caller source location `sl`. Increments the thread-local nesting depth. If `sn` is omitted or empty (`{}`), the scope name automatically defaults to the plain function name extracted via `extract_func_name(sl.function_name())` (evaluating to `"GLOBAL"` when declared in global scope outside of any function).
+### `static ScopeTrace& CreateInstance(std::string_view sn = {}, trace_level level = trace_level::none, const std::source_location& sl = std::source_location::current())`
+Static factory method for obtaining or initializing the process-wide singleton `ScopeTrace` instance.
+- **Process Singleton**: Ensures only one process-wide root scope instance exists (`depth = 0`).
+- **Initialization & Updates**: First invocation constructs the process singleton with `sn`, threshold `level`, and `sl`. Subsequent calls return the same singleton reference (updating process scope name or `m_log_level` if non-default parameters are supplied).
 
-- **`sn`**: Custom scope label or contextual identifier (defaults to `{}`).
-- **`level`**: Scope logging threshold (`LogLevel` / `trace_level`, defaults to `trace_level::none`).
+- **`sn`**: Process scope label or contextual identifier (defaults to caller plain function name).
+- **`level`**: Logging threshold (`LogLevel` / `trace_level`, defaults to `trace_level::none`).
 - **`sl`**: Source location (defaults to caller site via `std::source_location::current()`).
 
-### `ScopeTrace nest(std::string_view sn, trace_level level = trace_level::none, const std::source_location& sl = std::source_location::current())`
-Creates and returns a new child `ScopeTrace` instance. The child scope name is automatically formatted as `"<parent_scope_name>/<sn>"`. If `level` is set to `trace_level::none` (default), the child scope automatically inherits the parent's logging threshold (`m_log_level`).
+### `ScopeTrace nest(std::string_view sn, trace_level level = trace_level::none, const std::source_location& sl = std::source_location::current()) const`
+Creates and returns a new child `ScopeTrace` instance. The child scope name is automatically formatted as `"<parent_scope_name>/<sn>"`. Child scope depth is derived directly from parent depth (`child.depth() = parent.depth() + 1`). If `level` is set to `trace_level::none` (default), the child scope inherits the parent's logging threshold (`m_log_level`).
 
 - **`sn`**: Sub-scope label string (required).
 - **`level`**: Child scope logging threshold (`LogLevel` / `trace_level`, defaults to `trace_level::none` to inherit parent threshold).
 - **`sl`**: Source location (defaults to caller site).
 
+### Protected Constructors
+Direct constructors `ScopeTrace(...)` are `protected:`. Direct stack instantiation (e.g. `ScopeTrace scope;`) is disabled in production code; instances must be obtained via `ScopeTrace::CreateInstance(...)` or `parent.nest(...)`.
+
 ### `~ScopeTrace() noexcept`
-Destructor. Decrements the thread-local nesting depth counter. Logs a scope completion message with elapsed duration in microseconds (`COMPLETED: time:...us`) at `trace_level::debug` severity.
+Destructor. Logs a scope completion message with elapsed duration in microseconds (`COMPLETED: time:...us`) at `trace_level::debug` severity.
 
 ### Copy & Move Operations
 Copy construction, move construction, copy assignment, and move assignment operators are explicitly `= delete`.

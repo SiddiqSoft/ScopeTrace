@@ -41,9 +41,9 @@ Using `std::source_location::current()`, `ScopeTrace` captures caller details au
   </div>
   <pre class="terminal-body" style="padding: 14px 18px; color: #e6edf3; font-size: 13px; line-height: 1.65; overflow-x: auto; margin: 0; background: transparent;"><span style="color: #6e7681;">  Creating NEW SCOPE compute:6</span>
 <span style="color: #8b949e;">2026-08-15T20:49:27.060564Z</span>  <span style="color: #e6edf3;">[info  ]</span> compute - Outer computation started
-<span style="color: #6e7681;">  Creating NEW SCOPE compute-stage1:4</span>
-<span style="color: #8b949e;">2026-08-15T20:49:27.060600Z</span>  <span style="color: #e6edf3;">[info  ]</span>   compute-stage1 - Processing stage 1 payload...
-<span style="color: #8b949e;">2026-08-15T20:49:27.061250Z</span>  <span style="color: #8b949e;">[debug ]</span>   <span style="color: #8b949e;">compute-stage1 - COMPLETED: time:</span><span style="color: #3fb950; font-weight: 600;">650us</span>
+<span style="color: #6e7681;">  Creating NEW SCOPE compute/stage1:4</span>
+<span style="color: #8b949e;">2026-08-15T20:49:27.060600Z</span>  <span style="color: #e6edf3;">[info  ]</span>   compute/stage1 - Processing stage 1 payload...
+<span style="color: #8b949e;">2026-08-15T20:49:27.061250Z</span>  <span style="color: #8b949e;">[debug ]</span>   <span style="color: #8b949e;">compute/stage1 - COMPLETED: time:</span><span style="color: #3fb950; font-weight: 600;">650us</span>
 <span style="color: #8b949e;">2026-08-15T20:49:27.061300Z</span>  <span style="color: #8b949e;">[debug ]</span> compute - COMPLETED: time:<span style="color: #3fb950; font-weight: 600;">1200us</span></pre>
 </div>
 
@@ -73,13 +73,13 @@ scope.set_level(siddiqsoft::LogLevel::trace);
 
 | Log Level / Method | Tag Label | Color Output | ANSI Escape Code | Visual Terminal Preview |
 | :--- | :--- | :--- | :--- | :--- |
-| **`trace_level::critical`** | `[critical]` | **Red** | `\033[0;31m` | <span style="color: #ff7b72; font-weight: 600;">[critical] System memory exhaustion</span> |
-| **`trace_level::exception`** | `[exception]` | **Red / Bold Red** | `\033[0;31m` | <span style="color: #ff7b72; font-weight: 600;">[exception] std::runtime_error - Timeout</span> |
-| **`trace_level::error`** | `[error]` | **Orange** | `\033[38;5;208m` | <span style="color: #ffa657; font-weight: 600;">[error  ] Failed to connect to db host</span> |
-| **`trace_level::warning`** | `[warning]` | **Dark Yellow / Gold** | `\033[38;5;136m` | <span style="color: #d29922; font-weight: 600;">[warning] Cache capacity reached 92%</span> |
-| **`trace_level::info`** | `[info]` | **Default / Neutral** | `\033[0m` | <span style="color: #e6edf3;">[info   ] Processing batch item 42</span> |
-| **`trace_level::debug`** | `[debug]` | **Light Gray** | `\033[38;5;250m` | <span style="color: #8b949e;">[debug  ] Worker thread pool depth: 4</span> |
-| **`trace_level::trace`** | `[trace]` | **Dark Blue** | `\033[38;5;19m` | <span style="color: #58a6ff;">[trace  ] RX buffer dump: 0x41 0x42 0x43</span> |
+| **`trace_level::critical`** | `[crit  ]` | **Red** | `\033[0;31m` | <span style="color: #ff7b72; font-weight: 600;">[crit  ] System memory exhaustion</span> |
+| **`trace_level::exception`** | `[except]` | **Red / Bold Red** | `\033[0;31m` | <span style="color: #ff7b72; font-weight: 600;">[except] std::runtime_error - Timeout</span> |
+| **`trace_level::error`** | `[error ]` | **Orange** | `\033[38;5;208m` | <span style="color: #ffa657; font-weight: 600;">[error ] Failed to connect to db host</span> |
+| **`trace_level::warning`** | `[warn  ]` | **Dark Yellow / Gold** | `\033[38;5;136m` | <span style="color: #d29922; font-weight: 600;">[warn  ] Cache capacity reached 92%</span> |
+| **`trace_level::info`** | `[info  ]` | **Default / Neutral** | `\033[0m` | <span style="color: #e6edf3;">[info  ] Processing batch item 42</span> |
+| **`trace_level::debug`** | `[debug ]` | **Light Gray** | `\033[38;5;250m` | <span style="color: #8b949e;">[debug ] Worker thread pool depth: 4</span> |
+| **`trace_level::trace`** | `[trace ]` | **Dark Blue** | `\033[38;5;19m` | <span style="color: #58a6ff;">[trace ] RX buffer dump: 0x41 0x42 0x43</span> |
 | **Scope Exit** | `COMPLETED` | **Green Time** | `\033[0;32m` | <span style="color: #8b949e;">COMPLETED: time:</span><span style="color: #3fb950; font-weight: 600;">450us</span> |
 
 > [!TIP]
