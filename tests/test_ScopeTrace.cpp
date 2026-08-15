@@ -10,15 +10,15 @@
 
 #include "../include/siddiqsoft/ScopeTrace.hpp"
 
-static siddiqsoft::ScopeTrace g_scope;
+static siddiqsoft::ScopeTrace g_scope{"test_ScopeTrace", siddiqsoft::LogLevel::debug, std::source_location::current()};
 
 
 TEST(ScopeTraceTest, HelloWorld)
 {
     {
-        auto scope = g_scope.nest(__func__);
+        auto scope = g_scope.nest(__func__, siddiqsoft::LogLevel::trace);
 
-        scope.trace("Hello, World!");
+        scope.log<siddiqsoft::LogLevel::info>("Hello, World!");
         std::this_thread::sleep_for(std::chrono::milliseconds(2));
     }
 }
@@ -100,13 +100,13 @@ TEST(ScopeTraceTest, ExceptionSafety)
 
 TEST(ScopeTraceTest, ExceptionSafety_2)
 {
-    auto scope = g_scope.nest(__func__);
+    auto scope = g_scope.nest("ExceptionSafety_2", siddiqsoft::LogLevel::info);
 
     EXPECT_THROW(
             {
-                auto inner = scope.nest("Nested");
+                auto inner = scope.nest("inner");
 
-                inner.info("From the inner scope line: {}", __LINE__);
+                inner.log<siddiqsoft::LogLevel::info>("From the inner scope line: {}", __LINE__);
                 inner.err_throw<std::invalid_argument>("Deliberate error from here");
             },
             std::invalid_argument);

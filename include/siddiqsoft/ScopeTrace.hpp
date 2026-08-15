@@ -51,31 +51,15 @@
 
 namespace siddiqsoft
 {
-    enum class LogLevel
+    enum LogLevel : uint8_t
     {
-        None,
-        Error,
-        Warning,
-        Info,
-        Debug,
-        Trace
-    };
-
-    struct ScopeTraceType
-    {
-        std::source_location location;
-        LogLevel             level {LogLevel::None};
-
-        ScopeTraceType(LogLevel lvl, const std::source_location& loc = std::source_location::current())
-            : location(loc)
-            , level(lvl)
-        {
-        }
-
-        ScopeTraceType(const std::source_location& loc = std::source_location::current())
-            : location(loc)
-        {
-        }
+        none,
+        critical = 0,
+        error    = 1,
+        warning  = 2,
+        info     = 3,
+        trace    = 4,
+        debug    = 9,
     };
 
     /// @brief Wrapper combining std::format_string with automatic caller std::source_location capture.
@@ -204,35 +188,36 @@ namespace siddiqsoft
         {
             // This gives a timestamp in ISO 8601 format with UTC timezone: "2026-08-13T23:16:00.519049Z"
             // Note we use fractional seconds with microsecond precision.
-            return std::format("{}{:%FT%TZ}{}  ", LTGY, std::chrono::system_clock::now(), NOC);
+            return std::format("{}{:%FT%TZ}{} ", LTGY, std::chrono::system_clock::now(), NOC);
         }
 
         /// @brief Get the plain function name matching __func__ from the source location
         /// @return Plain function name string view
         [[nodiscard]] std::string_view function_name() const noexcept { return extract_func_name(m_location.function_name()); }
 
-        /// @brief Alias for function_name() matching __func__
-        /// @return Plain function name string view
-        [[nodiscard]] std::string_view func_name() const noexcept { return function_name(); }
-
     public:
         /// @brief Construct a ScopeTrace with a scope name and optional source location
         /// @param sn Custom scope label or context name
         /// @param sl Source location (defaults to caller site)
-        explicit ScopeTrace(std::string_view sn = {}, const std::source_location& sl = std::source_location::current())
+        explicit ScopeTrace(std::string_view            sn    = {},
+                            LogLevel                    level = LogLevel::critical,
+                            const std::source_location& sl    = std::source_location::current())
             : m_location(sl)
             , m_start_timestamp(std::chrono::system_clock::now())
             , m_scope_name(sn)
             , m_scope_depth(current_depth()++)
+            , m_log_level(level)
         {
             if (sn.empty()) m_scope_name = extract_func_name(m_location.function_name());
         }
 
-        ScopeTrace nest(std::string_view sn, const std::source_location& sl = std::source_location::current())
+        ScopeTrace nest(std::string_view            sn,
+                        LogLevel                    level = LogLevel::critical,
+                        const std::source_location& sl    = std::source_location::current())
         {
             // The scope name is required when nesting.
             // We will add the function name and the scope name to the log message.
-            return ScopeTrace {std::format("{}-{}", m_scope_name, sn), sl};
+            return ScopeTrace {std::format("{}-{}", m_scope_name, sn), level, sl};
         }
 
         /// @brief Copying is not supported
@@ -247,36 +232,95 @@ namespace siddiqsoft
         /// @brief Move assignment is not supported
         ScopeTrace& operator=(ScopeTrace&&) = delete;
 
-        /// @brief Destructor logs scope completion in debug builds and updates depth counter
-        ~ScopeTrace() noexcept
-        {
-            if (current_depth() > 0) {
-                --current_depth();
-            }
-
-#if defined(DEBUG) || defined(_DEBUG) || defined(DEBUG_TRACE)
-            auto        us = std::chrono::duration_cast<std::chrono::microseconds>(elapsed()).count();
-            std::string indent(m_scope_depth * 2, ' ');
-
-            std::println(std::cerr,
-                         "{}{}{}{} - COMPLETED - time:{}{}us{}",
-                         current_timestamp(),
-                         indent,
-                         BLU,
-                         m_scope_name.empty() ? m_location.file_name() : m_scope_name,
-                         GRN,
-                         us,
-                         NOC);
-#endif
-        }
-
-        template <LogLevel level = LogLevel::Info, typename... Args>
+        template <LogLevel level = LogLevel::critical, typename... Args>
         auto& log(std::format_string<Args...> fmt, Args&&... args)
         {
             std::string      indent(m_scope_depth * 2, ' ');
             std::string_view scope_label = m_scope_name.empty() ? m_location.file_name() : m_scope_name;
 
-            return this;
+            switch (level) {
+                case LogLevel::critical:
+                    indent.insert(0, "[CRIT] ");
+                    if (m_log_level >= LogLevel::critical) {
+                        std::println(std::cerr,
+                                     "{}{}{}{} - {}{}",
+                                     current_timestamp(),
+                                     indent,
+                                     RED,
+                                     m_scope_name.empty() ? m_location.file_name() : m_scope_name,
+                                     std::format(fmt, std::forward<Args>(args)...),
+                                     NOC);
+                    }
+                    break;
+                case LogLevel::error:
+                    indent.insert(0, "[ERR ] ");
+                    if (m_log_level >= LogLevel::error) {
+                        std::println(std::cerr,
+                                     "{}{}{}{} - {}{}",
+                                     current_timestamp(),
+                                     indent,
+                                     RED,
+                                     m_scope_name.empty() ? m_location.file_name() : m_scope_name,
+                                     std::format(fmt, std::forward<Args>(args)...),
+                                     NOC);
+                    }
+                    break;
+                case LogLevel::warning:
+                    indent.insert(0, "[WARN] ");
+                    if (m_log_level >= LogLevel::warning) {
+                        std::println(std::cerr,
+                                     "{}{}{}{} - {}{}",
+                                     current_timestamp(),
+                                     indent,
+                                     YLW,
+                                     m_scope_name.empty() ? m_location.file_name() : m_scope_name,
+                                     std::format(fmt, std::forward<Args>(args)...),
+                                     NOC);
+                    }
+                    break;
+                case LogLevel::info:
+                    indent.insert(0, "[INFO] ");
+                    if (m_log_level >= LogLevel::info) {
+                        std::println(std::cerr,
+                                     "{}{}{}{} - {}{}",
+                                     current_timestamp(),
+                                     indent,
+                                     NOC,
+                                     m_scope_name.empty() ? m_location.file_name() : m_scope_name,
+                                     std::format(fmt, std::forward<Args>(args)...),
+                                     NOC);
+                    }
+                    break;
+                case LogLevel::debug:
+                    indent.insert(0, "[DEBG] ");
+                    if (m_log_level >= LogLevel::debug) {
+                        std::println(std::cerr,
+                                     "{}{}{}{} - {}{}",
+                                     current_timestamp(),
+                                     indent,
+                                     LTGY,
+                                     m_scope_name.empty() ? m_location.file_name() : m_scope_name,
+                                     std::format(fmt, std::forward<Args>(args)...),
+                                     NOC);
+                    }
+                    break;
+                case LogLevel::trace:
+                    indent.insert(0, "[TRCE] ");
+                    if (m_log_level >= LogLevel::trace) {
+                        std::println(std::cerr,
+                                     "{}{}{}{} - {}{}",
+                                     current_timestamp(),
+                                     indent,
+                                     LTGY,
+                                     m_scope_name.empty() ? m_location.file_name() : m_scope_name,
+                                     std::format(fmt, std::forward<Args>(args)...),
+                                     NOC);
+                    }
+                    break;
+                default: break;
+            }
+
+            return *this;
         }
 
 
@@ -285,17 +329,9 @@ namespace siddiqsoft
         /// @param fmt Format string
         /// @param args Format arguments
         template <typename... Args>
-        void warn(std::format_string<Args...> fmt, Args&&... args)
+        auto& warn(std::format_string<Args...> fmt, Args&&... args)
         {
-            std::string indent(m_scope_depth * 2, ' ');
-            std::println(std::cerr,
-                         "{}{}{}{} - {}{}",
-                         current_timestamp(),
-                         indent,
-                         YLW,
-                         m_scope_name.empty() ? m_location.file_name() : m_scope_name,
-                         std::format(fmt, std::forward<Args>(args)...),
-                         NOC);
+            return log<siddiqsoft::LogLevel::warning>(fmt, std::forward<Args>(args)...);
         }
 
         /// @brief Log a formatted warning message to std::cerr with indentation and scope label
@@ -303,37 +339,30 @@ namespace siddiqsoft
         /// @param fmt Format string
         /// @param args Format arguments
         template <typename... Args>
-        void trace(std::format_string<Args...> fmt, Args&&... args)
+        auto& trace(std::format_string<Args...> fmt, Args&&... args)
         {
-#if defined(DEBUG_TRACE)
-            std::string indent(m_scope_depth * 2, ' ');
-            std::println(std::cerr,
-                         "{}{}{}{} - {}{}",
-                         current_timestamp(),
-                         indent,
-                         LTGY,
-                         m_scope_name.empty() ? m_location.file_name() : m_scope_name,
-                         std::format(fmt, std::forward<Args>(args)...),
-                         NOC);
-#endif
+            return log<siddiqsoft::LogLevel::trace>(fmt, std::forward<Args>(args)...);
         }
+
+        /// @brief Log a formatted warning message to std::cerr with indentation and scope label
+        /// @tparam Args Format argument types
+        /// @param fmt Format string
+        /// @param args Format arguments
+        template <typename... Args>
+        auto& debug(std::format_string<Args...> fmt, Args&&... args)
+        {
+            return log<siddiqsoft::LogLevel::debug>(fmt, std::forward<Args>(args)...);
+        }
+
 
         /// @brief Log a formatted error message to std::cerr with indentation and scope label
         /// @tparam Args Format argument types
         /// @param fmt Format string
         /// @param args Format arguments
         template <typename... Args>
-        void err(std::format_string<Args...> fmt, Args&&... args)
+        auto& err(std::format_string<Args...> fmt, Args&&... args)
         {
-            std::string indent(m_scope_depth * 2, ' ');
-            std::println(std::cerr,
-                         "{}{}{}{} - {}{}",
-                         current_timestamp(),
-                         indent,
-                         RED,
-                         m_scope_name.empty() ? m_location.file_name() : m_scope_name,
-                         std::format(fmt, std::forward<Args>(args)...),
-                         NOC);
+            return log<siddiqsoft::LogLevel::error>(fmt, std::forward<Args>(args)...);
         }
 
         /// @brief Log exception details (type and message) to std::cerr with indentation and scope label
@@ -341,6 +370,7 @@ namespace siddiqsoft
         void exp(const std::exception& e)
         {
             std::string indent(m_scope_depth * 2, ' ');
+            indent.insert(0, "[EXPT] ");
             std::println(std::cerr,
                          "{}{}{}{} - {}{}{} - {}{}",
                          current_timestamp(),
@@ -358,6 +388,7 @@ namespace siddiqsoft
         void exp(const std::exception& e, std::format_string<Args...> fmt, Args&&... args)
         {
             std::string indent(m_scope_depth * 2, ' ');
+            indent.insert(0, "[EXPT] ");
 
             std::println(std::cerr,
                          "{}{}{}{} - {}{}{} - {}{}{}{} - {}{}",
@@ -388,6 +419,7 @@ namespace siddiqsoft
             const auto&      loc = fmt_loc.location;
             std::string      indent(m_scope_depth * 2, ' ');
             std::string_view scope_label = m_scope_name.empty() ? extract_func_name(loc.function_name()) : m_scope_name;
+            indent.insert(0, "[EXPT] ");
 
             std::println(std::cerr,
                          "{}{}{}{} - {}{}{} - {}{}{}{} - {}from:{}@{}{}",
@@ -415,19 +447,9 @@ namespace siddiqsoft
         /// @param fmt Format string
         /// @param args Format arguments
         template <typename... Args>
-        void info(std::format_string<Args...> fmt, Args&&... args)
+        auto& info(std::format_string<Args...> fmt, Args&&... args)
         {
-#if defined(DEBUG) || defined(_DEBUG)
-            std::string indent(m_scope_depth * 2, ' ');
-            std::println(std::cerr,
-                         "{}{}{}{} - {}{}",
-                         current_timestamp(),
-                         indent,
-                         NOC,
-                         m_scope_name.empty() ? m_location.file_name() : m_scope_name,
-                         std::format(fmt, std::forward<Args>(args)...),
-                         NOC);
-#endif
+            return log<siddiqsoft::LogLevel::info>(fmt, std::forward<Args>(args)...);
         }
 
 
@@ -472,7 +494,26 @@ namespace siddiqsoft
             return os;
         }
 
+        auto& set_level(LogLevel level) noexcept
+        {
+            m_log_level = level;
+            return *this;
+        }
+
+        /// @brief Destructor logs scope completion in debug builds and updates depth counter
+        ~ScopeTrace() noexcept
+        {
+            auto us = std::chrono::duration_cast<std::chrono::microseconds>(elapsed()).count();
+
+            if (current_depth() > 0) {
+                --current_depth();
+            }
+
+            log<siddiqsoft::LogLevel::debug>("COMPLETED: time:{}{}us{}", GRN, us, NOC);
+        }
+
     private:
+        LogLevel                              m_log_level {LogLevel::error};
         std::source_location                  m_location;
         std::chrono::system_clock::time_point m_start_timestamp;
         std::string                           m_scope_name {};
