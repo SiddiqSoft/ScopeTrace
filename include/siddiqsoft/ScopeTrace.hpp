@@ -310,36 +310,28 @@ namespace siddiqsoft
         template <LogLevel level = LogLevel::critical, typename... Args>
         auto& log(std::format_string<Args...> fmt, Args&&... args)
         {
-            std::string indent(m_scope_depth * 2, ' ');
-
             switch (level) {
+                case LogLevel::exception:
                 case LogLevel::critical:
-                    indent.insert(0, "[CRIT] ");
-                    if (m_log_level >= LogLevel::critical) {
-                        std::println(std::cerr,
-                                     "{}{}{} - {}{}",
-                                     logline_prefix(m_log_level),
-                                     logline_start_color(m_log_level),
-                                     m_scope_name.empty() ? m_location.file_name() : m_scope_name,
-                                     std::format(fmt, std::forward<Args>(args)...),
-                                     logline_end_color(m_log_level));
-                    }
+                    std::println(std::cerr,
+                                 "{}{}{} - {}{}",
+                                 logline_prefix(m_log_level),
+                                 logline_start_color(m_log_level),
+                                 m_scope_name.empty() ? m_location.file_name() : m_scope_name,
+                                 std::format(fmt, std::forward<Args>(args)...),
+                                 logline_end_color(m_log_level));
                     break;
                 case LogLevel::error:
-                    indent.insert(0, "[ERR ] ");
-                    if (m_log_level >= LogLevel::error) {
-                        std::println(std::cerr,
-                                     "{}{}{} - {}{}",
-                                     logline_prefix(m_log_level),
-                                     logline_start_color(m_log_level),
-                                     m_scope_name.empty() ? m_location.file_name() : m_scope_name,
-                                     std::format(fmt, std::forward<Args>(args)...),
-                                     logline_end_color(m_log_level));
-                    }
+                    std::println(std::cerr,
+                                 "{}{}{} - {}{}",
+                                 logline_prefix(m_log_level),
+                                 logline_start_color(m_log_level),
+                                 m_scope_name.empty() ? m_location.file_name() : m_scope_name,
+                                 std::format(fmt, std::forward<Args>(args)...),
+                                 logline_end_color(m_log_level));
                     break;
                 case LogLevel::warning:
-                    indent.insert(0, "[WARN] ");
-                    if (m_log_level >= LogLevel::warning) {
+                    if (m_log_level <= LogLevel::warning) {
                         std::println(std::cerr,
                                      "{}{}{} - {}{}",
                                      logline_prefix(m_log_level),
@@ -350,7 +342,6 @@ namespace siddiqsoft
                     }
                     break;
                 case LogLevel::info:
-                    indent.insert(0, "[INFO] ");
                     if (m_log_level >= LogLevel::info) {
                         std::println(std::cerr,
                                      "{}{}{} - {}{}",
@@ -362,7 +353,6 @@ namespace siddiqsoft
                     }
                     break;
                 case LogLevel::debug:
-                    indent.insert(0, "[DEBG] ");
                     if (m_log_level >= LogLevel::debug) {
                         std::println(std::cerr,
                                      "{}{}{} - {}{}",
@@ -374,7 +364,6 @@ namespace siddiqsoft
                     }
                     break;
                 case LogLevel::trace:
-                    indent.insert(0, "[TRCE] ");
                     if (m_log_level >= LogLevel::trace) {
                         std::println(std::cerr,
                                      "{}{}{} - {}{}",
@@ -437,35 +426,13 @@ namespace siddiqsoft
         /// @param e Reference to caught exception
         void exp(const std::exception& e)
         {
-            log<siddiqsoft::LogLevel::exception>("{}{}{}{}{}",
-                                             m_scope_name.empty() ? m_location.file_name() : m_scope_name,
-                                             BOLD,
-                                             typeid(e).name(),
-                                             NOTBOLD,
-                                             e.what());
-            /*    std::string indent(m_scope_depth * 2, ' ');
-                indent.insert(0, "[EXPT] ");
-                std::println(std::cerr,
-                             "{}{}{}{} - {}{}{} - {}{}",
-                             current_timestamp(),
-                             indent,
-                             RED,
-                             m_scope_name.empty() ? m_location.file_name() : m_scope_name,
-                             BOLD,
-                             typeid(e).name(),
-                             NOTBOLD,
-                             e.what(),
-                             NOC); */
+            log<siddiqsoft::LogLevel::exception>("{}{}{}{}", BOLD, typeid(e).name(), NOTBOLD, e.what());
         }
 
         template <typename... Args>
         void exp(const std::exception& e, std::format_string<Args...> fmt, Args&&... args)
         {
-            std::string indent(m_scope_depth * 2, ' ');
-            indent.insert(0, "[EXPT] ");
-
-            log<siddiqsoft::LogLevel::exception>("{}{}{}{} - {}{}{} - {}",
-                                                 m_scope_name.empty() ? m_location.file_name() : m_scope_name,
+            log<siddiqsoft::LogLevel::exception>("{}{}{} - {}{}{} - {}",
                                                  BOLD,
                                                  typeid(e).name(),
                                                  NOTBOLD,
@@ -473,22 +440,6 @@ namespace siddiqsoft
                                                  e.what(),
                                                  NOTITAL,
                                                  std::format(fmt, std::forward<Args>(args)...));
-
-            /*std::println(std::cerr,
-                         "{}{}{}{} - {}{}{} - {}{}{}{} - {}{}",
-                         current_timestamp(),
-                         indent,
-                         RED,
-                         m_scope_name.empty() ? m_location.file_name() : m_scope_name,
-                         BOLD,
-                         typeid(e).name(),
-                         NOTBOLD,
-                         ITAL,
-                         e.what(),
-                         NOTITAL,
-                         NOC,
-                         std::format(fmt, std::forward<Args>(args)...),
-                         NOC);*/
         }
 
 
@@ -500,10 +451,9 @@ namespace siddiqsoft
         template <typename EX = std::exception, typename... Args>
         void err_throw(source_location_format_string<std::type_identity_t<Args>...> fmt_loc, Args&&... args) noexcept(false)
         {
-            const auto&      loc = fmt_loc.location;
+            const auto& loc = fmt_loc.location;
 
-            log<siddiqsoft::LogLevel::exception>("{} - {}{}{} - {}{}{}{} - {}from:{}@{}{}",
-                                                 m_scope_name.empty() ? extract_func_name(loc.function_name()) : m_scope_name,
+            log<siddiqsoft::LogLevel::exception>("{}{}{} - {}{}{}{} - {}from:{}@{}{}",
                                                  BOLD,
                                                  typeid(EX).name(),
                                                  NOTBOLD,

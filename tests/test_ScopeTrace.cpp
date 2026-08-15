@@ -90,7 +90,7 @@ TEST(ScopeTraceTest, ExceptionSafety)
         auto inner = scope.nest("Nested");
 
         inner.info("From the inner scope line: {}", __LINE__);
-        inner.log<siddiqsoft::LogLevel::critical>("From the inner scope line: {}", __LINE__);
+        inner.log<siddiqsoft::LogLevel::warning>("From the inner scope line: {}", __LINE__);
         inner.err_throw<std::runtime_error>("Deliberate error from here");
     }
     catch (const std::exception& e) {
