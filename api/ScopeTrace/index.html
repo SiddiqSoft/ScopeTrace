@@ -922,16 +922,27 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#helper-types" class="md-nav__link">
+  <a href="#helper-types-enums" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Helper Types
+        Helper Types &amp; Enums
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Helper Types">
+    <nav class="md-nav" aria-label="Helper Types &amp; Enums">
       <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#enum-class-trace_level-uint8_t-alias-loglevel" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        enum class trace_level : uint8_t (Alias: LogLevel)
+      
+    </span>
+  </a>
+  
+</li>
         
           <li class="md-nav__item">
   <a href="#template-typename-args-struct-source_location_format_string" class="md-nav__link">
@@ -962,10 +973,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#explicit-scopetracestdstring_view-sn-const-stdsource_location-sl-stdsource_locationcurrent" class="md-nav__link">
+  <a href="#explicit-scopetracestdstring_view-sn-trace_level-level-trace_levelcritical-const-stdsource_location-sl-stdsource_locationcurrent" class="md-nav__link">
     <span class="md-ellipsis">
       
-        explicit ScopeTrace(std::string_view sn = {}, const std::source_location&amp; sl = std::source_location::current())
+        explicit ScopeTrace(std::string_view sn = {}, trace_level level = trace_level::critical, const std::source_location&amp; sl = std::source_location::current())
       
     </span>
   </a>
@@ -973,10 +984,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#scopetrace-neststdstring_view-sn-const-stdsource_location-sl-stdsource_locationcurrent" class="md-nav__link">
+  <a href="#scopetrace-neststdstring_view-sn-trace_level-level-trace_levelcritical-const-stdsource_location-sl-stdsource_locationcurrent" class="md-nav__link">
     <span class="md-ellipsis">
       
-        ScopeTrace nest(std::string_view sn, const std::source_location&amp; sl = std::source_location::current())
+        ScopeTrace nest(std::string_view sn, trace_level level = trace_level::critical, const std::source_location&amp; sl = std::source_location::current())
       
     </span>
   </a>
@@ -1061,16 +1072,27 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#accessor-member-functions" class="md-nav__link">
+  <a href="#accessor-modifier-member-functions" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Accessor Member Functions
+        Accessor &amp; Modifier Member Functions
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Accessor Member Functions">
+    <nav class="md-nav" aria-label="Accessor &amp; Modifier Member Functions">
       <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#auto-set_leveltrace_level-level-noexcept" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        auto&amp; set_level(trace_level level) noexcept
+      
+    </span>
+  </a>
+  
+</li>
         
           <li class="md-nav__item">
   <a href="#nodiscard-auto-elapsed-const-noexcept" class="md-nav__link">
@@ -1127,17 +1149,6 @@
   
 </li>
         
-          <li class="md-nav__item">
-  <a href="#nodiscard-stdstring_view-func_name-const-noexcept" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        [[nodiscard]] std::string_view func_name() const noexcept
-      
-    </span>
-  </a>
-  
-</li>
-        
       </ul>
     </nav>
   
@@ -1156,10 +1167,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#template-typename-args-void-infostdformat_stringargs-fmt-args-args" class="md-nav__link">
+  <a href="#template-trace_level-level-trace_levelcritical-typename-args-auto-logstdformat_stringargs-fmt-args-args" class="md-nav__link">
     <span class="md-ellipsis">
       
-        template &lt;typename... Args&gt; void info(std::format_string&lt;Args...&gt; fmt, Args&amp;&amp;... args)
+        template &lt;trace_level level = trace_level::critical, typename... Args&gt; auto&amp; log(std::format_string&lt;Args...&gt; fmt, Args&amp;&amp;... args)
       
     </span>
   </a>
@@ -1167,10 +1178,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#template-typename-args-void-tracestdformat_stringargs-fmt-args-args" class="md-nav__link">
+  <a href="#template-typename-args-auto-tracestdformat_stringargs-fmt-args-args" class="md-nav__link">
     <span class="md-ellipsis">
       
-        template &lt;typename... Args&gt; void trace(std::format_string&lt;Args...&gt; fmt, Args&amp;&amp;... args)
+        template &lt;typename... Args&gt; auto&amp; trace(std::format_string&lt;Args...&gt; fmt, Args&amp;&amp;... args)
       
     </span>
   </a>
@@ -1178,10 +1189,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#template-typename-args-void-warnstdformat_stringargs-fmt-args-args" class="md-nav__link">
+  <a href="#template-typename-args-auto-debugstdformat_stringargs-fmt-args-args" class="md-nav__link">
     <span class="md-ellipsis">
       
-        template &lt;typename... Args&gt; void warn(std::format_string&lt;Args...&gt; fmt, Args&amp;&amp;... args)
+        template &lt;typename... Args&gt; auto&amp; debug(std::format_string&lt;Args...&gt; fmt, Args&amp;&amp;... args)
       
     </span>
   </a>
@@ -1189,10 +1200,32 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#template-typename-args-void-errstdformat_stringargs-fmt-args-args" class="md-nav__link">
+  <a href="#template-typename-args-auto-infostdformat_stringargs-fmt-args-args" class="md-nav__link">
     <span class="md-ellipsis">
       
-        template &lt;typename... Args&gt; void err(std::format_string&lt;Args...&gt; fmt, Args&amp;&amp;... args)
+        template &lt;typename... Args&gt; auto&amp; info(std::format_string&lt;Args...&gt; fmt, Args&amp;&amp;... args)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#template-typename-args-auto-warnstdformat_stringargs-fmt-args-args" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        template &lt;typename... Args&gt; auto&amp; warn(std::format_string&lt;Args...&gt; fmt, Args&amp;&amp;... args)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#template-typename-args-auto-errstdformat_stringargs-fmt-args-args" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        template &lt;typename... Args&gt; auto&amp; err(std::format_string&lt;Args...&gt; fmt, Args&amp;&amp;... args)
       
     </span>
   </a>
@@ -1463,16 +1496,27 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#helper-types" class="md-nav__link">
+  <a href="#helper-types-enums" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Helper Types
+        Helper Types &amp; Enums
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Helper Types">
+    <nav class="md-nav" aria-label="Helper Types &amp; Enums">
       <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#enum-class-trace_level-uint8_t-alias-loglevel" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        enum class trace_level : uint8_t (Alias: LogLevel)
+      
+    </span>
+  </a>
+  
+</li>
         
           <li class="md-nav__item">
   <a href="#template-typename-args-struct-source_location_format_string" class="md-nav__link">
@@ -1503,10 +1547,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#explicit-scopetracestdstring_view-sn-const-stdsource_location-sl-stdsource_locationcurrent" class="md-nav__link">
+  <a href="#explicit-scopetracestdstring_view-sn-trace_level-level-trace_levelcritical-const-stdsource_location-sl-stdsource_locationcurrent" class="md-nav__link">
     <span class="md-ellipsis">
       
-        explicit ScopeTrace(std::string_view sn = {}, const std::source_location&amp; sl = std::source_location::current())
+        explicit ScopeTrace(std::string_view sn = {}, trace_level level = trace_level::critical, const std::source_location&amp; sl = std::source_location::current())
       
     </span>
   </a>
@@ -1514,10 +1558,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#scopetrace-neststdstring_view-sn-const-stdsource_location-sl-stdsource_locationcurrent" class="md-nav__link">
+  <a href="#scopetrace-neststdstring_view-sn-trace_level-level-trace_levelcritical-const-stdsource_location-sl-stdsource_locationcurrent" class="md-nav__link">
     <span class="md-ellipsis">
       
-        ScopeTrace nest(std::string_view sn, const std::source_location&amp; sl = std::source_location::current())
+        ScopeTrace nest(std::string_view sn, trace_level level = trace_level::critical, const std::source_location&amp; sl = std::source_location::current())
       
     </span>
   </a>
@@ -1602,16 +1646,27 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#accessor-member-functions" class="md-nav__link">
+  <a href="#accessor-modifier-member-functions" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Accessor Member Functions
+        Accessor &amp; Modifier Member Functions
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Accessor Member Functions">
+    <nav class="md-nav" aria-label="Accessor &amp; Modifier Member Functions">
       <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#auto-set_leveltrace_level-level-noexcept" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        auto&amp; set_level(trace_level level) noexcept
+      
+    </span>
+  </a>
+  
+</li>
         
           <li class="md-nav__item">
   <a href="#nodiscard-auto-elapsed-const-noexcept" class="md-nav__link">
@@ -1668,17 +1723,6 @@
   
 </li>
         
-          <li class="md-nav__item">
-  <a href="#nodiscard-stdstring_view-func_name-const-noexcept" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        [[nodiscard]] std::string_view func_name() const noexcept
-      
-    </span>
-  </a>
-  
-</li>
-        
       </ul>
     </nav>
   
@@ -1697,10 +1741,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#template-typename-args-void-infostdformat_stringargs-fmt-args-args" class="md-nav__link">
+  <a href="#template-trace_level-level-trace_levelcritical-typename-args-auto-logstdformat_stringargs-fmt-args-args" class="md-nav__link">
     <span class="md-ellipsis">
       
-        template &lt;typename... Args&gt; void info(std::format_string&lt;Args...&gt; fmt, Args&amp;&amp;... args)
+        template &lt;trace_level level = trace_level::critical, typename... Args&gt; auto&amp; log(std::format_string&lt;Args...&gt; fmt, Args&amp;&amp;... args)
       
     </span>
   </a>
@@ -1708,10 +1752,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#template-typename-args-void-tracestdformat_stringargs-fmt-args-args" class="md-nav__link">
+  <a href="#template-typename-args-auto-tracestdformat_stringargs-fmt-args-args" class="md-nav__link">
     <span class="md-ellipsis">
       
-        template &lt;typename... Args&gt; void trace(std::format_string&lt;Args...&gt; fmt, Args&amp;&amp;... args)
+        template &lt;typename... Args&gt; auto&amp; trace(std::format_string&lt;Args...&gt; fmt, Args&amp;&amp;... args)
       
     </span>
   </a>
@@ -1719,10 +1763,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#template-typename-args-void-warnstdformat_stringargs-fmt-args-args" class="md-nav__link">
+  <a href="#template-typename-args-auto-debugstdformat_stringargs-fmt-args-args" class="md-nav__link">
     <span class="md-ellipsis">
       
-        template &lt;typename... Args&gt; void warn(std::format_string&lt;Args...&gt; fmt, Args&amp;&amp;... args)
+        template &lt;typename... Args&gt; auto&amp; debug(std::format_string&lt;Args...&gt; fmt, Args&amp;&amp;... args)
       
     </span>
   </a>
@@ -1730,10 +1774,32 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#template-typename-args-void-errstdformat_stringargs-fmt-args-args" class="md-nav__link">
+  <a href="#template-typename-args-auto-infostdformat_stringargs-fmt-args-args" class="md-nav__link">
     <span class="md-ellipsis">
       
-        template &lt;typename... Args&gt; void err(std::format_string&lt;Args...&gt; fmt, Args&amp;&amp;... args)
+        template &lt;typename... Args&gt; auto&amp; info(std::format_string&lt;Args...&gt; fmt, Args&amp;&amp;... args)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#template-typename-args-auto-warnstdformat_stringargs-fmt-args-args" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        template &lt;typename... Args&gt; auto&amp; warn(std::format_string&lt;Args...&gt; fmt, Args&amp;&amp;... args)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#template-typename-args-auto-errstdformat_stringargs-fmt-args-args" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        template &lt;typename... Args&gt; auto&amp; err(std::format_string&lt;Args...&gt; fmt, Args&amp;&amp;... args)
       
     </span>
   </a>
@@ -1888,30 +1954,47 @@
 <h1 id="scopetrace-class-api-reference"><code>ScopeTrace</code> Class API Reference<a class="headerlink" href="#scopetrace-class-api-reference" title="Permanent link">&para;</a></h1>
 <p>Header: <code>&lt;siddiqsoft/ScopeTrace.hpp&gt;</code></p>
 <div class="language-cpp highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="k">namespace</span><span class="w"> </span><span class="nn">siddiqsoft</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">    </span><span class="k">class</span><span class="w"> </span><span class="nc">ScopeTrace</span><span class="p">;</span>
-</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="p">}</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">    </span><span class="k">enum</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">trace_level</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="kt">uint8_t</span><span class="p">;</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">    </span><span class="k">using</span><span class="w"> </span><span class="n">LogLevel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">trace_level</span><span class="p">;</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">    </span><span class="k">class</span><span class="w"> </span><span class="nc">ScopeTrace</span><span class="p">;</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="p">}</span>
 </span></code></pre></div>
 <p><code>siddiqsoft::ScopeTrace</code> is a modern C++23 RAII scope logging utility that measures duration, tracks nesting levels, records source locations, and formats diagnostic messages.</p>
 <hr />
-<h2 id="helper-types">Helper Types<a class="headerlink" href="#helper-types" title="Permanent link">&para;</a></h2>
+<h2 id="helper-types-enums">Helper Types &amp; Enums<a class="headerlink" href="#helper-types-enums" title="Permanent link">&para;</a></h2>
+<h3 id="enum-class-trace_level-uint8_t-alias-loglevel"><code>enum class trace_level : uint8_t</code> (Alias: <code>LogLevel</code>)<a class="headerlink" href="#enum-class-trace_level-uint8_t-alias-loglevel" title="Permanent link">&para;</a></h3>
+<p>Defines message log levels and scope threshold levels:</p>
+<div class="language-cpp highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="k">enum</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">trace_level</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="kt">uint8_t</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">    </span><span class="n">critical</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">  </span><span class="c1">// Always logged</span>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">    </span><span class="n">exception</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">  </span><span class="c1">// Always logged</span>
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">    </span><span class="n">error</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">  </span><span class="c1">// Always logged</span>
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">    </span><span class="n">warning</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w">  </span><span class="c1">// Logged if m_log_level &gt;= warning</span>
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">    </span><span class="n">info</span><span class="w">      </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w">  </span><span class="c1">// Logged if m_log_level &gt;= info</span>
+</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="w">    </span><span class="n">debug</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w">  </span><span class="c1">// Logged if m_log_level &gt;= debug (excludes trace)</span>
+</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="w">    </span><span class="n">trace</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="mi">6</span><span class="p">,</span><span class="w">  </span><span class="c1">// Logged if m_log_level &gt;= trace (all logs)</span>
+</span><span id="__span-1-9"><a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="w">    </span><span class="n">none</span><span class="w">      </span><span class="o">=</span><span class="w"> </span><span class="mi">255</span><span class="w"> </span><span class="c1">// Disabled threshold</span>
+</span><span id="__span-1-10"><a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="p">};</span>
+</span></code></pre></div>
 <h3 id="template-typename-args-struct-source_location_format_string"><code>template &lt;typename... Args&gt; struct source_location_format_string</code><a class="headerlink" href="#template-typename-args-struct-source_location_format_string" title="Permanent link">&para;</a></h3>
 <p>A specialized format string wrapper struct in <code>namespace siddiqsoft</code> that combines <code>std::format_string&lt;Args...&gt;</code> with a <code>consteval</code> constructor capturing caller <code>std::source_location::current()</code>. Used by <code>err_throw()</code> to capture exact call-site file and line numbers.</p>
 <hr />
 <h2 id="public-constructors-destructor">Public Constructors &amp; Destructor<a class="headerlink" href="#public-constructors-destructor" title="Permanent link">&para;</a></h2>
-<h3 id="explicit-scopetracestdstring_view-sn-const-stdsource_location-sl-stdsource_locationcurrent"><code>explicit ScopeTrace(std::string_view sn = {}, const std::source_location&amp; sl = std::source_location::current())</code><a class="headerlink" href="#explicit-scopetracestdstring_view-sn-const-stdsource_location-sl-stdsource_locationcurrent" title="Permanent link">&para;</a></h3>
-<p>Constructs a scope logger with the specified scope name <code>sn</code> and caller source location <code>sl</code>. Increments the thread-local nesting depth. If <code>sn</code> is omitted or empty (<code>{}</code>), the scope name automatically defaults to the plain function name extracted via <code>extract_func_name(sl.function_name())</code> (evaluating to <code>"GLOBAL"</code> when declared in global scope outside of any function).</p>
+<h3 id="explicit-scopetracestdstring_view-sn-trace_level-level-trace_levelcritical-const-stdsource_location-sl-stdsource_locationcurrent"><code>explicit ScopeTrace(std::string_view sn = {}, trace_level level = trace_level::critical, const std::source_location&amp; sl = std::source_location::current())</code><a class="headerlink" href="#explicit-scopetracestdstring_view-sn-trace_level-level-trace_levelcritical-const-stdsource_location-sl-stdsource_locationcurrent" title="Permanent link">&para;</a></h3>
+<p>Constructs a scope logger with the specified scope name <code>sn</code>, logging threshold <code>level</code>, and caller source location <code>sl</code>. Increments the thread-local nesting depth. If <code>sn</code> is omitted or empty (<code>{}</code>), the scope name automatically defaults to the plain function name extracted via <code>extract_func_name(sl.function_name())</code> (evaluating to <code>"GLOBAL"</code> when declared in global scope outside of any function).</p>
 <ul>
 <li><strong><code>sn</code></strong>: Custom scope label or contextual identifier (defaults to <code>{}</code>).</li>
+<li><strong><code>level</code></strong>: Scope logging threshold (<code>LogLevel</code> / <code>trace_level</code>, defaults to <code>trace_level::critical</code>).</li>
 <li><strong><code>sl</code></strong>: Source location (defaults to caller site via <code>std::source_location::current()</code>).</li>
 </ul>
-<h3 id="scopetrace-neststdstring_view-sn-const-stdsource_location-sl-stdsource_locationcurrent"><code>ScopeTrace nest(std::string_view sn, const std::source_location&amp; sl = std::source_location::current())</code><a class="headerlink" href="#scopetrace-neststdstring_view-sn-const-stdsource_location-sl-stdsource_locationcurrent" title="Permanent link">&para;</a></h3>
+<h3 id="scopetrace-neststdstring_view-sn-trace_level-level-trace_levelcritical-const-stdsource_location-sl-stdsource_locationcurrent"><code>ScopeTrace nest(std::string_view sn, trace_level level = trace_level::critical, const std::source_location&amp; sl = std::source_location::current())</code><a class="headerlink" href="#scopetrace-neststdstring_view-sn-trace_level-level-trace_levelcritical-const-stdsource_location-sl-stdsource_locationcurrent" title="Permanent link">&para;</a></h3>
 <p>Creates and returns a new child <code>ScopeTrace</code> instance. The child scope name is automatically formatted as <code>"&lt;parent_scope_name&gt;-&lt;sn&gt;"</code>.</p>
 <ul>
 <li><strong><code>sn</code></strong>: Sub-scope label string.</li>
+<li><strong><code>level</code></strong>: Child scope logging threshold (<code>LogLevel</code> / <code>trace_level</code>, defaults to <code>trace_level::critical</code>).</li>
 <li><strong><code>sl</code></strong>: Source location (defaults to caller site).</li>
 </ul>
 <h3 id="scopetrace-noexcept"><code>~ScopeTrace() noexcept</code><a class="headerlink" href="#scopetrace-noexcept" title="Permanent link">&para;</a></h3>
-<p>Destructor. Decrements the thread-local nesting depth counter. In debug builds (<code>DEBUG</code>, <code>_DEBUG</code>, or <code>DEBUG_TRACE</code>), logs a scope completion message with elapsed duration in microseconds and ISO 8601 UTC timestamp to <code>std::cerr</code>.</p>
+<p>Destructor. Decrements the thread-local nesting depth counter. Logs a scope completion message with elapsed duration in microseconds and ISO 8601 UTC timestamp to <code>std::cerr</code>.</p>
 <h3 id="copy-move-operations">Copy &amp; Move Operations<a class="headerlink" href="#copy-move-operations" title="Permanent link">&para;</a></h3>
 <p>Copy construction, move construction, copy assignment, and move assignment operators are explicitly <code>= delete</code>.</p>
 <hr />
@@ -1923,7 +2006,9 @@
 <h3 id="nodiscard-static-stdstring-current_timestamp-noexcept"><code>[[nodiscard]] static std::string current_timestamp() noexcept</code><a class="headerlink" href="#nodiscard-static-stdstring-current_timestamp-noexcept" title="Permanent link">&para;</a></h3>
 <p>Returns an ISO 8601 UTC timestamp string with microsecond precision e.g. <code>"2026-08-13T23:16:00.519049Z  "</code> (styled with ANSI light gray color codes).</p>
 <hr />
-<h2 id="accessor-member-functions">Accessor Member Functions<a class="headerlink" href="#accessor-member-functions" title="Permanent link">&para;</a></h2>
+<h2 id="accessor-modifier-member-functions">Accessor &amp; Modifier Member Functions<a class="headerlink" href="#accessor-modifier-member-functions" title="Permanent link">&para;</a></h2>
+<h3 id="auto-set_leveltrace_level-level-noexcept"><code>auto&amp; set_level(trace_level level) noexcept</code><a class="headerlink" href="#auto-set_leveltrace_level-level-noexcept" title="Permanent link">&para;</a></h3>
+<p>Updates the scope's logging threshold level (<code>m_log_level</code>). Returns a reference to <code>*this</code>.</p>
 <h3 id="nodiscard-auto-elapsed-const-noexcept"><code>[[nodiscard]] auto elapsed() const noexcept</code><a class="headerlink" href="#nodiscard-auto-elapsed-const-noexcept" title="Permanent link">&para;</a></h3>
 <p>Calculates and returns the duration (<code>std::chrono::system_clock::duration</code>) elapsed since the <code>ScopeTrace</code> instance was constructed.</p>
 <h3 id="nodiscard-size_t-depth-const-noexcept"><code>[[nodiscard]] size_t depth() const noexcept</code><a class="headerlink" href="#nodiscard-size_t-depth-const-noexcept" title="Permanent link">&para;</a></h3>
@@ -1934,24 +2019,28 @@
 <p>Returns the scope name string view passed at construction (or the auto-extracted plain function name if <code>sn</code> was empty).</p>
 <h3 id="nodiscard-stdstring_view-function_name-const-noexcept"><code>[[nodiscard]] std::string_view function_name() const noexcept</code><a class="headerlink" href="#nodiscard-stdstring_view-function_name-const-noexcept" title="Permanent link">&para;</a></h3>
 <p>Returns the plain function name matching the <code>__func__</code> macro, extracted from <code>m_location.function_name()</code>.</p>
-<h3 id="nodiscard-stdstring_view-func_name-const-noexcept"><code>[[nodiscard]] std::string_view func_name() const noexcept</code><a class="headerlink" href="#nodiscard-stdstring_view-func_name-const-noexcept" title="Permanent link">&para;</a></h3>
-<p>Shorthand alias for <code>function_name()</code>.</p>
 <hr />
 <h2 id="logging-member-functions">Logging Member Functions<a class="headerlink" href="#logging-member-functions" title="Permanent link">&para;</a></h2>
-<h3 id="template-typename-args-void-infostdformat_stringargs-fmt-args-args"><code>template &lt;typename... Args&gt; void info(std::format_string&lt;Args...&gt; fmt, Args&amp;&amp;... args)</code><a class="headerlink" href="#template-typename-args-void-infostdformat_stringargs-fmt-args-args" title="Permanent link">&para;</a></h3>
-<p>In debug builds (<code>DEBUG</code> / <code>_DEBUG</code>), formats and outputs an informational message to <code>std::cerr</code> prefixed by timestamp and depth-indented scope name.</p>
-<h3 id="template-typename-args-void-tracestdformat_stringargs-fmt-args-args"><code>template &lt;typename... Args&gt; void trace(std::format_string&lt;Args...&gt; fmt, Args&amp;&amp;... args)</code><a class="headerlink" href="#template-typename-args-void-tracestdformat_stringargs-fmt-args-args" title="Permanent link">&para;</a></h3>
-<p>In trace debug builds (<code>DEBUG_TRACE</code>), formats and outputs a trace-level diagnostic message to <code>std::cerr</code> (colored light gray) prefixed by timestamp and depth-indented scope name.</p>
-<h3 id="template-typename-args-void-warnstdformat_stringargs-fmt-args-args"><code>template &lt;typename... Args&gt; void warn(std::format_string&lt;Args...&gt; fmt, Args&amp;&amp;... args)</code><a class="headerlink" href="#template-typename-args-void-warnstdformat_stringargs-fmt-args-args" title="Permanent link">&para;</a></h3>
-<p>Formats and outputs a warning message to <code>std::cerr</code> (colored yellow) prefixed by timestamp and depth-indented scope name. Active in all build modes.</p>
-<h3 id="template-typename-args-void-errstdformat_stringargs-fmt-args-args"><code>template &lt;typename... Args&gt; void err(std::format_string&lt;Args...&gt; fmt, Args&amp;&amp;... args)</code><a class="headerlink" href="#template-typename-args-void-errstdformat_stringargs-fmt-args-args" title="Permanent link">&para;</a></h3>
-<p>Formats and outputs an error message to <code>std::cerr</code> (colored red) prefixed by timestamp and depth-indented scope name. Active in all build modes.</p>
+<h3 id="template-trace_level-level-trace_levelcritical-typename-args-auto-logstdformat_stringargs-fmt-args-args"><code>template &lt;trace_level level = trace_level::critical, typename... Args&gt; auto&amp; log(std::format_string&lt;Args...&gt; fmt, Args&amp;&amp;... args)</code><a class="headerlink" href="#template-trace_level-level-trace_levelcritical-typename-args-auto-logstdformat_stringargs-fmt-args-args" title="Permanent link">&para;</a></h3>
+<p>Core formatted logging template. Formats and outputs a diagnostic message to <code>std::cerr</code>.
+- <strong>Filtering Logic</strong>: Messages with <code>level</code> equal to <code>critical</code>, <code>exception</code>, or <code>error</code> are <strong>always logged</strong> regardless of <code>m_log_level</code>. For other levels (<code>warning</code>, <code>info</code>, <code>debug</code>, <code>trace</code>), the message is logged if <code>level &lt;= m_log_level</code>.
+- <strong>Formatting</strong>: Output line includes ISO 8601 UTC timestamp, formatted level tag (e.g. <code>[critical]</code>, <code>[warning]</code>, <code>[debug]</code>), nesting depth spaces, ANSI colors, scope name, and the formatted message.</p>
+<h3 id="template-typename-args-auto-tracestdformat_stringargs-fmt-args-args"><code>template &lt;typename... Args&gt; auto&amp; trace(std::format_string&lt;Args...&gt; fmt, Args&amp;&amp;... args)</code><a class="headerlink" href="#template-typename-args-auto-tracestdformat_stringargs-fmt-args-args" title="Permanent link">&para;</a></h3>
+<p>Logs a trace message (<code>log&lt;trace_level::trace&gt;</code>). Active if <code>m_log_level &gt;= trace_level::trace</code>.</p>
+<h3 id="template-typename-args-auto-debugstdformat_stringargs-fmt-args-args"><code>template &lt;typename... Args&gt; auto&amp; debug(std::format_string&lt;Args...&gt; fmt, Args&amp;&amp;... args)</code><a class="headerlink" href="#template-typename-args-auto-debugstdformat_stringargs-fmt-args-args" title="Permanent link">&para;</a></h3>
+<p>Logs a debug message (<code>log&lt;trace_level::debug&gt;</code>). Active if <code>m_log_level &gt;= trace_level::debug</code>. Excludes <code>trace</code> level logs.</p>
+<h3 id="template-typename-args-auto-infostdformat_stringargs-fmt-args-args"><code>template &lt;typename... Args&gt; auto&amp; info(std::format_string&lt;Args...&gt; fmt, Args&amp;&amp;... args)</code><a class="headerlink" href="#template-typename-args-auto-infostdformat_stringargs-fmt-args-args" title="Permanent link">&para;</a></h3>
+<p>Logs an info message (<code>log&lt;trace_level::info&gt;</code>). Active if <code>m_log_level &gt;= trace_level::info</code>. Excludes <code>debug</code> and <code>trace</code> logs.</p>
+<h3 id="template-typename-args-auto-warnstdformat_stringargs-fmt-args-args"><code>template &lt;typename... Args&gt; auto&amp; warn(std::format_string&lt;Args...&gt; fmt, Args&amp;&amp;... args)</code><a class="headerlink" href="#template-typename-args-auto-warnstdformat_stringargs-fmt-args-args" title="Permanent link">&para;</a></h3>
+<p>Logs a warning message (<code>log&lt;trace_level::warning&gt;</code>). Active if <code>m_log_level &gt;= trace_level::warning</code>.</p>
+<h3 id="template-typename-args-auto-errstdformat_stringargs-fmt-args-args"><code>template &lt;typename... Args&gt; auto&amp; err(std::format_string&lt;Args...&gt; fmt, Args&amp;&amp;... args)</code><a class="headerlink" href="#template-typename-args-auto-errstdformat_stringargs-fmt-args-args" title="Permanent link">&para;</a></h3>
+<p>Logs an error message (<code>log&lt;trace_level::error&gt;</code>). Always logged regardless of <code>m_log_level</code>.</p>
 <h3 id="template-typename-ex-stdexception-typename-args-void-err_throwsource_location_format_stringstdtype_identity_targs-fmt_loc-args-args-noexceptfalse"><code>template &lt;typename EX = std::exception, typename... Args&gt; void err_throw(source_location_format_string&lt;std::type_identity_t&lt;Args&gt;...&gt; fmt_loc, Args&amp;&amp;... args) noexcept(false)</code><a class="headerlink" href="#template-typename-ex-stdexception-typename-args-void-err_throwsource_location_format_stringstdtype_identity_targs-fmt_loc-args-args-noexceptfalse" title="Permanent link">&para;</a></h3>
-<p>Unified error logging and exception throwing shortcut. Uses <code>source_location_format_string</code> to capture the caller's exact call-site <code>std::source_location</code>. Formats and logs an error message to <code>std::cerr</code> (colored orange) with ISO 8601 UTC timestamp, depth-indented scope name, bold exception type name (<code>typeid(EX).name()</code>), formatted message in italics, and call-site <code>file:line</code> details. Then constructs and throws <code>EX(formatted_message)</code>. Active in all build modes.</p>
+<p>Unified error logging and exception throwing shortcut. Uses <code>source_location_format_string</code> to capture the caller's exact call-site <code>std::source_location</code>. Formats and logs an error message to <code>std::cerr</code> (colored orange) with ISO 8601 UTC timestamp, depth-indented scope name, bold exception type name (<code>typeid(EX).name()</code>), formatted message in italics, and call-site <code>file:line</code> details. Then constructs and throws <code>EX(formatted_message)</code>. Always logged.</p>
 <h3 id="void-expconst-stdexception-e"><code>void exp(const std::exception&amp; e)</code><a class="headerlink" href="#void-expconst-stdexception-e" title="Permanent link">&para;</a></h3>
-<p>Shortcut for logging caught exceptions in <code>catch</code> blocks. Outputs exception type (<code>typeid(e).name()</code>) in bold red and exception message (<code>e.what()</code>) to <code>std::cerr</code> prefixed by timestamp and depth-indented scope name. Active in all build modes.</p>
+<p>Shortcut for logging caught exceptions in <code>catch</code> blocks. Outputs exception type (<code>typeid(e).name()</code>) in bold red and exception message (<code>e.what()</code>) to <code>std::cerr</code> prefixed by timestamp and depth-indented scope name. Always logged.</p>
 <h3 id="template-typename-args-void-expconst-stdexception-e-stdformat_stringargs-fmt-args-args"><code>template &lt;typename... Args&gt; void exp(const std::exception&amp; e, std::format_string&lt;Args...&gt; fmt, Args&amp;&amp;... args)</code><a class="headerlink" href="#template-typename-args-void-expconst-stdexception-e-stdformat_stringargs-fmt-args-args" title="Permanent link">&para;</a></h3>
-<p>Enhanced exception logging shortcut for <code>catch</code> blocks. Outputs exception type (<code>typeid(e).name()</code>) in bold red, exception message (<code>e.what()</code>) in italic, followed by custom formatted contextual details (<code>fmt</code>, <code>args...</code>) to <code>std::cerr</code> prefixed by timestamp and depth-indented scope name. Active in all build modes.</p>
+<p>Enhanced exception logging shortcut for <code>catch</code> blocks. Outputs exception type (<code>typeid(e).name()</code>) in bold red, exception message (<code>e.what()</code>) in italic, followed by custom formatted contextual details (<code>fmt</code>, <code>args...</code>) to <code>std::cerr</code> prefixed by timestamp and depth-indented scope name. Always logged.</p>
 <hr />
 <h2 id="formatting-stream-operations">Formatting &amp; Stream Operations<a class="headerlink" href="#formatting-stream-operations" title="Permanent link">&para;</a></h2>
 <h3 id="template-typename-chart-char-nodiscard-auto-to_string-const"><code>template &lt;typename charT = char&gt; [[nodiscard]] auto to_string() const</code><a class="headerlink" href="#template-typename-chart-char-nodiscard-auto-to_string-const" title="Permanent link">&para;</a></h3>
@@ -2053,7 +2142,7 @@
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.expand", "navigation.path", "navigation.top", "navigation.footer", "navigation.tracking", "search.suggest", "search.highlight", "search.share", "content.code.copy", "content.code.annotate"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": "0.21.0-alpha.16"}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.expand", "navigation.path", "navigation.top", "navigation.footer", "navigation.tracking", "search.suggest", "search.highlight", "search.share", "content.code.copy", "content.code.annotate"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": "0.21.0-alpha.17"}</script>
     
     
       <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
