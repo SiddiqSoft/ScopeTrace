@@ -17,21 +17,22 @@ scope.set_level(siddiqsoft::LogLevel::trace);
 auto inner = scope.nest("sub_task", siddiqsoft::LogLevel::info);
 ```
 
-### Structured Console Logging
+### Structured Console Logging & Colors
 ```cpp
 // Trace log (light gray output, active when threshold >= LogLevel::trace)
-scope.trace("Low-level trace data: addr={:p}", ptr);
+// RECOMMENDED FOR HIGH-VOLUME I/O: Socket reads/writes, packet dumps, buffer transfers
+scope.trace("Socket read {} bytes from {}:{:d}", bytes, host, port);
 
-// Debug log (active when threshold >= LogLevel::debug, excludes trace)
+// Debug log (light gray output, active when threshold >= LogLevel::debug, excludes trace)
 scope.debug("Debugging state: count={}", count);
 
-// Info log (active when threshold >= LogLevel::info)
+// Info log (default/neutral output, active when threshold >= LogLevel::info)
 scope.info("Processing item {} of {}", current, total);
 
-// Warning log (yellow output, active when threshold >= LogLevel::warning)
+// Warning log (dark yellow/gold output, active when threshold >= LogLevel::warning)
 scope.warn("Cache miss for key: {}", key);
 
-// Error log (red output, always logged regardless of threshold)
+// Error log (orange output, always logged regardless of threshold)
 scope.err("Failed to open connection to host: {}", host);
 
 // Unified Error & Throw shortcut (orange output, always logged)

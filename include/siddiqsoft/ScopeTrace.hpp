@@ -118,6 +118,7 @@ namespace siddiqsoft
         static constexpr std::string_view RED {"\033[0;31m"};       //< Red
         static constexpr std::string_view ORN {"\033[38;5;208m"};   //< Orange
         static constexpr std::string_view BLU {"\033[0;34m"};       //< Blue
+        static constexpr std::string_view DRKBLU {"\033[38;5;19m"}; //< Dark Blue
         static constexpr std::string_view GRN {"\033[0;32m"};       //< Green
         static constexpr std::string_view YLW {"\033[1;33m"};       //< Yellow
         static constexpr std::string_view DKYLW {"\033[38;5;136m"}; //< Dark Yellow
@@ -281,7 +282,7 @@ namespace siddiqsoft
                 case trace_level::warning: return DKYLW;
                 case trace_level::info: return NOC;
                 case trace_level::debug: return LTGY;
-                case trace_level::trace: return LTGY;
+                case trace_level::trace: return DRKBLU;
                 default: return NOC;
             }
         }

@@ -21,16 +21,29 @@ Defines message log levels and scope threshold levels:
 
 ```cpp
 enum class trace_level : uint8_t {
-    critical  = 0,  // Always logged
-    exception = 1,  // Always logged
-    error     = 2,  // Always logged
-    warning   = 3,  // Logged if m_log_level >= warning
-    info      = 4,  // Logged if m_log_level >= info
-    debug     = 5,  // Logged if m_log_level >= debug (excludes trace)
-    trace     = 6,  // Logged if m_log_level >= trace (all logs)
+    critical  = 0,  // Always logged (Red output)
+    exception = 1,  // Always logged (Red output)
+    error     = 2,  // Always logged (Orange output)
+    warning   = 3,  // Logged if m_log_level >= warning (Dark Yellow / Gold output)
+    info      = 4,  // Logged if m_log_level >= info (Default/Neutral output)
+    debug     = 5,  // Logged if m_log_level >= debug (Light Gray output, excludes trace)
+    trace     = 6,  // Logged if m_log_level >= trace (Light Gray output, all logs)
     none      = 255 // Disabled threshold
 };
 ```
+
+| Log Level | Color Output | ANSI Escape Sequence | Standard Use Case |
+| :--- | :--- | :--- | :--- |
+| `critical` | **Red** | `\033[0;31m` | Fatal system failures |
+| `exception` | **Red** | `\033[0;31m` | Exception handler logging (`exp()`) |
+| `error` | **Orange** | `\033[38;5;208m` | Operational errors (`err()`, `err_throw()`) |
+| `warning` | **Dark Yellow / Gold** | `\033[38;5;136m` | Recoverable warnings (`warn()`) |
+| `info` | **Default / Neutral** | `\033[0m` | Application status changes (`info()`) |
+| `debug` | **Light Gray** | `\033[38;5;250m` | General debug inspection (`debug()`) |
+| `trace` | **Light Gray** | `\033[38;5;250m` | High-frequency I/O operations & packet/buffer dumps (`trace()`) |
+
+> **Advice for High-Volume I/O Logging:**
+> High-frequency operations — such as socket data transfers, stream packet dumps, HTTP body payload dumps, or file buffer reads/writes — should **always** use `trace_level::trace` (`scope.trace(...)`). This allows I/O diagnostic noise to be cleanly filtered out when running at `LogLevel::debug` or `info` thresholds without incurring string formatting costs.
 
 ### `template <typename... Args> struct source_location_format_string`
 A specialized format string wrapper struct in `namespace siddiqsoft` that combines `std::format_string<Args...>` with a `consteval` constructor capturing caller `std::source_location::current()`. Used by `err_throw()` to capture exact call-site file and line numbers.
