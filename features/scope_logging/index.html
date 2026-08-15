@@ -1464,11 +1464,11 @@
 </span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="p">}</span><span class="w"> </span><span class="c1">// Destructors automatically log completion status and elapsed duration at LogLevel::debug severity upon scope exit</span>
 </span></code></pre></div>
 <h2 id="source-location-function-name-extraction">Source Location &amp; Function Name Extraction<a class="headerlink" href="#source-location-function-name-extraction" title="Permanent link">&para;</a></h2>
-<p>Using <code>std::source_location::current()</code>, <code>ScopeTrace</code> captures caller details automatically:
-- Source file path (<code>location().file_name()</code>)
-- Line number (<code>location().line()</code>)
-- Enclosing function signature (<code>location().function_name()</code>)</p>
-<p><code>ScopeTrace</code> also includes built-in parsing (<code>extract_func_name()</code> / <code>function_name()</code>) to extract clean plain function names matching <code>__func__</code> from full signature strings. When <code>ScopeTrace</code> is declared in the global scope (outside of any enclosing function), <code>extract_func_name()</code> evaluates to <code>"GLOBAL"</code>.</p>
+<p>Using <code>std::source_location::current()</code>, <code>ScopeTrace</code> captures caller details automatically upon construction:
+- Source file path (<code>m_location.file_name()</code>)
+- Line number (<code>m_location.line()</code>)
+- Enclosing function signature (<code>m_location.function_name()</code>)</p>
+<p><code>ScopeTrace</code> also includes internal protected helper routines (<code>extract_func_name()</code> / <code>function_name()</code>) to extract clean plain function names matching <code>__func__</code> from full signature strings. When <code>ScopeTrace</code> is declared in the global scope (outside of any enclosing function), <code>extract_func_name()</code> evaluates to <code>"GLOBAL"</code>.</p>
 <h2 id="nesting-depth-iso-8601-timestamps">Nesting Depth &amp; ISO 8601 Timestamps<a class="headerlink" href="#nesting-depth-iso-8601-timestamps" title="Permanent link">&para;</a></h2>
 <p><code>ScopeTrace</code> automatically tracks nested scopes using a thread-local counter (<code>current_depth()</code>), producing formatted visual indentation for hierarchical log trees. Each output line is prefixed with an ISO 8601 UTC timestamp (<code>current_timestamp()</code>):</p>
 <div class="terminal-window" style="background-color: #1b1d24; border-radius: 8px; border: 1px solid #2e3240; margin: 1.5rem 0; overflow: hidden; font-family: 'JetBrains Mono', Consolas, monospace;">
@@ -1713,7 +1713,7 @@
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.expand", "navigation.path", "navigation.top", "navigation.footer", "navigation.tracking", "search.suggest", "search.highlight", "search.share", "content.code.copy", "content.code.annotate"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": "0.31.0-3"}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.expand", "navigation.path", "navigation.top", "navigation.footer", "navigation.tracking", "search.suggest", "search.highlight", "search.share", "content.code.copy", "content.code.annotate"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": "0.31.0-5"}</script>
     
     
       <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>

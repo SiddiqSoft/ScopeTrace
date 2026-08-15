@@ -655,21 +655,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#formatting-streaming" class="md-nav__link">
+  <a href="#internal-scope-metrics-helpers-protected-methods" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Formatting &amp; Streaming
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#scope-metrics-nesting" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Scope Metrics &amp; Nesting
+        Internal Scope Metrics &amp; Helpers (Protected Methods)
       
     </span>
   </a>
@@ -1265,21 +1254,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#formatting-streaming" class="md-nav__link">
+  <a href="#internal-scope-metrics-helpers-protected-methods" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Formatting &amp; Streaming
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#scope-metrics-nesting" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Scope Metrics &amp; Nesting
+        Internal Scope Metrics &amp; Helpers (Protected Methods)
       
     </span>
   </a>
@@ -1423,28 +1401,23 @@
 <span style="color: #8b949e;">2026-08-15T20:49:27.061100Z</span>  <span style="color: #8b949e;">[debug ]</span> scope - COMPLETED: time:<span style="color: #3fb950; font-weight: 600;">540us</span></pre>
 </div>
 
-<h3 id="formatting-streaming">Formatting &amp; Streaming<a class="headerlink" href="#formatting-streaming" title="Permanent link">&para;</a></h3>
-<div class="language-cpp highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="c1">// Format as std::string (includes ISO 8601 UTC timestamp and location)</span>
-</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">formatted</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">scope</span><span class="p">.</span><span class="n">to_string</span><span class="p">();</span>
-</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>
-</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="c1">// Stream insertion operator</span>
-</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">scope</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
-</span></code></pre></div>
-<h3 id="scope-metrics-nesting">Scope Metrics &amp; Nesting<a class="headerlink" href="#scope-metrics-nesting" title="Permanent link">&para;</a></h3>
-<div class="language-cpp highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="c1">// Elapsed time since scope entry</span>
-</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="k">auto</span><span class="w"> </span><span class="n">duration</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">scope</span><span class="p">.</span><span class="n">elapsed</span><span class="p">();</span>
-</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>
-</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="c1">// Instance nesting depth level</span>
-</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="kt">size_t</span><span class="w"> </span><span class="n">level</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">scope</span><span class="p">.</span><span class="n">depth</span><span class="p">();</span>
-</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>
-</span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="c1">// Current thread nesting depth counter</span>
-</span><span id="__span-3-8"><a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="kt">size_t</span><span class="w"> </span><span class="n">thread_depth</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">siddiqsoft</span><span class="o">::</span><span class="n">ScopeTrace</span><span class="o">::</span><span class="n">current_depth</span><span class="p">();</span>
-</span><span id="__span-3-9"><a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a>
-</span><span id="__span-3-10"><a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="c1">// ISO 8601 UTC timestamp string</span>
-</span><span id="__span-3-11"><a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">ts</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">siddiqsoft</span><span class="o">::</span><span class="n">ScopeTrace</span><span class="o">::</span><span class="n">current_timestamp</span><span class="p">();</span>
-</span><span id="__span-3-12"><a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a>
-</span><span id="__span-3-13"><a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a><span class="c1">// Extract plain function name matching __func__</span>
-</span><span id="__span-3-14"><a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a><span class="n">std</span><span class="o">::</span><span class="n">string_view</span><span class="w"> </span><span class="n">func</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">scope</span><span class="p">.</span><span class="n">function_name</span><span class="p">();</span>
+<h3 id="internal-scope-metrics-helpers-protected-methods">Internal Scope Metrics &amp; Helpers (Protected Methods)<a class="headerlink" href="#internal-scope-metrics-helpers-protected-methods" title="Permanent link">&para;</a></h3>
+<div class="language-cpp highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="c1">// Protected implementation helpers (accessible in derived classes or when SCOPETRACE_PRIVATE_TESTING is defined):</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="c1">// Elapsed duration since scope entry</span>
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="k">auto</span><span class="w"> </span><span class="n">duration</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">scope</span><span class="p">.</span><span class="n">elapsed</span><span class="p">();</span>
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>
+</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="c1">// Instance nesting depth level</span>
+</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="kt">size_t</span><span class="w"> </span><span class="n">level</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">scope</span><span class="p">.</span><span class="n">depth</span><span class="p">();</span>
+</span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>
+</span><span id="__span-2-9"><a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="c1">// Current thread nesting depth counter</span>
+</span><span id="__span-2-10"><a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="kt">size_t</span><span class="w"> </span><span class="n">thread_depth</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">siddiqsoft</span><span class="o">::</span><span class="n">ScopeTrace</span><span class="o">::</span><span class="n">current_depth</span><span class="p">();</span>
+</span><span id="__span-2-11"><a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a>
+</span><span id="__span-2-12"><a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="c1">// ISO 8601 UTC timestamp string</span>
+</span><span id="__span-2-13"><a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">ts</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">siddiqsoft</span><span class="o">::</span><span class="n">ScopeTrace</span><span class="o">::</span><span class="n">current_timestamp</span><span class="p">();</span>
+</span><span id="__span-2-14"><a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a>
+</span><span id="__span-2-15"><a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a><span class="c1">// Extract plain function name matching __func__</span>
+</span><span id="__span-2-16"><a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a><span class="n">std</span><span class="o">::</span><span class="n">string_view</span><span class="w"> </span><span class="n">func</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">scope</span><span class="p">.</span><span class="n">function_name</span><span class="p">();</span>
 </span></code></pre></div>
 
 
@@ -1541,7 +1514,7 @@
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.expand", "navigation.path", "navigation.top", "navigation.footer", "navigation.tracking", "search.suggest", "search.highlight", "search.share", "content.code.copy", "content.code.annotate"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": "0.31.0-3"}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.expand", "navigation.path", "navigation.top", "navigation.footer", "navigation.tracking", "search.suggest", "search.highlight", "search.share", "content.code.copy", "content.code.annotate"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": "0.31.0-5"}</script>
     
     
       <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>

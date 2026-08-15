@@ -1001,10 +1001,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#explicit-scopetracestdstring_view-sn-trace_level-level-trace_levelcritical-const-stdsource_location-sl-stdsource_locationcurrent" class="md-nav__link">
+  <a href="#explicit-scopetracestdstring_view-sn-trace_level-level-trace_levelnone-const-stdsource_location-sl-stdsource_locationcurrent" class="md-nav__link">
     <span class="md-ellipsis">
       
-        explicit ScopeTrace(std::string_view sn = {}, trace_level level = trace_level::critical, const std::source_location&amp; sl = std::source_location::current())
+        explicit ScopeTrace(std::string_view sn = {}, trace_level level = trace_level::none, const std::source_location&amp; sl = std::source_location::current())
       
     </span>
   </a>
@@ -1012,10 +1012,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#scopetrace-neststdstring_view-sn-trace_level-level-trace_levelcritical-const-stdsource_location-sl-stdsource_locationcurrent" class="md-nav__link">
+  <a href="#scopetrace-neststdstring_view-sn-trace_level-level-trace_levelnone-const-stdsource_location-sl-stdsource_locationcurrent" class="md-nav__link">
     <span class="md-ellipsis">
       
-        ScopeTrace nest(std::string_view sn, trace_level level = trace_level::critical, const std::source_location&amp; sl = std::source_location::current())
+        ScopeTrace nest(std::string_view sn, trace_level level = trace_level::none, const std::source_location&amp; sl = std::source_location::current())
       
     </span>
   </a>
@@ -1050,65 +1050,15 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#static-methods" class="md-nav__link">
+  <a href="#public-accessor-modifier-member-functions" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Static Methods
+        Public Accessor &amp; Modifier Member Functions
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Static Methods">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#static-size_t-current_depth-noexcept" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        static size_t&amp; current_depth() noexcept
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#nodiscard-static-stdstring_view-extract_func_namestdstring_view-full_signature-noexcept" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        [[nodiscard]] static std::string_view extract_func_name(std::string_view full_signature) noexcept
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#nodiscard-static-stdstring-current_timestamp-noexcept" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        [[nodiscard]] static std::string current_timestamp() noexcept
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#accessor-modifier-member-functions" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Accessor &amp; Modifier Member Functions
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Accessor &amp; Modifier Member Functions">
+    <nav class="md-nav" aria-label="Public Accessor &amp; Modifier Member Functions">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -1122,76 +1072,21 @@
   
 </li>
         
-          <li class="md-nav__item">
-  <a href="#nodiscard-auto-elapsed-const-noexcept" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        [[nodiscard]] auto elapsed() const noexcept
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#nodiscard-size_t-depth-const-noexcept" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        [[nodiscard]] size_t depth() const noexcept
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#nodiscard-const-stdsource_location-location-const-noexcept" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        [[nodiscard]] const std::source_location&amp; location() const noexcept
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#nodiscard-stdstring_view-name-const-noexcept" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        [[nodiscard]] std::string_view name() const noexcept
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#nodiscard-stdstring_view-function_name-const-noexcept" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        [[nodiscard]] std::string_view function_name() const noexcept
-      
-    </span>
-  </a>
-  
-</li>
-        
       </ul>
     </nav>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#logging-member-functions" class="md-nav__link">
+  <a href="#public-logging-member-functions" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Logging Member Functions
+        Public Logging Member Functions
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Logging Member Functions">
+    <nav class="md-nav" aria-label="Public Logging Member Functions">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -1299,22 +1194,22 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#formatting-stream-operations" class="md-nav__link">
+  <a href="#protected-non-public-implementation-details" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Formatting &amp; Stream Operations
+        Protected &amp; Non-Public Implementation Details
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Formatting &amp; Stream Operations">
+    <nav class="md-nav" aria-label="Protected &amp; Non-Public Implementation Details">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#template-typename-chart-char-nodiscard-auto-to_string-const" class="md-nav__link">
+  <a href="#protected-helper-methods-protected" class="md-nav__link">
     <span class="md-ellipsis">
       
-        template &lt;typename charT = char&gt; [[nodiscard]] auto to_string() const
+        Protected Helper Methods (protected:)
       
     </span>
   </a>
@@ -1322,10 +1217,21 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#friend-stdostream-operatorstdostream-os-const-scopetrace-src" class="md-nav__link">
+  <a href="#private-color-string-constants-private" class="md-nav__link">
     <span class="md-ellipsis">
       
-        friend std::ostream&amp; operator&lt;&lt;(std::ostream&amp; os, const ScopeTrace&amp; src)
+        Private Color &amp; String Constants (private:)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#private-member-variables-private" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Private Member Variables (private:)
       
     </span>
   </a>
@@ -1575,10 +1481,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#explicit-scopetracestdstring_view-sn-trace_level-level-trace_levelcritical-const-stdsource_location-sl-stdsource_locationcurrent" class="md-nav__link">
+  <a href="#explicit-scopetracestdstring_view-sn-trace_level-level-trace_levelnone-const-stdsource_location-sl-stdsource_locationcurrent" class="md-nav__link">
     <span class="md-ellipsis">
       
-        explicit ScopeTrace(std::string_view sn = {}, trace_level level = trace_level::critical, const std::source_location&amp; sl = std::source_location::current())
+        explicit ScopeTrace(std::string_view sn = {}, trace_level level = trace_level::none, const std::source_location&amp; sl = std::source_location::current())
       
     </span>
   </a>
@@ -1586,10 +1492,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#scopetrace-neststdstring_view-sn-trace_level-level-trace_levelcritical-const-stdsource_location-sl-stdsource_locationcurrent" class="md-nav__link">
+  <a href="#scopetrace-neststdstring_view-sn-trace_level-level-trace_levelnone-const-stdsource_location-sl-stdsource_locationcurrent" class="md-nav__link">
     <span class="md-ellipsis">
       
-        ScopeTrace nest(std::string_view sn, trace_level level = trace_level::critical, const std::source_location&amp; sl = std::source_location::current())
+        ScopeTrace nest(std::string_view sn, trace_level level = trace_level::none, const std::source_location&amp; sl = std::source_location::current())
       
     </span>
   </a>
@@ -1624,65 +1530,15 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#static-methods" class="md-nav__link">
+  <a href="#public-accessor-modifier-member-functions" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Static Methods
+        Public Accessor &amp; Modifier Member Functions
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Static Methods">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#static-size_t-current_depth-noexcept" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        static size_t&amp; current_depth() noexcept
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#nodiscard-static-stdstring_view-extract_func_namestdstring_view-full_signature-noexcept" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        [[nodiscard]] static std::string_view extract_func_name(std::string_view full_signature) noexcept
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#nodiscard-static-stdstring-current_timestamp-noexcept" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        [[nodiscard]] static std::string current_timestamp() noexcept
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#accessor-modifier-member-functions" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Accessor &amp; Modifier Member Functions
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Accessor &amp; Modifier Member Functions">
+    <nav class="md-nav" aria-label="Public Accessor &amp; Modifier Member Functions">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -1696,76 +1552,21 @@
   
 </li>
         
-          <li class="md-nav__item">
-  <a href="#nodiscard-auto-elapsed-const-noexcept" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        [[nodiscard]] auto elapsed() const noexcept
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#nodiscard-size_t-depth-const-noexcept" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        [[nodiscard]] size_t depth() const noexcept
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#nodiscard-const-stdsource_location-location-const-noexcept" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        [[nodiscard]] const std::source_location&amp; location() const noexcept
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#nodiscard-stdstring_view-name-const-noexcept" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        [[nodiscard]] std::string_view name() const noexcept
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#nodiscard-stdstring_view-function_name-const-noexcept" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        [[nodiscard]] std::string_view function_name() const noexcept
-      
-    </span>
-  </a>
-  
-</li>
-        
       </ul>
     </nav>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#logging-member-functions" class="md-nav__link">
+  <a href="#public-logging-member-functions" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Logging Member Functions
+        Public Logging Member Functions
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Logging Member Functions">
+    <nav class="md-nav" aria-label="Public Logging Member Functions">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -1873,22 +1674,22 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#formatting-stream-operations" class="md-nav__link">
+  <a href="#protected-non-public-implementation-details" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Formatting &amp; Stream Operations
+        Protected &amp; Non-Public Implementation Details
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Formatting &amp; Stream Operations">
+    <nav class="md-nav" aria-label="Protected &amp; Non-Public Implementation Details">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#template-typename-chart-char-nodiscard-auto-to_string-const" class="md-nav__link">
+  <a href="#protected-helper-methods-protected" class="md-nav__link">
     <span class="md-ellipsis">
       
-        template &lt;typename charT = char&gt; [[nodiscard]] auto to_string() const
+        Protected Helper Methods (protected:)
       
     </span>
   </a>
@@ -1896,10 +1697,21 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#friend-stdostream-operatorstdostream-os-const-scopetrace-src" class="md-nav__link">
+  <a href="#private-color-string-constants-private" class="md-nav__link">
     <span class="md-ellipsis">
       
-        friend std::ostream&amp; operator&lt;&lt;(std::ostream&amp; os, const ScopeTrace&amp; src)
+        Private Color &amp; String Constants (private:)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#private-member-variables-private" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Private Member Variables (private:)
       
     </span>
   </a>
@@ -2073,48 +1885,30 @@ High-frequency operations — such as socket data transfers, stream packet dumps
 <p>A specialized format string wrapper struct in <code>namespace siddiqsoft</code> that combines <code>std::format_string&lt;Args...&gt;</code> with a <code>consteval</code> constructor capturing caller <code>std::source_location::current()</code>. Used by <code>err_throw()</code> to capture exact call-site file and line numbers.</p>
 <hr />
 <h2 id="public-constructors-destructor">Public Constructors &amp; Destructor<a class="headerlink" href="#public-constructors-destructor" title="Permanent link">&para;</a></h2>
-<h3 id="explicit-scopetracestdstring_view-sn-trace_level-level-trace_levelcritical-const-stdsource_location-sl-stdsource_locationcurrent"><code>explicit ScopeTrace(std::string_view sn = {}, trace_level level = trace_level::critical, const std::source_location&amp; sl = std::source_location::current())</code><a class="headerlink" href="#explicit-scopetracestdstring_view-sn-trace_level-level-trace_levelcritical-const-stdsource_location-sl-stdsource_locationcurrent" title="Permanent link">&para;</a></h3>
+<h3 id="explicit-scopetracestdstring_view-sn-trace_level-level-trace_levelnone-const-stdsource_location-sl-stdsource_locationcurrent"><code>explicit ScopeTrace(std::string_view sn = {}, trace_level level = trace_level::none, const std::source_location&amp; sl = std::source_location::current())</code><a class="headerlink" href="#explicit-scopetracestdstring_view-sn-trace_level-level-trace_levelnone-const-stdsource_location-sl-stdsource_locationcurrent" title="Permanent link">&para;</a></h3>
 <p>Constructs a scope logger with the specified scope name <code>sn</code>, logging threshold <code>level</code>, and caller source location <code>sl</code>. Increments the thread-local nesting depth. If <code>sn</code> is omitted or empty (<code>{}</code>), the scope name automatically defaults to the plain function name extracted via <code>extract_func_name(sl.function_name())</code> (evaluating to <code>"GLOBAL"</code> when declared in global scope outside of any function).</p>
 <ul>
 <li><strong><code>sn</code></strong>: Custom scope label or contextual identifier (defaults to <code>{}</code>).</li>
-<li><strong><code>level</code></strong>: Scope logging threshold (<code>LogLevel</code> / <code>trace_level</code>, defaults to <code>trace_level::critical</code>).</li>
+<li><strong><code>level</code></strong>: Scope logging threshold (<code>LogLevel</code> / <code>trace_level</code>, defaults to <code>trace_level::none</code>).</li>
 <li><strong><code>sl</code></strong>: Source location (defaults to caller site via <code>std::source_location::current()</code>).</li>
 </ul>
-<h3 id="scopetrace-neststdstring_view-sn-trace_level-level-trace_levelcritical-const-stdsource_location-sl-stdsource_locationcurrent"><code>ScopeTrace nest(std::string_view sn, trace_level level = trace_level::critical, const std::source_location&amp; sl = std::source_location::current())</code><a class="headerlink" href="#scopetrace-neststdstring_view-sn-trace_level-level-trace_levelcritical-const-stdsource_location-sl-stdsource_locationcurrent" title="Permanent link">&para;</a></h3>
-<p>Creates and returns a new child <code>ScopeTrace</code> instance. The child scope name is automatically formatted as <code>"&lt;parent_scope_name&gt;-&lt;sn&gt;"</code>.</p>
+<h3 id="scopetrace-neststdstring_view-sn-trace_level-level-trace_levelnone-const-stdsource_location-sl-stdsource_locationcurrent"><code>ScopeTrace nest(std::string_view sn, trace_level level = trace_level::none, const std::source_location&amp; sl = std::source_location::current())</code><a class="headerlink" href="#scopetrace-neststdstring_view-sn-trace_level-level-trace_levelnone-const-stdsource_location-sl-stdsource_locationcurrent" title="Permanent link">&para;</a></h3>
+<p>Creates and returns a new child <code>ScopeTrace</code> instance. The child scope name is automatically formatted as <code>"&lt;parent_scope_name&gt;/&lt;sn&gt;"</code>. If <code>level</code> is set to <code>trace_level::none</code> (default), the child scope automatically inherits the parent's logging threshold (<code>m_log_level</code>).</p>
 <ul>
-<li><strong><code>sn</code></strong>: Sub-scope label string.</li>
-<li><strong><code>level</code></strong>: Child scope logging threshold (<code>LogLevel</code> / <code>trace_level</code>, defaults to <code>trace_level::critical</code>).</li>
+<li><strong><code>sn</code></strong>: Sub-scope label string (required).</li>
+<li><strong><code>level</code></strong>: Child scope logging threshold (<code>LogLevel</code> / <code>trace_level</code>, defaults to <code>trace_level::none</code> to inherit parent threshold).</li>
 <li><strong><code>sl</code></strong>: Source location (defaults to caller site).</li>
 </ul>
 <h3 id="scopetrace-noexcept"><code>~ScopeTrace() noexcept</code><a class="headerlink" href="#scopetrace-noexcept" title="Permanent link">&para;</a></h3>
-<p>Destructor. Decrements the thread-local nesting depth counter. Logs a scope completion message with elapsed duration in microseconds and ISO 8601 UTC timestamp to <code>std::cerr</code>.</p>
+<p>Destructor. Decrements the thread-local nesting depth counter. Logs a scope completion message with elapsed duration in microseconds (<code>COMPLETED: time:...us</code>) at <code>trace_level::debug</code> severity.</p>
 <h3 id="copy-move-operations">Copy &amp; Move Operations<a class="headerlink" href="#copy-move-operations" title="Permanent link">&para;</a></h3>
 <p>Copy construction, move construction, copy assignment, and move assignment operators are explicitly <code>= delete</code>.</p>
 <hr />
-<h2 id="static-methods">Static Methods<a class="headerlink" href="#static-methods" title="Permanent link">&para;</a></h2>
-<h3 id="static-size_t-current_depth-noexcept"><code>static size_t&amp; current_depth() noexcept</code><a class="headerlink" href="#static-size_t-current_depth-noexcept" title="Permanent link">&para;</a></h3>
-<p>Accesses the thread-local scope depth counter. Returns a reference to the current thread's nesting depth index (<code>size_t</code>).</p>
-<h3 id="nodiscard-static-stdstring_view-extract_func_namestdstring_view-full_signature-noexcept"><code>[[nodiscard]] static std::string_view extract_func_name(std::string_view full_signature) noexcept</code><a class="headerlink" href="#nodiscard-static-stdstring_view-extract_func_namestdstring_view-full_signature-noexcept" title="Permanent link">&para;</a></h3>
-<p>Extracts the plain function name (matching the <code>__func__</code> macro) from a full function signature string (such as <code>std::source_location::function_name()</code>). Returns <code>"GLOBAL"</code> if <code>full_signature</code> is empty or instantiated in global scope outside of a function.</p>
-<h3 id="nodiscard-static-stdstring-current_timestamp-noexcept"><code>[[nodiscard]] static std::string current_timestamp() noexcept</code><a class="headerlink" href="#nodiscard-static-stdstring-current_timestamp-noexcept" title="Permanent link">&para;</a></h3>
-<p>Returns an ISO 8601 UTC timestamp string with microsecond precision e.g. <code>"2026-08-13T23:16:00.519049Z  "</code> (styled with ANSI light gray color codes).</p>
-<hr />
-<h2 id="accessor-modifier-member-functions">Accessor &amp; Modifier Member Functions<a class="headerlink" href="#accessor-modifier-member-functions" title="Permanent link">&para;</a></h2>
+<h2 id="public-accessor-modifier-member-functions">Public Accessor &amp; Modifier Member Functions<a class="headerlink" href="#public-accessor-modifier-member-functions" title="Permanent link">&para;</a></h2>
 <h3 id="auto-set_leveltrace_level-level-noexcept"><code>auto&amp; set_level(trace_level level) noexcept</code><a class="headerlink" href="#auto-set_leveltrace_level-level-noexcept" title="Permanent link">&para;</a></h3>
 <p>Updates the scope's logging threshold level (<code>m_log_level</code>). Returns a reference to <code>*this</code>.</p>
-<h3 id="nodiscard-auto-elapsed-const-noexcept"><code>[[nodiscard]] auto elapsed() const noexcept</code><a class="headerlink" href="#nodiscard-auto-elapsed-const-noexcept" title="Permanent link">&para;</a></h3>
-<p>Calculates and returns the duration (<code>std::chrono::system_clock::duration</code>) elapsed since the <code>ScopeTrace</code> instance was constructed.</p>
-<h3 id="nodiscard-size_t-depth-const-noexcept"><code>[[nodiscard]] size_t depth() const noexcept</code><a class="headerlink" href="#nodiscard-size_t-depth-const-noexcept" title="Permanent link">&para;</a></h3>
-<p>Returns the nesting depth index of this scope instance (<code>0</code> for top-level scopes).</p>
-<h3 id="nodiscard-const-stdsource_location-location-const-noexcept"><code>[[nodiscard]] const std::source_location&amp; location() const noexcept</code><a class="headerlink" href="#nodiscard-const-stdsource_location-location-const-noexcept" title="Permanent link">&para;</a></h3>
-<p>Returns the <code>std::source_location</code> object captured at construction.</p>
-<h3 id="nodiscard-stdstring_view-name-const-noexcept"><code>[[nodiscard]] std::string_view name() const noexcept</code><a class="headerlink" href="#nodiscard-stdstring_view-name-const-noexcept" title="Permanent link">&para;</a></h3>
-<p>Returns the scope name string view passed at construction (or the auto-extracted plain function name if <code>sn</code> was empty).</p>
-<h3 id="nodiscard-stdstring_view-function_name-const-noexcept"><code>[[nodiscard]] std::string_view function_name() const noexcept</code><a class="headerlink" href="#nodiscard-stdstring_view-function_name-const-noexcept" title="Permanent link">&para;</a></h3>
-<p>Returns the plain function name matching the <code>__func__</code> macro, extracted from <code>m_location.function_name()</code>.</p>
 <hr />
-<h2 id="logging-member-functions">Logging Member Functions<a class="headerlink" href="#logging-member-functions" title="Permanent link">&para;</a></h2>
+<h2 id="public-logging-member-functions">Public Logging Member Functions<a class="headerlink" href="#public-logging-member-functions" title="Permanent link">&para;</a></h2>
 <h3 id="template-trace_level-level-trace_levelcritical-typename-args-auto-logstdformat_stringargs-fmt-args-args"><code>template &lt;trace_level level = trace_level::critical, typename... Args&gt; auto&amp; log(std::format_string&lt;Args...&gt; fmt, Args&amp;&amp;... args)</code><a class="headerlink" href="#template-trace_level-level-trace_levelcritical-typename-args-auto-logstdformat_stringargs-fmt-args-args" title="Permanent link">&para;</a></h3>
 <p>Core formatted logging template. Formats and outputs a diagnostic message to <code>std::cerr</code>.
 - <strong>Filtering Logic</strong>: Messages with <code>level</code> equal to <code>critical</code>, <code>exception</code>, or <code>error</code> are <strong>always logged</strong> regardless of <code>m_log_level</code>. For other levels (<code>warning</code>, <code>info</code>, <code>debug</code>, <code>trace</code>), the message is logged if <code>level &lt;= m_log_level</code>.
@@ -2136,11 +1930,140 @@ High-frequency operations — such as socket data transfers, stream packet dumps
 <h3 id="template-typename-args-void-expconst-stdexception-e-stdformat_stringargs-fmt-args-args"><code>template &lt;typename... Args&gt; void exp(const std::exception&amp; e, std::format_string&lt;Args...&gt; fmt, Args&amp;&amp;... args)</code><a class="headerlink" href="#template-typename-args-void-expconst-stdexception-e-stdformat_stringargs-fmt-args-args" title="Permanent link">&para;</a></h3>
 <p>Enhanced exception logging shortcut for <code>catch</code> blocks. Outputs exception type (<code>typeid(e).name()</code>) in bold red, exception message (<code>e.what()</code>) in italic, followed by custom formatted contextual details (<code>fmt</code>, <code>args...</code>) to <code>std::cerr</code> prefixed by timestamp and depth-indented scope name. Always logged.</p>
 <hr />
-<h2 id="formatting-stream-operations">Formatting &amp; Stream Operations<a class="headerlink" href="#formatting-stream-operations" title="Permanent link">&para;</a></h2>
-<h3 id="template-typename-chart-char-nodiscard-auto-to_string-const"><code>template &lt;typename charT = char&gt; [[nodiscard]] auto to_string() const</code><a class="headerlink" href="#template-typename-chart-char-nodiscard-auto-to_string-const" title="Permanent link">&para;</a></h3>
-<p>Formats the scope log as a string containing ISO 8601 UTC timestamp, line indentation, source location, function name, scope name, and elapsed duration in microseconds.</p>
-<h3 id="friend-stdostream-operatorstdostream-os-const-scopetrace-src"><code>friend std::ostream&amp; operator&lt;&lt;(std::ostream&amp; os, const ScopeTrace&amp; src)</code><a class="headerlink" href="#friend-stdostream-operatorstdostream-os-const-scopetrace-src" title="Permanent link">&para;</a></h3>
-<p>Stream insertion operator. Writes <code>src.to_string&lt;char&gt;()</code> to the standard output stream <code>os</code>.</p>
+<h2 id="protected-non-public-implementation-details">Protected &amp; Non-Public Implementation Details<a class="headerlink" href="#protected-non-public-implementation-details" title="Permanent link">&para;</a></h2>
+<p>The following internal helper methods, formatting functions, constants, and data members are declared <code>protected:</code> (exposed as <code>public:</code> to unit test suites only when <code>SCOPETRACE_PRIVATE_TESTING</code> is defined):</p>
+<h3 id="protected-helper-methods-protected">Protected Helper Methods (<code>protected:</code>)<a class="headerlink" href="#protected-helper-methods-protected" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong><code>static size_t&amp; current_depth() noexcept</code></strong><br />
+  Accesses reference to thread-local scope nesting depth index (<code>thread_local size_t depth = 0</code>).</li>
+<li><strong><code>[[nodiscard]] auto elapsed() const noexcept</code></strong><br />
+  Calculates duration (<code>std::chrono::system_clock::duration</code>) elapsed since scope construction.</li>
+<li><strong><code>[[nodiscard]] size_t depth() const noexcept</code></strong><br />
+  Returns nesting depth index of this scope (<code>0</code> for top-level scope).</li>
+<li><strong><code>[[nodiscard]] const std::source_location&amp; location() const noexcept</code></strong><br />
+  Returns <code>std::source_location</code> captured at scope entry.</li>
+<li><strong><code>[[nodiscard]] std::string_view name() const noexcept</code></strong><br />
+  Returns scope name string view (<code>m_scope_name</code>).</li>
+<li><strong><code>[[nodiscard]] static std::string_view extract_func_name(std::string_view full_signature) noexcept</code></strong><br />
+  Extracts plain function name matching <code>__func__</code> from full signature (returns <code>"GLOBAL"</code> if empty).</li>
+<li><strong><code>[[nodiscard]] static std::string current_timestamp() noexcept</code></strong><br />
+  Returns ISO 8601 UTC timestamp string with microsecond precision e.g. <code>"2026-08-13T23:16:00.519049Z  "</code> (styled with <code>LTGY</code> color).</li>
+<li><strong><code>[[nodiscard]] std::string_view function_name() const noexcept</code></strong><br />
+  Returns plain function name matching <code>__func__</code> extracted from <code>m_location.function_name()</code>.</li>
+<li><strong><code>[[nodiscard]] static constexpr std::string_view logline_start_color(trace_level level) noexcept</code></strong><br />
+  Maps a <code>trace_level</code> severity tag to its corresponding ANSI start escape sequence (<code>RED</code>, <code>ORN</code>, <code>DKYLW</code>, <code>NOC</code>, <code>LTGY</code>, or <code>DRKBLU</code>).</li>
+<li><strong><code>[[nodiscard]] static constexpr std::string_view logline_end_color(trace_level) noexcept</code></strong><br />
+  Returns the ANSI color reset escape sequence <code>NOC</code> (<code>\033[0m</code>).</li>
+<li><strong><code>[[nodiscard]] std::string indent_buffer(trace_level level) const</code></strong><br />
+  Formats a colored <code>[level]</code> tag padded to 7 characters followed by <code>m_scope_depth * 2</code> spaces indentation.</li>
+<li><strong><code>[[nodiscard]] std::string logline_prefix(trace_level level) const</code></strong><br />
+  Generates line prefix string containing ISO 8601 UTC timestamp in light gray (<code>LTGY</code>), colored <code>[level]</code> severity tag, and depth-indented spaces (<code>m_scope_depth * 2</code>).</li>
+</ul>
+<h3 id="private-color-string-constants-private">Private Color &amp; String Constants (<code>private:</code>)<a class="headerlink" href="#private-color-string-constants-private" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Constant</th>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Value</th>
+<th style="text-align: left;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>LTGY</code></td>
+<td style="text-align: left;"><code>std::string_view</code></td>
+<td style="text-align: left;"><code>\033[38;5;250m</code></td>
+<td style="text-align: left;">Light gray color sequence for timestamps and caller details</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>DKGY</code></td>
+<td style="text-align: left;"><code>std::string_view</code></td>
+<td style="text-align: left;"><code>\033[1;40m</code></td>
+<td style="text-align: left;">Dark gray background sequence</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>RED</code></td>
+<td style="text-align: left;"><code>std::string_view</code></td>
+<td style="text-align: left;"><code>\033[0;31m</code></td>
+<td style="text-align: left;">Red sequence for <code>critical</code> and <code>exception</code> levels</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>ORN</code></td>
+<td style="text-align: left;"><code>std::string_view</code></td>
+<td style="text-align: left;"><code>\033[38;5;208m</code></td>
+<td style="text-align: left;">Orange sequence for <code>error</code> level</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>BLU</code></td>
+<td style="text-align: left;"><code>std::string_view</code></td>
+<td style="text-align: left;"><code>\033[0;34m</code></td>
+<td style="text-align: left;">Standard blue sequence</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>DRKBLU</code></td>
+<td style="text-align: left;"><code>std::string_view</code></td>
+<td style="text-align: left;"><code>\033[38;5;19m</code></td>
+<td style="text-align: left;">Dark blue sequence for <code>trace</code> level</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>GRN</code></td>
+<td style="text-align: left;"><code>std::string_view</code></td>
+<td style="text-align: left;"><code>\033[0;32m</code></td>
+<td style="text-align: left;">Green sequence for scope completion duration (<code>COMPLETED: time:...us</code>)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>YLW</code></td>
+<td style="text-align: left;"><code>std::string_view</code></td>
+<td style="text-align: left;"><code>\033[1;33m</code></td>
+<td style="text-align: left;">Yellow sequence modifier</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>DKYLW</code></td>
+<td style="text-align: left;"><code>std::string_view</code></td>
+<td style="text-align: left;"><code>\033[38;5;136m</code></td>
+<td style="text-align: left;">Dark yellow sequence for <code>warning</code> level</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>BOLD</code> / <code>NOTBOLD</code></td>
+<td style="text-align: left;"><code>std::string_view</code></td>
+<td style="text-align: left;"><code>\033[1m</code> / <code>\033[22m</code></td>
+<td style="text-align: left;">Bold text toggle sequences</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>ITAL</code> / <code>NOTITAL</code></td>
+<td style="text-align: left;"><code>std::string_view</code></td>
+<td style="text-align: left;"><code>\033[3m</code> / <code>\033[23m</code></td>
+<td style="text-align: left;">Italic text toggle sequences</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>UNDL</code> / <code>NOTUNDL</code></td>
+<td style="text-align: left;"><code>std::string_view</code></td>
+<td style="text-align: left;"><code>\033[4m</code> / <code>\033[24m</code></td>
+<td style="text-align: left;">Underline text toggle sequences</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>NOC</code></td>
+<td style="text-align: left;"><code>std::string_view</code></td>
+<td style="text-align: left;"><code>\033[0m</code></td>
+<td style="text-align: left;">Reset all ANSI styles</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>global_function_name</code></td>
+<td style="text-align: left;"><code>std::string_view</code></td>
+<td style="text-align: left;"><code>"GLOBAL"</code></td>
+<td style="text-align: left;">Fallback function name when instantiated in global scope</td>
+</tr>
+</tbody>
+</table>
+<h3 id="private-member-variables-private">Private Member Variables (<code>private:</code>)<a class="headerlink" href="#private-member-variables-private" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong><code>trace_level m_log_level</code></strong>: Threshold filter level (<code>trace_level::error</code> default).</li>
+<li><strong><code>std::source_location m_location</code></strong>: Caller source location recorded upon scope entry.</li>
+<li><strong><code>std::chrono::system_clock::time_point m_start_timestamp</code></strong>: Entry timestamp for calculating <code>elapsed()</code>.</li>
+<li><strong><code>std::string m_scope_name</code></strong>: Custom scope label or auto-extracted plain function name (<code>"GLOBAL"</code> or <code>__func__</code>).</li>
+<li><strong><code>size_t m_scope_depth</code></strong>: Scope nesting depth level captured from <code>current_depth()</code>.</li>
+</ul>
 
 
 
@@ -2236,7 +2159,7 @@ High-frequency operations — such as socket data transfers, stream packet dumps
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.expand", "navigation.path", "navigation.top", "navigation.footer", "navigation.tracking", "search.suggest", "search.highlight", "search.share", "content.code.copy", "content.code.annotate"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": "0.31.0-3"}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.expand", "navigation.path", "navigation.top", "navigation.footer", "navigation.tracking", "search.suggest", "search.highlight", "search.share", "content.code.copy", "content.code.annotate"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": "0.31.0-5"}</script>
     
     
       <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>

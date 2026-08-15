@@ -1267,11 +1267,8 @@
 </span><span id="__span-0-38"><a id="__codelineno-0-38" name="__codelineno-0-38" href="#__codelineno-0-38"></a>
 </span><span id="__span-0-39"><a id="__codelineno-0-39" name="__codelineno-0-39" href="#__codelineno-0-39"></a><span class="w">    </span><span class="n">perform_operation</span><span class="p">();</span>
 </span><span id="__span-0-40"><a id="__codelineno-0-40" name="__codelineno-0-40" href="#__codelineno-0-40"></a>
-</span><span id="__span-0-41"><a id="__codelineno-0-41" name="__codelineno-0-41" href="#__codelineno-0-41"></a><span class="w">    </span><span class="c1">// Stream formatting example</span>
-</span><span id="__span-0-42"><a id="__codelineno-0-42" name="__codelineno-0-42" href="#__codelineno-0-42"></a><span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;Scope summary: &quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">scope</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
-</span><span id="__span-0-43"><a id="__codelineno-0-43" name="__codelineno-0-43" href="#__codelineno-0-43"></a>
-</span><span id="__span-0-44"><a id="__codelineno-0-44" name="__codelineno-0-44" href="#__codelineno-0-44"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
-</span><span id="__span-0-45"><a id="__codelineno-0-45" name="__codelineno-0-45" href="#__codelineno-0-45"></a><span class="p">}</span>
+</span><span id="__span-0-41"><a id="__codelineno-0-41" name="__codelineno-0-41" href="#__codelineno-0-41"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+</span><span id="__span-0-42"><a id="__codelineno-0-42" name="__codelineno-0-42" href="#__codelineno-0-42"></a><span class="p">}</span>
 </span></code></pre></div>
 <hr />
 <h2 id="sample-console-output-coloring">Sample Console Output &amp; Coloring<a class="headerlink" href="#sample-console-output-coloring" title="Permanent link">&para;</a></h2>
@@ -1281,7 +1278,7 @@
     <span class="terminal-dot red" style="width: 12px; height: 12px; border-radius: 50%; background-color: #ff5f56; display: inline-block;"></span>
     <span class="terminal-dot yellow" style="width: 12px; height: 12px; border-radius: 50%; background-color: #ffbd2e; display: inline-block;"></span>
     <span class="terminal-dot green" style="width: 12px; height: 12px; border-radius: 50%; background-color: #27c93f; display: inline-block;"></span>
-    <span class="terminal-title" style="color: #8b949e; font-size: 12px; margin-left: 6px; font-family: sans-serif;">Console Output (std::cerr & std::cout)</span>
+    <span class="terminal-title" style="color: #8b949e; font-size: 12px; margin-left: 6px; font-family: sans-serif;">Console Output (std::cerr)</span>
   </div>
   <pre class="terminal-body" style="padding: 14px 18px; color: #e6edf3; font-size: 13px; line-height: 1.65; overflow-x: auto; margin: 0; background: transparent;"><span style="color: #6e7681;">  Creating NEW SCOPE main:6</span>
 <span style="color: #8b949e;">2026-08-15T20:49:27.060564Z</span>  <span style="color: #e6edf3;">[info  ]</span> main - Application initialization complete
@@ -1295,7 +1292,6 @@
 <span style="color: #8b949e;">2026-08-15T20:49:27.070900Z</span>  <span style="color: #8b949e;">[debug ]</span>     <span style="color: #8b949e;">worker - COMPLETED: time:</span><span style="color: #3fb950; font-weight: 600;">10310us</span>
 <span style="color: #8b949e;">2026-08-15T20:49:27.071000Z</span>  <span style="color: #ff7b72;">[exception]</span>   <span style="color: #ff7b72;">perform_operation - <b>std::runtime_error</b> - <i>Simulated failure in sub-system</i> - Error encountered during operation execution</span>
 <span style="color: #8b949e;">2026-08-15T20:49:27.071050Z</span>  <span style="color: #8b949e;">[debug ]</span>   <span style="color: #8b949e;">perform_operation - COMPLETED: time:</span><span style="color: #3fb950; font-weight: 600;">10500us</span>
-Scope summary: 2026-08-15T20:49:27.071100Z [main.cpp:41] main (main) took 10600us
 <span style="color: #8b949e;">2026-08-15T20:49:27.071120Z</span>  <span style="color: #8b949e;">[debug ]</span> main - COMPLETED: time:<span style="color: #3fb950; font-weight: 600;">10620us</span></pre>
 </div>
 
@@ -1393,7 +1389,7 @@ Scope summary: 2026-08-15T20:49:27.071100Z [main.cpp:41] main (main) took 10600u
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.expand", "navigation.path", "navigation.top", "navigation.footer", "navigation.tracking", "search.suggest", "search.highlight", "search.share", "content.code.copy", "content.code.annotate"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": "0.31.0-3"}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.expand", "navigation.path", "navigation.top", "navigation.footer", "navigation.tracking", "search.suggest", "search.highlight", "search.share", "content.code.copy", "content.code.annotate"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": "0.31.0-5"}</script>
     
     
       <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
