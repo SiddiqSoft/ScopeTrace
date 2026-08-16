@@ -1916,14 +1916,11 @@ High-frequency operations — such as socket data transfers, stream packet dumps
 <hr />
 <h2 id="process-singleton-nesting-api">Process Singleton &amp; Nesting API<a class="headerlink" href="#process-singleton-nesting-api" title="Permanent link">&para;</a></h2>
 <h3 id="static-scopetrace-getinstancestdstring_view-sn-trace_level-level-trace_levelnone-const-stdsource_location-sl-stdsource_locationcurrent"><code>static ScopeTrace&amp; GetInstance(std::string_view sn = {}, trace_level level = trace_level::none, const std::source_location&amp; sl = std::source_location::current())</code><a class="headerlink" href="#static-scopetrace-getinstancestdstring_view-sn-trace_level-level-trace_levelnone-const-stdsource_location-sl-stdsource_locationcurrent" title="Permanent link">&para;</a></h3>
-<p>Static factory method for obtaining or initializing the process-wide singleton <code>ScopeTrace</code> instance.
-- <strong>Process Singleton</strong>: Ensures only one process-wide root scope instance exists (<code>depth = 0</code>).
-- <strong>Initialization</strong>: First invocation constructs the process singleton with <code>sn</code>, threshold <code>level</code>, and <code>sl</code>. Subsequent calls return the exact same singleton reference.</p>
-<ul>
-<li><strong><code>sn</code></strong>: Process scope label or contextual identifier (defaults to caller file name extracted from caller <code>std::source_location::file_name()</code>).</li>
-<li><strong><code>level</code></strong>: Logging threshold (<code>LogLevel</code> / <code>trace_level</code>, defaults to <code>trace_level::none</code>).</li>
-<li><strong><code>sl</code></strong>: Source location (defaults to caller site via <code>std::source_location::current()</code>).</li>
-</ul>
+<p>Static factory method for obtaining the process-wide singleton <code>ScopeTrace</code> instance.
+- <strong>Pure Meyer's Singleton</strong>: Zero state management or internal maps. Constructing a thread-safe static instance on the first invocation (<code>depth = 0</code>). All subsequent calls across the process return a reference to the exact same shared instance.
+- <strong><code>sn</code></strong>: Process scope label (defaults to caller file name extracted from caller <code>std::source_location::file_name()</code> on first initialization).
+- <strong><code>level</code></strong>: Logging threshold (<code>LogLevel</code> / <code>trace_level</code>, defaults to <code>trace_level::none</code>).
+- <strong><code>sl</code></strong>: Source location (defaults to caller site via <code>std::source_location::current()</code>).</p>
 <h3 id="scopetrace-sub_scopestdstring_view-sn-trace_level-level-trace_levelnone-const-stdsource_location-sl-stdsource_locationcurrent-const"><code>ScopeTrace sub_scope(std::string_view sn, trace_level level = trace_level::none, const std::source_location&amp; sl = std::source_location::current()) const</code><a class="headerlink" href="#scopetrace-sub_scopestdstring_view-sn-trace_level-level-trace_levelnone-const-stdsource_location-sl-stdsource_locationcurrent-const" title="Permanent link">&para;</a></h3>
 <p>Creates and returns a new child <code>ScopeTrace</code> instance. The child scope name is automatically formatted as <code>"&lt;parent_scope_name&gt;/&lt;sn&gt;"</code>. Child scope depth is derived directly from parent depth (<code>child.depth() = parent.depth() + 1</code>). If <code>level</code> is set to <code>trace_level::none</code> (default), the child scope inherits the parent's logging threshold (<code>m_log_level</code>).</p>
 <ul>
@@ -2195,7 +2192,7 @@ High-frequency operations — such as socket data transfers, stream packet dumps
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.expand", "navigation.path", "navigation.top", "navigation.footer", "navigation.tracking", "search.suggest", "search.highlight", "search.share", "content.code.copy", "content.code.annotate"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": "0.41.0-alpha.3"}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.expand", "navigation.path", "navigation.top", "navigation.footer", "navigation.tracking", "search.suggest", "search.highlight", "search.share", "content.code.copy", "content.code.annotate"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": "0.41.0-alpha.4"}</script>
     
     
       <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
