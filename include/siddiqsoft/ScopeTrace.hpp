@@ -127,7 +127,7 @@ namespace siddiqsoft
         static constexpr std::string_view NOTBOLD {"\033[22m"};     //< Not bold
         static constexpr std::string_view NOTITAL {"\033[23m"};     //< Not italic
         static constexpr std::string_view NOC {"\033[0m"};          //< No Color
-        static constexpr std::string_view global_function_name {"GLOBAL"};
+        static constexpr std::string_view global_function_name {};
 
         // We're using this to allow unit tests to access protected members of ScopeTrace for testing purposes.
 #if defined(SCOPETRACE_PRIVATE_TESTING)
@@ -164,7 +164,17 @@ namespace siddiqsoft
         /// @return Plain function name string view
         [[nodiscard]] static std::string_view extract_func_name(std::string_view full_signature) noexcept
         {
-            if (full_signature.empty()) return global_function_name;
+            if (full_signature.empty()) {
+                // Use the name of the file as a fallback if the function signature is empty
+                auto file_name = std::source_location::current().file_name();
+                if (file_name) {
+                    std::string_view file_name_view(file_name);
+                    size_t           last_slash = file_name_view.find_last_of("/\\");
+                    if (last_slash != std::string_view::npos) {
+                        return file_name_view.substr(last_slash + 1);
+                    }
+                }
+            }
 
             // Find opening parenthesis of parameter list outside template angle brackets
             size_t param_start = std::string_view::npos;
@@ -315,15 +325,9 @@ namespace siddiqsoft
 
         [[nodiscard]] static constexpr auto logline_end_color(trace_level) noexcept -> std::string_view { return NOC; }
 
-        [[nodiscard]] auto                  indent_buffer(trace_level level) const -> std::string
-        {
-            return std::format(
-                    "{}[{: <7}]{} {:<{}}", logline_start_color(level), level, logline_end_color(level), "", m_scope_depth * 2);
-        }
-
         [[nodiscard]] auto logline_prefix(trace_level level) const -> std::string
         {
-            return std::format("{}{:%FT%TZ} {} [{: <6}]{} {:<{}}",
+            return std::format("{}{:%FT%TZ}|{}{: <6}{}|{:<{}}",
                                LTGY,
                                std::chrono::system_clock::now(),
                                logline_start_color(level),
@@ -349,7 +353,7 @@ namespace siddiqsoft
 
             if (is_always_logged || level <= m_log_level) {
                 std::println(std::cerr,
-                             "{}{}{} - {}{}",
+                             "{}{}{}|{}|{}",
                              logline_prefix(level),
                              logline_start_color(level),
                              m_scope_name.empty() ? m_location.file_name() : m_scope_name,
