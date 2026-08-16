@@ -296,8 +296,8 @@ namespace siddiqsoft
         /// @param sl Source location (defaults to caller site)
         /// @return New ScopeTrace instance
         ScopeTrace sub_scope(std::string_view            sn, //< required sub-scope name
-                              trace_level                 level = trace_level::none,
-                              const std::source_location& sl    = std::source_location::current()) const
+                             trace_level                 level = trace_level::none,
+                             const std::source_location& sl    = std::source_location::current()) const
         {
             return ScopeTrace {m_scope_name.empty() ? std::string(sn) : std::format("{}/{}", m_scope_name, sn),
                                level == trace_level::none ? m_log_level : level,
@@ -334,7 +334,7 @@ namespace siddiqsoft
 
         [[nodiscard]] static constexpr auto logline_end_color(trace_level) noexcept -> std::string_view { return NOC; }
 
-        [[nodiscard]] auto logline_prefix(trace_level level) const -> std::string
+        [[nodiscard]] auto                  logline_prefix(trace_level level) const -> std::string
         {
             return std::format("{}{:%FT%TZ}|{}{: <6}{}|{:<{}}",
                                LTGY,
@@ -362,10 +362,12 @@ namespace siddiqsoft
 
             if (is_always_logged || level <= m_log_level) {
                 std::println(std::cerr,
-                             "{}{}{}|{}|{}",
+                             "{}{}{}{}{}|{}|{}",
                              logline_prefix(level),
-                             logline_start_color(level),
+                             LTGY, // the name of the scope is always light gray, regardless of log level
                              m_scope_name.empty() ? m_location.file_name() : m_scope_name,
+                             NOC,
+                             logline_start_color(level),
                              std::format(fmt, std::forward<Args>(args)...),
                              logline_end_color(level));
             }
