@@ -681,6 +681,17 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#cross-platform-windows-compatibility" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cross-Platform &amp; Windows Compatibility
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1179,6 +1190,17 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#cross-platform-windows-compatibility" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cross-Platform &amp; Windows Compatibility
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1255,8 +1277,14 @@
 </ul>
 <h2 id="thread-safety-performance">Thread Safety &amp; Performance<a class="headerlink" href="#thread-safety-performance" title="Permanent link">&para;</a></h2>
 <ul>
-<li><strong>Zero-Lock Nesting Depth</strong>: Scope nesting depth is stored in <code>thread_local</code> state (<code>current_depth()</code>), requiring zero lock contention or synchronization overhead across concurrent threads.</li>
+<li><strong>Zero-Lock Nesting Depth</strong>: Scope nesting depth is derived directly from parentage (<code>parent.depth() + 1</code>), requiring zero lock contention or synchronization overhead across concurrent threads.</li>
 <li><strong>Header-Only Efficiency</strong>: Small, lightweight header-only implementation with minimal overhead.</li>
+</ul>
+<h2 id="cross-platform-windows-compatibility">Cross-Platform &amp; Windows Compatibility<a class="headerlink" href="#cross-platform-windows-compatibility" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong>Path Separators</strong>: <code>extract_file_name()</code> handles both Unix (<code>/</code>) and Windows (<code>\</code>) path separators seamlessly.</li>
+<li><strong>Automatic Windows Console Color Support</strong>: On Windows, <code>GetInstance()</code> automatically enables Virtual Terminal Processing (<code>ENABLE_VIRTUAL_TERMINAL_PROCESSING</code>) on <code>STD_ERROR_HANDLE</code>, guaranteeing native ANSI color escape code and reverse video tag rendering across <code>cmd.exe</code>, PowerShell, and Windows Terminal.</li>
+<li><strong>MSVC &amp; Clang-CL Safe</strong>: Protected against Windows macro pollution (<code>WIN32_LEAN_AND_MEAN</code> and <code>NOMINMAX</code>). Fully compatible with MSVC 2022 and Clang-CL with <code>/std:c++23</code> / <code>/std:c++latest</code>.</li>
 </ul>
 
 
@@ -1353,7 +1381,7 @@
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.expand", "navigation.path", "navigation.top", "navigation.footer", "navigation.tracking", "search.suggest", "search.highlight", "search.share", "content.code.copy", "content.code.annotate"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": "0.41.0-alpha.6"}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.expand", "navigation.path", "navigation.top", "navigation.footer", "navigation.tracking", "search.suggest", "search.highlight", "search.share", "content.code.copy", "content.code.annotate"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": "0.51.0-alpha.0"}</script>
     
     
       <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>

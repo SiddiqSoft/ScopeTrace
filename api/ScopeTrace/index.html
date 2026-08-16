@@ -1842,7 +1842,7 @@
 <tr>
 <th style="text-align: left;">Log Level</th>
 <th style="text-align: left;">Abbreviated Tag</th>
-<th style="text-align: left;">Color Output</th>
+<th style="text-align: left;">Tag Color Output</th>
 <th style="text-align: left;">ANSI Escape Sequence</th>
 <th style="text-align: left;">Visual Terminal Preview</th>
 <th style="text-align: left;">Standard Use Case</th>
@@ -1852,33 +1852,33 @@
 <tr>
 <td style="text-align: left;"><code>critical</code></td>
 <td style="text-align: left;"><code>crit</code></td>
-<td style="text-align: left;"><strong>Red</strong></td>
-<td style="text-align: left;"><code>\033[0;31m</code></td>
-<td style="text-align: left;"><span style="color: #ff7b72; font-weight: 600;">[crit  ] Out of memory</span></td>
+<td style="text-align: left;"><strong>Reverse Red</strong></td>
+<td style="text-align: left;"><code>\033[7;31m</code></td>
+<td style="text-align: left;">[<span style="background-color: #da3633; color: #ffffff; font-weight: 600; padding: 0 3px;">crit  </span>] Out of memory</td>
 <td style="text-align: left;">Fatal system failures</td>
 </tr>
 <tr>
 <td style="text-align: left;"><code>exception</code></td>
 <td style="text-align: left;"><code>except</code></td>
-<td style="text-align: left;"><strong>Red</strong></td>
-<td style="text-align: left;"><code>\033[0;31m</code></td>
-<td style="text-align: left;"><span style="color: #ff7b72; font-weight: 600;">[except] std::runtime_error</span></td>
+<td style="text-align: left;"><strong>Reverse Red</strong></td>
+<td style="text-align: left;"><code>\033[7;31m</code></td>
+<td style="text-align: left;">[<span style="background-color: #da3633; color: #ffffff; font-weight: 600; padding: 0 3px;">except</span>] std::runtime_error</td>
 <td style="text-align: left;">Exception handler logging (<code>exp()</code>)</td>
 </tr>
 <tr>
 <td style="text-align: left;"><code>error</code></td>
 <td style="text-align: left;"><code>error</code></td>
-<td style="text-align: left;"><strong>Orange</strong></td>
-<td style="text-align: left;"><code>\033[38;5;208m</code></td>
-<td style="text-align: left;"><span style="color: #ffa657; font-weight: 600;">[error ] Network unreachable</span></td>
+<td style="text-align: left;"><strong>Reverse Orange</strong></td>
+<td style="text-align: left;"><code>\033[7;38;5;208m</code></td>
+<td style="text-align: left;">[<span style="background-color: #d96c00; color: #ffffff; font-weight: 600; padding: 0 3px;">error </span>] Network unreachable</td>
 <td style="text-align: left;">Operational errors (<code>err()</code>, <code>err_throw()</code>)</td>
 </tr>
 <tr>
 <td style="text-align: left;"><code>warning</code></td>
 <td style="text-align: left;"><code>warn</code></td>
-<td style="text-align: left;"><strong>Dark Yellow / Gold</strong></td>
-<td style="text-align: left;"><code>\033[38;5;136m</code></td>
-<td style="text-align: left;"><span style="color: #d29922; font-weight: 600;">[warn  ] High memory usage</span></td>
+<td style="text-align: left;"><strong>Reverse Light Yellow</strong></td>
+<td style="text-align: left;"><code>\033[7;38;5;220m</code></td>
+<td style="text-align: left;">[<span style="background-color: #ffd700; color: #000000; font-weight: 600; padding: 0 3px;">warn  </span>] High memory usage</td>
 <td style="text-align: left;">Recoverable warnings (<code>warn()</code>)</td>
 </tr>
 <tr>
@@ -2192,7 +2192,7 @@ High-frequency operations — such as socket data transfers, stream packet dumps
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.expand", "navigation.path", "navigation.top", "navigation.footer", "navigation.tracking", "search.suggest", "search.highlight", "search.share", "content.code.copy", "content.code.annotate"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": "0.41.0-alpha.6"}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.expand", "navigation.path", "navigation.top", "navigation.footer", "navigation.tracking", "search.suggest", "search.highlight", "search.share", "content.code.copy", "content.code.annotate"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": "0.51.0-alpha.0"}</script>
     
     
       <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>

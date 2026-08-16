@@ -1454,11 +1454,11 @@
 </span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>
 </span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="kt">void</span><span class="w"> </span><span class="nf">compute</span><span class="p">()</span>
 </span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="p">{</span>
-</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">    </span><span class="c1">// Defaults scope name to plain function name (&quot;compute&quot;)</span>
-</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">    </span><span class="n">siddiqsoft</span><span class="o">::</span><span class="n">ScopeTrace</span><span class="w"> </span><span class="n">scope</span><span class="p">;</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">    </span><span class="c1">// Obtain process-wide root ScopeTrace instance (&quot;compute&quot;)</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">    </span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="n">scope</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">siddiqsoft</span><span class="o">::</span><span class="n">ScopeTrace</span><span class="o">::</span><span class="n">GetInstance</span><span class="p">(</span><span class="s">&quot;compute&quot;</span><span class="p">);</span>
 </span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>
-</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="w">    </span><span class="c1">// Explicit nested scope (&quot;compute-stage1&quot;)</span>
-</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="n">sub</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">scope</span><span class="p">.</span><span class="n">nest</span><span class="p">(</span><span class="s">&quot;stage1&quot;</span><span class="p">);</span>
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="w">    </span><span class="c1">// Explicit nested scope (&quot;compute/stage1&quot;)</span>
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="n">sub</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">scope</span><span class="p">.</span><span class="n">sub_scope</span><span class="p">(</span><span class="s">&quot;stage1&quot;</span><span class="p">);</span>
 </span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>
 </span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="w">    </span><span class="n">sub</span><span class="p">.</span><span class="n">info</span><span class="p">(</span><span class="s">&quot;Processing stage 1 payload...&quot;</span><span class="p">);</span>
 </span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="p">}</span><span class="w"> </span><span class="c1">// Destructors automatically log completion status and elapsed duration at LogLevel::debug severity upon scope exit</span>
@@ -1468,7 +1468,7 @@
 - Source file path (<code>m_location.file_name()</code>)
 - Line number (<code>m_location.line()</code>)
 - Enclosing function signature (<code>m_location.function_name()</code>)</p>
-<p><code>ScopeTrace</code> also includes internal protected helper routines (<code>extract_func_name()</code> / <code>function_name()</code>) to extract clean plain function names matching <code>__func__</code> from full signature strings. When <code>ScopeTrace</code> is declared in the global scope (outside of any enclosing function), <code>extract_func_name()</code> evaluates to <code>"GLOBAL"</code>.</p>
+<p><code>ScopeTrace</code> also includes internal protected helper routines (<code>extract_file_name()</code>, <code>extract_func_name()</code>, <code>function_name()</code>) to extract clean plain file names (e.g. <code>"main.cpp"</code>) and function names matching <code>__func__</code> from full signature strings.</p>
 <h2 id="nesting-depth-iso-8601-timestamps">Nesting Depth &amp; ISO 8601 Timestamps<a class="headerlink" href="#nesting-depth-iso-8601-timestamps" title="Permanent link">&para;</a></h2>
 <p><code>ScopeTrace</code> tracks nested scope depth strictly by parentage (<code>child.depth() = parent.depth() + 1</code>), producing formatted visual indentation for hierarchical log trees. Each output line is prefixed with an ISO 8601 UTC timestamp:</p>
 <div class="terminal-window" style="background-color: #1b1d24; border-radius: 8px; border: 1px solid #2e3240; margin: 1.5rem 0; overflow: hidden; font-family: 'JetBrains Mono', Consolas, monospace;">
@@ -1478,18 +1478,16 @@
     <span class="terminal-dot green" style="width: 12px; height: 12px; border-radius: 50%; background-color: #27c93f; display: inline-block;"></span>
     <span class="terminal-title" style="color: #8b949e; font-size: 12px; margin-left: 6px; font-family: sans-serif;">Console Output (Hierarchical Indentation)</span>
   </div>
-  <pre class="terminal-body" style="padding: 14px 18px; color: #e6edf3; font-size: 13px; line-height: 1.65; overflow-x: auto; margin: 0; background: transparent;"><span style="color: #6e7681;">  Creating NEW SCOPE compute:6</span>
-<span style="color: #8b949e;">2026-08-15T20:49:27.060564Z</span>  <span style="color: #e6edf3;">[info  ]</span> compute - Outer computation started
-<span style="color: #6e7681;">  Creating NEW SCOPE compute/stage1:4</span>
-<span style="color: #8b949e;">2026-08-15T20:49:27.060600Z</span>  <span style="color: #e6edf3;">[info  ]</span>   compute/stage1 - Processing stage 1 payload...
-<span style="color: #8b949e;">2026-08-15T20:49:27.061250Z</span>  <span style="color: #8b949e;">[debug ]</span>   <span style="color: #8b949e;">compute/stage1 - COMPLETED: time:</span><span style="color: #3fb950; font-weight: 600;">650us</span>
-<span style="color: #8b949e;">2026-08-15T20:49:27.061300Z</span>  <span style="color: #8b949e;">[debug ]</span> compute - COMPLETED: time:<span style="color: #3fb950; font-weight: 600;">1200us</span></pre>
+  <pre class="terminal-body" style="padding: 14px 18px; color: #e6edf3; font-size: 13px; line-height: 1.65; overflow-x: auto; margin: 0; background: transparent;"><span style="color: #8b949e;">2026-08-15T20:49:27.060564Z</span>|[<span style="color: #e6edf3;">info  </span>]|<span style="color: #8b949e;">compute</span>|Outer computation started
+<span style="color: #8b949e;">2026-08-15T20:49:27.060600Z</span>|[<span style="color: #e6edf3;">info  </span>]|<span style="color: #8b949e;">compute/stage1</span>|Processing stage 1 payload...
+<span style="color: #8b949e;">2026-08-15T20:49:27.061250Z</span>|[<span style="color: #8b949e;">debug </span>]|<span style="color: #8b949e;">compute/stage1</span>|<span style="color: #8b949e;">COMPLETED: time:</span><span style="color: #3fb950; font-weight: 600;">650us</span>
+<span style="color: #8b949e;">2026-08-15T20:49:27.061300Z</span>|[<span style="color: #8b949e;">debug </span>]|<span style="color: #8b949e;">compute</span>|<span style="color: #8b949e;">COMPLETED: time:</span><span style="color: #3fb950; font-weight: 600;">1200us</span></pre>
 </div>
 
 <h2 id="dynamic-log-level-filtering">Dynamic Log Level Filtering<a class="headerlink" href="#dynamic-log-level-filtering" title="Permanent link">&para;</a></h2>
-<p>Each <code>ScopeTrace</code> instance maintains a configurable log level threshold (<code>LogLevel</code> / <code>trace_level</code>, defaulted to <code>LogLevel::critical</code> upon construction). You can set the threshold at scope creation or dynamically update it via <code>set_level()</code>:</p>
-<div class="language-cpp highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1">// Set logging threshold to debug at construction</span>
-</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="n">siddiqsoft</span><span class="o">::</span><span class="n">ScopeTrace</span><span class="w"> </span><span class="n">scope</span><span class="p">(</span><span class="s">&quot;compute&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">siddiqsoft</span><span class="o">::</span><span class="n">LogLevel</span><span class="o">::</span><span class="n">debug</span><span class="p">);</span>
+<p>Each <code>ScopeTrace</code> instance maintains a configurable log level threshold (<code>LogLevel</code> / <code>trace_level</code>, defaulted to <code>LogLevel::none</code>). You can set the threshold at instance acquisition or dynamically update it via <code>set_level()</code>:</p>
+<div class="language-cpp highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1">// Set logging threshold to debug at instance acquisition</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="n">scope</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">siddiqsoft</span><span class="o">::</span><span class="n">ScopeTrace</span><span class="o">::</span><span class="n">GetInstance</span><span class="p">(</span><span class="s">&quot;compute&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">siddiqsoft</span><span class="o">::</span><span class="n">LogLevel</span><span class="o">::</span><span class="n">debug</span><span class="p">);</span>
 </span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>
 </span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="c1">// Dynamically change logging threshold</span>
 </span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="n">scope</span><span class="p">.</span><span class="n">set_level</span><span class="p">(</span><span class="n">siddiqsoft</span><span class="o">::</span><span class="n">LogLevel</span><span class="o">::</span><span class="n">trace</span><span class="p">);</span>
@@ -1509,7 +1507,7 @@
 <tr>
 <th style="text-align: left;">Log Level / Method</th>
 <th style="text-align: left;">Tag Label</th>
-<th style="text-align: left;">Color Output</th>
+<th style="text-align: left;">Tag Color Output</th>
 <th style="text-align: left;">ANSI Escape Code</th>
 <th style="text-align: left;">Visual Terminal Preview</th>
 </tr>
@@ -1517,49 +1515,49 @@
 <tbody>
 <tr>
 <td style="text-align: left;"><strong><code>trace_level::critical</code></strong></td>
-<td style="text-align: left;"><code>[crit  ]</code></td>
-<td style="text-align: left;"><strong>Red</strong></td>
-<td style="text-align: left;"><code>\033[0;31m</code></td>
-<td style="text-align: left;"><span style="color: #ff7b72; font-weight: 600;">[crit  ] System memory exhaustion</span></td>
+<td style="text-align: left;"><code>crit</code></td>
+<td style="text-align: left;"><strong>Reverse Red</strong></td>
+<td style="text-align: left;"><code>\033[7;31m</code></td>
+<td style="text-align: left;">[<span style="background-color: #da3633; color: #ffffff; font-weight: 600; padding: 0 3px;">crit  </span>] System memory exhaustion</td>
 </tr>
 <tr>
 <td style="text-align: left;"><strong><code>trace_level::exception</code></strong></td>
-<td style="text-align: left;"><code>[except]</code></td>
-<td style="text-align: left;"><strong>Red / Bold Red</strong></td>
-<td style="text-align: left;"><code>\033[0;31m</code></td>
-<td style="text-align: left;"><span style="color: #ff7b72; font-weight: 600;">[except] std::runtime_error - Timeout</span></td>
+<td style="text-align: left;"><code>except</code></td>
+<td style="text-align: left;"><strong>Reverse Red</strong></td>
+<td style="text-align: left;"><code>\033[7;31m</code></td>
+<td style="text-align: left;">[<span style="background-color: #da3633; color: #ffffff; font-weight: 600; padding: 0 3px;">except</span>] std::runtime_error - Timeout</td>
 </tr>
 <tr>
 <td style="text-align: left;"><strong><code>trace_level::error</code></strong></td>
-<td style="text-align: left;"><code>[error ]</code></td>
-<td style="text-align: left;"><strong>Orange</strong></td>
-<td style="text-align: left;"><code>\033[38;5;208m</code></td>
-<td style="text-align: left;"><span style="color: #ffa657; font-weight: 600;">[error ] Failed to connect to db host</span></td>
+<td style="text-align: left;"><code>error</code></td>
+<td style="text-align: left;"><strong>Reverse Orange</strong></td>
+<td style="text-align: left;"><code>\033[7;38;5;208m</code></td>
+<td style="text-align: left;">[<span style="background-color: #d96c00; color: #ffffff; font-weight: 600; padding: 0 3px;">error </span>] Failed to connect to db host</td>
 </tr>
 <tr>
 <td style="text-align: left;"><strong><code>trace_level::warning</code></strong></td>
-<td style="text-align: left;"><code>[warn  ]</code></td>
-<td style="text-align: left;"><strong>Dark Yellow / Gold</strong></td>
-<td style="text-align: left;"><code>\033[38;5;136m</code></td>
-<td style="text-align: left;"><span style="color: #d29922; font-weight: 600;">[warn  ] Cache capacity reached 92%</span></td>
+<td style="text-align: left;"><code>warn</code></td>
+<td style="text-align: left;"><strong>Reverse Light Yellow</strong></td>
+<td style="text-align: left;"><code>\033[7;38;5;220m</code></td>
+<td style="text-align: left;">[<span style="background-color: #ffd700; color: #000000; font-weight: 600; padding: 0 3px;">warn  </span>] Cache capacity reached 92%</td>
 </tr>
 <tr>
 <td style="text-align: left;"><strong><code>trace_level::info</code></strong></td>
-<td style="text-align: left;"><code>[info  ]</code></td>
+<td style="text-align: left;"><code>info</code></td>
 <td style="text-align: left;"><strong>Default / Neutral</strong></td>
 <td style="text-align: left;"><code>\033[0m</code></td>
 <td style="text-align: left;"><span style="color: #e6edf3;">[info  ] Processing batch item 42</span></td>
 </tr>
 <tr>
 <td style="text-align: left;"><strong><code>trace_level::debug</code></strong></td>
-<td style="text-align: left;"><code>[debug ]</code></td>
+<td style="text-align: left;"><code>debug</code></td>
 <td style="text-align: left;"><strong>Light Gray</strong></td>
 <td style="text-align: left;"><code>\033[38;5;250m</code></td>
 <td style="text-align: left;"><span style="color: #8b949e;">[debug ] Worker thread pool depth: 4</span></td>
 </tr>
 <tr>
 <td style="text-align: left;"><strong><code>trace_level::trace</code></strong></td>
-<td style="text-align: left;"><code>[trace ]</code></td>
+<td style="text-align: left;"><code>trace</code></td>
 <td style="text-align: left;"><strong>Dark Blue</strong></td>
 <td style="text-align: left;"><code>\033[38;5;19m</code></td>
 <td style="text-align: left;"><span style="color: #58a6ff;">[trace ] RX buffer dump: 0x41 0x42 0x43</span></td>
@@ -1597,7 +1595,7 @@
 <p>Instead of separate log and throw statements, <code>err_throw&lt;EX&gt;(fmt, args...)</code> logs the formatted error message with timestamps, depth indentation, and exception type details, then immediately throws <code>EX</code>:</p>
 <div class="language-cpp highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">validate_input</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">value</span><span class="p">)</span>
 </span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="p">{</span>
-</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">    </span><span class="n">siddiqsoft</span><span class="o">::</span><span class="n">ScopeTrace</span><span class="w"> </span><span class="n">scope</span><span class="p">;</span>
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="n">scope</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">siddiqsoft</span><span class="o">::</span><span class="n">ScopeTrace</span><span class="o">::</span><span class="n">GetInstance</span><span class="p">().</span><span class="n">sub_scope</span><span class="p">(</span><span class="s">&quot;validate_input&quot;</span><span class="p">);</span>
 </span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>
 </span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">value</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 </span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="w">        </span><span class="c1">// Logs orange error message and throws std::invalid_argument</span>
@@ -1713,7 +1711,7 @@
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.expand", "navigation.path", "navigation.top", "navigation.footer", "navigation.tracking", "search.suggest", "search.highlight", "search.share", "content.code.copy", "content.code.annotate"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": "0.41.0-alpha.6"}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.expand", "navigation.path", "navigation.top", "navigation.footer", "navigation.tracking", "search.suggest", "search.highlight", "search.share", "content.code.copy", "content.code.annotate"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": "0.51.0-alpha.0"}</script>
     
     
       <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
