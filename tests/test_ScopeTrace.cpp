@@ -30,10 +30,12 @@ TEST(ScopeTraceTest, GetInstanceSingleton)
 TEST(ScopeTraceTest, HelloWorld)
 {
     {
-        auto scope = g_scope.sub_scope(__func__, siddiqsoft::trace_level::trace);
+        auto scope = g_scope.sub_scope(__func__, siddiqsoft::trace_level::info);
 
         scope.log<siddiqsoft::trace_level::info>("Hello, World!");
+        scope.trace("Hello, World! (trace)"); // should not be logged due to log level filtering
         std::this_thread::sleep_for(std::chrono::milliseconds(2));
+        scope.err("Hello, World! (error)");
     }
 }
 
@@ -86,8 +88,8 @@ TEST(ScopeTraceTest, ScopeDepthNesting)
             inner.err("Inner scope error message");
             {
                 // Use this for anonymous or within an exception scope.
-                auto innermost = inner.sub_scope("Innermost");
-                innermost.trace("Innermost scope message");
+                auto innermost = inner.sub_scope("Innermost", siddiqsoft::trace_level::debug);
+                innermost.trace("Innermost scope trace message");
                 EXPECT_EQ(3, innermost.depth());
             }
         }

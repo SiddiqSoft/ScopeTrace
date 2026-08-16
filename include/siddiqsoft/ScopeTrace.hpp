@@ -336,6 +336,9 @@ namespace siddiqsoft
 
         [[nodiscard]] auto                  logline_prefix(trace_level level) const -> std::string
         {
+            return std::format(
+                    "{}{:%FT%TZ}|{}{: <6}{}|", LTGY, std::chrono::system_clock::now(), logline_start_color(level), level, NOC);
+            /*
             return std::format("{}{:%FT%TZ}|{}{: <6}{}|{:<{}}",
                                LTGY,
                                std::chrono::system_clock::now(),
@@ -344,6 +347,7 @@ namespace siddiqsoft
                                NOC,
                                "",
                                m_scope_depth * 2);
+*/
         }
 
     public:
