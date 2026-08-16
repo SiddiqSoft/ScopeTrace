@@ -57,7 +57,7 @@ Static factory method for obtaining or initializing the process-wide singleton `
 - **Process Singleton**: Ensures only one process-wide root scope instance exists (`depth = 0`).
 - **Initialization & Updates**: First invocation constructs the process singleton with `sn`, threshold `level`, and `sl`. Subsequent calls return the same singleton reference (updating process scope name or `m_log_level` if non-default parameters are supplied).
 
-- **`sn`**: Process scope label or contextual identifier (defaults to caller plain function name).
+- **`sn`**: Process scope label or contextual identifier (defaults to caller file name extracted from caller `std::source_location::file_name()`).
 - **`level`**: Logging threshold (`LogLevel` / `trace_level`, defaults to `trace_level::none`).
 - **`sl`**: Source location (defaults to caller site via `std::source_location::current()`).
 
@@ -137,6 +137,8 @@ The following internal helper methods, formatting functions, constants, and data
   Returns scope name string view (`m_scope_name`).
 - **`[[nodiscard]] static std::string_view extract_func_name(std::string_view full_signature) noexcept`**  
   Extracts plain function name matching `__func__` from full signature (returns `"GLOBAL"` if empty).
+- **`[[nodiscard]] static std::string_view extract_file_name(std::string_view file_path) noexcept`**  
+  Extracts plain file name (e.g., `"main.cpp"`) from full file path string. Used for default scope naming when `sn` is omitted.
 - **`[[nodiscard]] static std::string current_timestamp() noexcept`**  
   Returns ISO 8601 UTC timestamp string with microsecond precision e.g. `"2026-08-13T23:16:00.519049Z  "` (styled with `LTGY` color).
 - **`[[nodiscard]] std::string_view function_name() const noexcept`**  

@@ -159,22 +159,25 @@ namespace siddiqsoft
         /// @return Scope name string view
         [[nodiscard]] std::string_view name() const noexcept { return m_scope_name; }
 
+        /// @brief Extract the plain file name from a full file path string
+        /// @param file_path File path string (e.g. from std::source_location::file_name())
+        /// @return Plain file name string view
+        [[nodiscard]] static std::string_view extract_file_name(std::string_view file_path) noexcept
+        {
+            if (file_path.empty()) return global_function_name;
+            size_t last_slash = file_path.find_last_of("/\\");
+            if (last_slash != std::string_view::npos) {
+                return file_path.substr(last_slash + 1);
+            }
+            return file_path;
+        }
+
         /// @brief Extract the plain function name matching __func__ from a full function signature
         /// @param full_signature Function signature string (e.g. from std::source_location::function_name())
         /// @return Plain function name string view
         [[nodiscard]] static std::string_view extract_func_name(std::string_view full_signature) noexcept
         {
-            if (full_signature.empty()) {
-                // Use the name of the file as a fallback if the function signature is empty
-                auto file_name = std::source_location::current().file_name();
-                if (file_name) {
-                    std::string_view file_name_view(file_name);
-                    size_t           last_slash = file_name_view.find_last_of("/\\");
-                    if (last_slash != std::string_view::npos) {
-                        return file_name_view.substr(last_slash + 1);
-                    }
-                }
-            }
+            if (full_signature.empty()) return global_function_name;
 
             // Find opening parenthesis of parameter list outside template angle brackets
             size_t param_start = std::string_view::npos;
@@ -252,7 +255,7 @@ namespace siddiqsoft
             , m_scope_depth(depth_val)
             , m_log_level(level)
         {
-            if (sn.empty()) m_scope_name = extract_func_name(m_location.function_name());
+            if (sn.empty()) m_scope_name = extract_file_name(m_location.file_name());
         }
 
         /// @brief Construct a ScopeTrace with a scope name, log level threshold, and optional source location
