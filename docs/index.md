@@ -104,12 +104,10 @@ int main()
     <span class="terminal-dot green" style="width: 12px; height: 12px; border-radius: 50%; background-color: #27c93f; display: inline-block;"></span>
     <span class="terminal-title" style="color: #8b949e; font-size: 12px; margin-left: 6px; font-family: sans-serif;">Console Output (std::cerr)</span>
   </div>
-  <pre class="terminal-body" style="padding: 14px 18px; color: #e6edf3; font-size: 13px; line-height: 1.65; overflow-x: auto; margin: 0; background: transparent;"><span style="color: #6e7681;">  Creating NEW SCOPE main:0</span>
-<span style="color: #6e7681;">  Creating NEW SCOPE process_request:0</span>
-<span style="color: #8b949e;">2026-08-15T20:49:27.060564Z</span>  <span style="color: #e6edf3;">[info  ]</span>   process_request - Parsing incoming payload...
-<span style="color: #8b949e;">2026-08-15T20:49:27.060912Z</span>  <span style="color: #d29922;">[warning]</span>   <span style="color: #d29922;">process_request - Payload buffer usage: 82%</span>
-<span style="color: #8b949e;">2026-08-15T20:49:27.061250Z</span>  <span style="color: #8b949e;">[debug ]</span>   <span style="color: #8b949e;">process_request - COMPLETED: time:</span><span style="color: #3fb950; font-weight: 600;">688us</span>
-<span style="color: #8b949e;">2026-08-15T20:49:27.061300Z</span>  <span style="color: #8b949e;">[debug ]</span> main - COMPLETED: time:<span style="color: #3fb950; font-weight: 600;">1240us</span></pre>
+  <pre class="terminal-body" style="padding: 14px 18px; color: #e6edf3; font-size: 13px; line-height: 1.65; overflow-x: auto; margin: 0; background: transparent;"><span style="color: #8b949e;">2026-08-15T20:49:27.060564Z</span>|[<span style="color: #e6edf3;">info  </span>]|<span style="color: #8b949e;">main/process_request</span>|Parsing incoming payload...
+<span style="color: #8b949e;">2026-08-15T20:49:27.060912Z</span>|[<span style="background-color: #ffd700; color: #000000; font-weight: 600; padding: 0 3px;">warn  </span>]|<span style="color: #8b949e;">main/process_request</span>|<span style="color: #ffd700;">Payload buffer usage: 82%</span>
+<span style="color: #8b949e;">2026-08-15T20:49:27.061250Z</span>|[<span style="color: #8b949e;">debug </span>]|<span style="color: #8b949e;">main/process_request</span>|<span style="color: #8b949e;">COMPLETED: time:</span><span style="color: #3fb950; font-weight: 600;">688us</span>
+<span style="color: #8b949e;">2026-08-15T20:49:27.061300Z</span>|[<span style="color: #8b949e;">debug </span>]|<span style="color: #8b949e;">main</span>|<span style="color: #8b949e;">COMPLETED: time:</span><span style="color: #3fb950; font-weight: 600;">1240us</span></pre>
 </div>
 
 ---

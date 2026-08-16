@@ -111,22 +111,25 @@ namespace siddiqsoft
     class ScopeTrace
     {
         // Colors for output
-        static constexpr std::string_view LTGY {"\033[38;5;250m"};  //< Light gray
-        static constexpr std::string_view DKGY {"\033[1;40m"};      //< Dark gray
-        static constexpr std::string_view RED {"\033[0;31m"};       //< Red
-        static constexpr std::string_view ORN {"\033[38;5;208m"};   //< Orange
-        static constexpr std::string_view BLU {"\033[0;34m"};       //< Blue
-        static constexpr std::string_view DRKBLU {"\033[38;5;19m"}; //< Dark Blue
-        static constexpr std::string_view GRN {"\033[0;32m"};       //< Green
-        static constexpr std::string_view YLW {"\033[1;33m"};       //< Yellow
-        static constexpr std::string_view DKYLW {"\033[38;5;136m"}; //< Dark Yellow
-        static constexpr std::string_view BOLD {"\033[1m"};         //< Bold
-        static constexpr std::string_view ITAL {"\033[3m"};         //< Italic
-        static constexpr std::string_view UNDL {"\033[4m"};         //< Underline
-        static constexpr std::string_view NOTUNDL {"\033[24m"};     //< Not underline
-        static constexpr std::string_view NOTBOLD {"\033[22m"};     //< Not bold
-        static constexpr std::string_view NOTITAL {"\033[23m"};     //< Not italic
-        static constexpr std::string_view NOC {"\033[0m"};          //< No Color
+        static constexpr std::string_view LTGY {"\033[38;5;250m"};       //< Light gray
+        static constexpr std::string_view DKGY {"\033[1;40m"};           //< Dark gray
+        static constexpr std::string_view RED {"\033[0;31m"};            //< Red
+        static constexpr std::string_view REV_RED {"\033[7;31m"};        //< Reverse Red
+        static constexpr std::string_view ORN {"\033[38;5;208m"};        //< Orange
+        static constexpr std::string_view REV_ORN {"\033[7;38;5;208m"};  //< Reverse Orange
+        static constexpr std::string_view BLU {"\033[0;34m"};            //< Blue
+        static constexpr std::string_view DRKBLU {"\033[38;5;19m"};      //< Dark Blue
+        static constexpr std::string_view GRN {"\033[0;32m"};            //< Green
+        static constexpr std::string_view YLW {"\033[1;33m"};            //< Yellow
+        static constexpr std::string_view LTYLW {"\033[38;5;220m"};      //< Light Bright Yellow
+        static constexpr std::string_view REV_LTYLW {"\033[7;38;5;220m"};//< Reverse Light Bright Yellow
+        static constexpr std::string_view BOLD {"\033[1m"};              //< Bold
+        static constexpr std::string_view ITAL {"\033[3m"};              //< Italic
+        static constexpr std::string_view UNDL {"\033[4m"};              //< Underline
+        static constexpr std::string_view NOTUNDL {"\033[24m"};          //< Not underline
+        static constexpr std::string_view NOTBOLD {"\033[22m"};          //< Not bold
+        static constexpr std::string_view NOTITAL {"\033[23m"};          //< Not italic
+        static constexpr std::string_view NOC {"\033[0m"};               //< No Color
         static constexpr std::string_view global_function_name {};
 
         // We're using this to allow unit tests to access protected members of ScopeTrace for testing purposes.
@@ -318,13 +321,27 @@ namespace siddiqsoft
         ScopeTrace& operator=(ScopeTrace&&) = delete;
 
     protected:
+        [[nodiscard]] static constexpr auto logline_tag_color(trace_level level) noexcept -> std::string_view
+        {
+            switch (level) {
+                case trace_level::critical: return REV_RED;
+                case trace_level::exception: return REV_RED;
+                case trace_level::error: return REV_ORN;
+                case trace_level::warning: return REV_LTYLW;
+                case trace_level::info: return NOC;
+                case trace_level::debug: return LTGY;
+                case trace_level::trace: return DRKBLU;
+                default: return NOC;
+            }
+        }
+
         [[nodiscard]] static constexpr auto logline_start_color(trace_level level) noexcept -> std::string_view
         {
             switch (level) {
                 case trace_level::critical: return RED;
                 case trace_level::exception: return RED;
                 case trace_level::error: return ORN;
-                case trace_level::warning: return DKYLW;
+                case trace_level::warning: return LTYLW;
                 case trace_level::info: return NOC;
                 case trace_level::debug: return LTGY;
                 case trace_level::trace: return DRKBLU;
@@ -337,17 +354,7 @@ namespace siddiqsoft
         [[nodiscard]] auto                  logline_prefix(trace_level level) const -> std::string
         {
             return std::format(
-                    "{}{:%FT%TZ}|{}{: <6}{}|", LTGY, std::chrono::system_clock::now(), logline_start_color(level), level, NOC);
-            /*
-            return std::format("{}{:%FT%TZ}|{}{: <6}{}|{:<{}}",
-                               LTGY,
-                               std::chrono::system_clock::now(),
-                               logline_start_color(level),
-                               level,
-                               NOC,
-                               "",
-                               m_scope_depth * 2);
-*/
+                    "{}{:%FT%TZ}{} {: <6} {}", LTGY, std::chrono::system_clock::now(), logline_tag_color(level), level, NOC);
         }
 
     public:

@@ -80,26 +80,24 @@ When running the quick start application, `siddiqsoft::ScopeTrace` outputs depth
     <span class="terminal-dot green" style="width: 12px; height: 12px; border-radius: 50%; background-color: #27c93f; display: inline-block;"></span>
     <span class="terminal-title" style="color: #8b949e; font-size: 12px; margin-left: 6px; font-family: sans-serif;">Console Output (std::cerr)</span>
   </div>
-  <pre class="terminal-body" style="padding: 14px 18px; color: #e6edf3; font-size: 13px; line-height: 1.65; overflow-x: auto; margin: 0; background: transparent;"><span style="color: #6e7681;">  Creating NEW SCOPE MYPROJECT:6</span>
-<span style="color: #8b949e;">2026-08-15T20:49:27.060564Z</span>  <span style="color: #e6edf3;">[info  ]</span> MYPROJECT - Starting application execution
-<span style="color: #6e7681;">  Creating NEW SCOPE MYPROJECT/sub_task:4</span>
-<span style="color: #8b949e;">2026-08-15T20:49:27.060600Z</span>  <span style="color: #e6edf3;">[info  ]</span>   MYPROJECT/sub_task - Processing items...
-<span style="color: #8b949e;">2026-08-15T20:49:27.061200Z</span>  <span style="color: #ff7b72;">[except]</span>   <span style="color: #ff7b72;">MYPROJECT/sub_task - <b>std::runtime_error</b> - <i>Device non-responsive</i> - Got exception last_line: 54</span>
-<span style="color: #8b949e;">2026-08-15T20:49:27.061250Z</span>  <span style="color: #8b949e;">[debug ]</span>   <span style="color: #8b949e;">MYPROJECT/sub_task - COMPLETED: time:</span><span style="color: #3fb950; font-weight: 600;">650us</span>
-<span style="color: #8b949e;">2026-08-15T20:49:27.061300Z</span>  <span style="color: #8b949e;">[debug ]</span> MYPROJECT - COMPLETED: time:<span style="color: #3fb950; font-weight: 600;">7360us</span></pre>
+  <pre class="terminal-body" style="padding: 14px 18px; color: #e6edf3; font-size: 13px; line-height: 1.65; overflow-x: auto; margin: 0; background: transparent;"><span style="color: #8b949e;">2026-08-15T20:49:27.060564Z</span>|[<span style="color: #e6edf3;">info  </span>]|<span style="color: #8b949e;">MYPROJECT</span>|Starting application execution
+<span style="color: #8b949e;">2026-08-15T20:49:27.060600Z</span>|[<span style="color: #e6edf3;">info  </span>]|<span style="color: #8b949e;">MYPROJECT/sub_task</span>|Processing items...
+<span style="color: #8b949e;">2026-08-15T20:49:27.061200Z</span>|[<span style="background-color: #da3633; color: #ffffff; font-weight: 600; padding: 0 3px;">except</span>]|<span style="color: #8b949e;">MYPROJECT/sub_task</span>|<span style="color: #ff7b72;"><b>std::runtime_error</b> - <i>Device non-responsive</i> - Got exception last_line: 54</span>
+<span style="color: #8b949e;">2026-08-15T20:49:27.061250Z</span>|[<span style="color: #8b949e;">debug </span>]|<span style="color: #8b949e;">MYPROJECT/sub_task</span>|<span style="color: #8b949e;">COMPLETED: time:</span><span style="color: #3fb950; font-weight: 600;">650us</span>
+<span style="color: #8b949e;">2026-08-15T20:49:27.061300Z</span>|[<span style="color: #8b949e;">debug </span>]|<span style="color: #8b949e;">MYPROJECT</span>|<span style="color: #8b949e;">COMPLETED: time:</span><span style="color: #3fb950; font-weight: 600;">7360us</span></pre>
 </div>
 
 ### Log Level Color Palette
 
-| Log Level / Method | Tag Label | Color Output | ANSI Code | Visual Output Preview |
+| Log Level / Method | Tag Label | Tag Color Output | ANSI Code | Visual Output Preview |
 | :--- | :--- | :--- | :--- | :--- |
-| **`trace_level::critical`** | `[crit  ]` | **Red** | `\033[0;31m` | <span style="color: #ff7b72; font-weight: 600;">[crit  ] System memory exhaustion</span> |
-| **`trace_level::exception`** | `[except]` | **Red** | `\033[0;31m` | <span style="color: #ff7b72; font-weight: 600;">[except] std::runtime_error - Connection refused</span> |
-| **`trace_level::error`** | `[error ]` | **Orange** | `\033[38;5;208m` | <span style="color: #ffa657; font-weight: 600;">[error ] Failed to open configuration file</span> |
-| **`trace_level::warning`** | `[warn  ]` | **Dark Yellow** | `\033[38;5;136m` | <span style="color: #d29922; font-weight: 600;">[warn  ] Cache capacity reached 92%</span> |
-| **`trace_level::info`** | `[info  ]` | **Default / Neutral** | `\033[0m` | <span style="color: #e6edf3;">[info  ] Server listening on port 8080</span> |
-| **`trace_level::debug`** | `[debug ]` | **Light Gray** | `\033[38;5;250m` | <span style="color: #8b949e;">[debug ] Worker thread depth: 2</span> |
-| **`trace_level::trace`** | `[trace ]` | **Dark Blue** | `\033[38;5;19m` | <span style="color: #58a6ff;">[trace ] RX payload: 0x41 0x42 0x43</span> |
+| **`trace_level::critical`** | `crit  ` | **Reverse Red** | `\033[7;31m` | [<span style="background-color: #da3633; color: #ffffff; font-weight: 600; padding: 0 3px;">crit  </span>] System memory exhaustion |
+| **`trace_level::exception`** | `except` | **Reverse Red** | `\033[7;31m` | [<span style="background-color: #da3633; color: #ffffff; font-weight: 600; padding: 0 3px;">except</span>] std::runtime_error - Connection refused |
+| **`trace_level::error`** | `error ` | **Reverse Orange** | `\033[7;38;5;208m` | [<span style="background-color: #d96c00; color: #ffffff; font-weight: 600; padding: 0 3px;">error </span>] Failed to open configuration file |
+| **`trace_level::warning`** | `warn  ` | **Reverse Light Yellow** | `\033[7;38;5;220m` | [<span style="background-color: #ffd700; color: #000000; font-weight: 600; padding: 0 3px;">warn  </span>] Cache capacity reached 92% |
+| **`trace_level::info`** | `info  ` | **Default / Neutral** | `\033[0m` | <span style="color: #e6edf3;">[info  ] Server listening on port 8080</span> |
+| **`trace_level::debug`** | `debug ` | **Light Gray** | `\033[38;5;250m` | <span style="color: #8b949e;">[debug ] Worker thread depth: 2</span> |
+| **`trace_level::trace`** | `trace ` | **Dark Blue** | `\033[38;5;19m` | <span style="color: #58a6ff;">[trace ] RX payload: 0x41 0x42 0x43</span> |
 | **Scope Exit** | `COMPLETED` | **Green Time** | `\033[0;32m` | <span style="color: #8b949e;">COMPLETED: time:</span><span style="color: #3fb950; font-weight: 600;">450us</span> |
 
 ---

@@ -9,11 +9,11 @@
 
 void compute()
 {
-    // Defaults scope name to plain function name ("compute")
-    siddiqsoft::ScopeTrace scope;
+    // Obtain process-wide root ScopeTrace instance ("compute")
+    auto& scope = siddiqsoft::ScopeTrace::GetInstance("compute");
     
-    // Explicit nested scope ("compute-stage1")
-    auto sub = scope.nest("stage1");
+    // Explicit nested scope ("compute/stage1")
+    auto sub = scope.sub_scope("stage1");
     
     sub.info("Processing stage 1 payload...");
 } // Destructors automatically log completion status and elapsed duration at LogLevel::debug severity upon scope exit
@@ -26,7 +26,7 @@ Using `std::source_location::current()`, `ScopeTrace` captures caller details au
 - Line number (`m_location.line()`)
 - Enclosing function signature (`m_location.function_name()`)
 
-`ScopeTrace` also includes internal protected helper routines (`extract_func_name()` / `function_name()`) to extract clean plain function names matching `__func__` from full signature strings. When `ScopeTrace` is declared in the global scope (outside of any enclosing function), `extract_func_name()` evaluates to `"GLOBAL"`.
+`ScopeTrace` also includes internal protected helper routines (`extract_file_name()`, `extract_func_name()`, `function_name()`) to extract clean plain file names (e.g. `"main.cpp"`) and function names matching `__func__` from full signature strings.
 
 ## Nesting Depth & ISO 8601 Timestamps
 
@@ -39,21 +39,19 @@ Using `std::source_location::current()`, `ScopeTrace` captures caller details au
     <span class="terminal-dot green" style="width: 12px; height: 12px; border-radius: 50%; background-color: #27c93f; display: inline-block;"></span>
     <span class="terminal-title" style="color: #8b949e; font-size: 12px; margin-left: 6px; font-family: sans-serif;">Console Output (Hierarchical Indentation)</span>
   </div>
-  <pre class="terminal-body" style="padding: 14px 18px; color: #e6edf3; font-size: 13px; line-height: 1.65; overflow-x: auto; margin: 0; background: transparent;"><span style="color: #6e7681;">  Creating NEW SCOPE compute:6</span>
-<span style="color: #8b949e;">2026-08-15T20:49:27.060564Z</span>  <span style="color: #e6edf3;">[info  ]</span> compute - Outer computation started
-<span style="color: #6e7681;">  Creating NEW SCOPE compute/stage1:4</span>
-<span style="color: #8b949e;">2026-08-15T20:49:27.060600Z</span>  <span style="color: #e6edf3;">[info  ]</span>   compute/stage1 - Processing stage 1 payload...
-<span style="color: #8b949e;">2026-08-15T20:49:27.061250Z</span>  <span style="color: #8b949e;">[debug ]</span>   <span style="color: #8b949e;">compute/stage1 - COMPLETED: time:</span><span style="color: #3fb950; font-weight: 600;">650us</span>
-<span style="color: #8b949e;">2026-08-15T20:49:27.061300Z</span>  <span style="color: #8b949e;">[debug ]</span> compute - COMPLETED: time:<span style="color: #3fb950; font-weight: 600;">1200us</span></pre>
+  <pre class="terminal-body" style="padding: 14px 18px; color: #e6edf3; font-size: 13px; line-height: 1.65; overflow-x: auto; margin: 0; background: transparent;"><span style="color: #8b949e;">2026-08-15T20:49:27.060564Z</span>|[<span style="color: #e6edf3;">info  </span>]|<span style="color: #8b949e;">compute</span>|Outer computation started
+<span style="color: #8b949e;">2026-08-15T20:49:27.060600Z</span>|[<span style="color: #e6edf3;">info  </span>]|<span style="color: #8b949e;">compute/stage1</span>|Processing stage 1 payload...
+<span style="color: #8b949e;">2026-08-15T20:49:27.061250Z</span>|[<span style="color: #8b949e;">debug </span>]|<span style="color: #8b949e;">compute/stage1</span>|<span style="color: #8b949e;">COMPLETED: time:</span><span style="color: #3fb950; font-weight: 600;">650us</span>
+<span style="color: #8b949e;">2026-08-15T20:49:27.061300Z</span>|[<span style="color: #8b949e;">debug </span>]|<span style="color: #8b949e;">compute</span>|<span style="color: #8b949e;">COMPLETED: time:</span><span style="color: #3fb950; font-weight: 600;">1200us</span></pre>
 </div>
 
 ## Dynamic Log Level Filtering
 
-Each `ScopeTrace` instance maintains a configurable log level threshold (`LogLevel` / `trace_level`, defaulted to `LogLevel::critical` upon construction). You can set the threshold at scope creation or dynamically update it via `set_level()`:
+Each `ScopeTrace` instance maintains a configurable log level threshold (`LogLevel` / `trace_level`, defaulted to `LogLevel::none`). You can set the threshold at instance acquisition or dynamically update it via `set_level()`:
 
 ```cpp
-// Set logging threshold to debug at construction
-siddiqsoft::ScopeTrace scope("compute", siddiqsoft::LogLevel::debug);
+// Set logging threshold to debug at instance acquisition
+auto& scope = siddiqsoft::ScopeTrace::GetInstance("compute", siddiqsoft::LogLevel::debug);
 
 // Dynamically change logging threshold
 scope.set_level(siddiqsoft::LogLevel::trace);
@@ -71,15 +69,15 @@ scope.set_level(siddiqsoft::LogLevel::trace);
 
 `ScopeTrace` applies distinct ANSI color escape codes to each log level tag to make terminal output visually scannable:
 
-| Log Level / Method | Tag Label | Color Output | ANSI Escape Code | Visual Terminal Preview |
+| Log Level / Method | Tag Label | Tag Color Output | ANSI Escape Code | Visual Terminal Preview |
 | :--- | :--- | :--- | :--- | :--- |
-| **`trace_level::critical`** | `[crit  ]` | **Red** | `\033[0;31m` | <span style="color: #ff7b72; font-weight: 600;">[crit  ] System memory exhaustion</span> |
-| **`trace_level::exception`** | `[except]` | **Red / Bold Red** | `\033[0;31m` | <span style="color: #ff7b72; font-weight: 600;">[except] std::runtime_error - Timeout</span> |
-| **`trace_level::error`** | `[error ]` | **Orange** | `\033[38;5;208m` | <span style="color: #ffa657; font-weight: 600;">[error ] Failed to connect to db host</span> |
-| **`trace_level::warning`** | `[warn  ]` | **Dark Yellow / Gold** | `\033[38;5;136m` | <span style="color: #d29922; font-weight: 600;">[warn  ] Cache capacity reached 92%</span> |
-| **`trace_level::info`** | `[info  ]` | **Default / Neutral** | `\033[0m` | <span style="color: #e6edf3;">[info  ] Processing batch item 42</span> |
-| **`trace_level::debug`** | `[debug ]` | **Light Gray** | `\033[38;5;250m` | <span style="color: #8b949e;">[debug ] Worker thread pool depth: 4</span> |
-| **`trace_level::trace`** | `[trace ]` | **Dark Blue** | `\033[38;5;19m` | <span style="color: #58a6ff;">[trace ] RX buffer dump: 0x41 0x42 0x43</span> |
+| **`trace_level::critical`** | `crit  ` | **Reverse Red** | `\033[7;31m` | [<span style="background-color: #da3633; color: #ffffff; font-weight: 600; padding: 0 3px;">crit  </span>] System memory exhaustion |
+| **`trace_level::exception`** | `except` | **Reverse Red** | `\033[7;31m` | [<span style="background-color: #da3633; color: #ffffff; font-weight: 600; padding: 0 3px;">except</span>] std::runtime_error - Timeout |
+| **`trace_level::error`** | `error ` | **Reverse Orange** | `\033[7;38;5;208m` | [<span style="background-color: #d96c00; color: #ffffff; font-weight: 600; padding: 0 3px;">error </span>] Failed to connect to db host |
+| **`trace_level::warning`** | `warn  ` | **Reverse Light Yellow** | `\033[7;38;5;220m` | [<span style="background-color: #ffd700; color: #000000; font-weight: 600; padding: 0 3px;">warn  </span>] Cache capacity reached 92% |
+| **`trace_level::info`** | `info  ` | **Default / Neutral** | `\033[0m` | <span style="color: #e6edf3;">[info  ] Processing batch item 42</span> |
+| **`trace_level::debug`** | `debug ` | **Light Gray** | `\033[38;5;250m` | <span style="color: #8b949e;">[debug ] Worker thread pool depth: 4</span> |
+| **`trace_level::trace`** | `trace ` | **Dark Blue** | `\033[38;5;19m` | <span style="color: #58a6ff;">[trace ] RX buffer dump: 0x41 0x42 0x43</span> |
 | **Scope Exit** | `COMPLETED` | **Green Time** | `\033[0;32m` | <span style="color: #8b949e;">COMPLETED: time:</span><span style="color: #3fb950; font-weight: 600;">450us</span> |
 
 > [!TIP]
@@ -112,7 +110,7 @@ Instead of separate log and throw statements, `err_throw<EX>(fmt, args...)` logs
 ```cpp
 void validate_input(int value)
 {
-    siddiqsoft::ScopeTrace scope;
+    auto scope = siddiqsoft::ScopeTrace::GetInstance().sub_scope("validate_input");
 
     if (value < 0) {
         // Logs orange error message and throws std::invalid_argument

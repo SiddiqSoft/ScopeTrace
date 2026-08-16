@@ -59,14 +59,14 @@ try {
     <span class="terminal-dot green" style="width: 12px; height: 12px; border-radius: 50%; background-color: #27c93f; display: inline-block;"></span>
     <span class="terminal-title" style="color: #8b949e; font-size: 12px; margin-left: 6px; font-family: sans-serif;">Console Log Colors</span>
   </div>
-  <pre class="terminal-body" style="padding: 14px 18px; color: #e6edf3; font-size: 13px; line-height: 1.65; overflow-x: auto; margin: 0; background: transparent;"><span style="color: #8b949e;">2026-08-15T20:49:27.060564Z</span>  <span style="color: #58a6ff;">[trace ]</span> scope - Socket read 1024 bytes from 127.0.0.1:8080
-<span style="color: #8b949e;">2026-08-15T20:49:27.060600Z</span>  <span style="color: #8b949e;">[debug ]</span> scope - Debugging state: count=42
-<span style="color: #8b949e;">2026-08-15T20:49:27.060620Z</span>  <span style="color: #e6edf3;">[info  ]</span> scope - Processing item 1 of 100
-<span style="color: #8b949e;">2026-08-15T20:49:27.060700Z</span>  <span style="color: #d29922;">[warn  ]</span> <span style="color: #d29922;">scope - Cache miss for key: user_123</span>
-<span style="color: #8b949e;">2026-08-15T20:49:27.060800Z</span>  <span style="color: #ffa657;">[error ]</span> <span style="color: #ffa657;">scope - Failed to open connection to host: db.internal</span>
-<span style="color: #8b949e;">2026-08-15T20:49:27.060900Z</span>  <span style="color: #ff7b72;">[except]</span> <span style="color: #ff7b72;">scope - <b>std::runtime_error</b> - <i>Fatal database connection timeout: 5s</i> - from:main.cpp@39</span>
-<span style="color: #8b949e;">2026-08-15T20:49:27.061000Z</span>  <span style="color: #ff7b72;">[except]</span> <span style="color: #ff7b72;">scope - <b>std::exception</b> - <i>Device I/O error</i> - Operation failed for request ID: REQ-99</span>
-<span style="color: #8b949e;">2026-08-15T20:49:27.061100Z</span>  <span style="color: #8b949e;">[debug ]</span> scope - COMPLETED: time:<span style="color: #3fb950; font-weight: 600;">540us</span></pre>
+  <pre class="terminal-body" style="padding: 14px 18px; color: #e6edf3; font-size: 13px; line-height: 1.65; overflow-x: auto; margin: 0; background: transparent;"><span style="color: #8b949e;">2026-08-15T20:49:27.060564Z</span>|[<span style="color: #58a6ff;">trace </span>]|<span style="color: #8b949e;">scope</span>|<span style="color: #58a6ff;">Socket read 1024 bytes from 127.0.0.1:8080</span>
+<span style="color: #8b949e;">2026-08-15T20:49:27.060600Z</span>|[<span style="color: #8b949e;">debug </span>]|<span style="color: #8b949e;">scope</span>|<span style="color: #8b949e;">Debugging state: count=42</span>
+<span style="color: #8b949e;">2026-08-15T20:49:27.060620Z</span>|[<span style="color: #e6edf3;">info  </span>]|<span style="color: #8b949e;">scope</span>|Processing item 1 of 100
+<span style="color: #8b949e;">2026-08-15T20:49:27.060700Z</span>|[<span style="background-color: #ffd700; color: #000000; font-weight: 600; padding: 0 3px;">warn  </span>]|<span style="color: #8b949e;">scope</span>|<span style="color: #ffd700;">Cache miss for key: user_123</span>
+<span style="color: #8b949e;">2026-08-15T20:49:27.060800Z</span>|[<span style="background-color: #d96c00; color: #ffffff; font-weight: 600; padding: 0 3px;">error </span>]|<span style="color: #8b949e;">scope</span>|<span style="color: #ffa657;">Failed to open connection to host: db.internal</span>
+<span style="color: #8b949e;">2026-08-15T20:49:27.060900Z</span>|[<span style="background-color: #da3633; color: #ffffff; font-weight: 600; padding: 0 3px;">except</span>]|<span style="color: #8b949e;">scope</span>|<span style="color: #ff7b72;"><b>std::runtime_error</b> - <i>Fatal database connection timeout: 5s</i> - from:main.cpp@39</span>
+<span style="color: #8b949e;">2026-08-15T20:49:27.061000Z</span>|[<span style="background-color: #da3633; color: #ffffff; font-weight: 600; padding: 0 3px;">except</span>]|<span style="color: #8b949e;">scope</span>|<span style="color: #ff7b72;"><b>std::exception</b> - <i>Device I/O error</i> - Operation failed for request ID: REQ-99</span>
+<span style="color: #8b949e;">2026-08-15T20:49:27.061100Z</span>|[<span style="color: #8b949e;">debug </span>]|<span style="color: #8b949e;">scope</span>|<span style="color: #8b949e;">COMPLETED: time:</span><span style="color: #3fb950; font-weight: 600;">540us</span></pre>
 </div>
 
 ### Internal Scope Metrics & Helpers (Protected Methods)

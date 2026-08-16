@@ -7,5 +7,5 @@
 
 ## Thread Safety & Performance
 
-- **Zero-Lock Nesting Depth**: Scope nesting depth is stored in `thread_local` state (`current_depth()`), requiring zero lock contention or synchronization overhead across concurrent threads.
+- **Zero-Lock Nesting Depth**: Scope nesting depth is derived directly from parentage (`parent.depth() + 1`), requiring zero lock contention or synchronization overhead across concurrent threads.
 - **Header-Only Efficiency**: Small, lightweight header-only implementation with minimal overhead.

@@ -32,15 +32,15 @@ enum class trace_level : uint8_t {
 };
 ```
 
-| Log Level | Abbreviated Tag | Color Output | ANSI Escape Sequence | Visual Terminal Preview | Standard Use Case |
+| Log Level | Abbreviated Tag | Tag Color Output | ANSI Escape Sequence | Visual Terminal Preview | Standard Use Case |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| `critical` | `crit` | **Red** | `\033[0;31m` | <span style="color: #ff7b72; font-weight: 600;">[crit  ] Out of memory</span> | Fatal system failures |
-| `exception` | `except` | **Red** | `\033[0;31m` | <span style="color: #ff7b72; font-weight: 600;">[except] std::runtime_error</span> | Exception handler logging (`exp()`) |
-| `error` | `error` | **Orange** | `\033[38;5;208m` | <span style="color: #ffa657; font-weight: 600;">[error ] Network unreachable</span> | Operational errors (`err()`, `err_throw()`) |
-| `warning` | `warn` | **Dark Yellow / Gold** | `\033[38;5;136m` | <span style="color: #d29922; font-weight: 600;">[warn  ] High memory usage</span> | Recoverable warnings (`warn()`) |
-| `info` | `info` | **Default / Neutral** | `\033[0m` | <span style="color: #e6edf3;">[info  ] Task starting...</span> | Application status changes (`info()`) |
-| `debug` | `debug` | **Light Gray** | `\033[38;5;250m` | <span style="color: #8b949e;">[debug ] Step 3 complete</span> | General debug inspection (`debug()`) |
-| `trace` | `trace` | **Dark Blue** | `\033[38;5;19m` | <span style="color: #58a6ff;">[trace ] RX 1024 bytes</span> | High-frequency I/O operations & packet/buffer dumps (`trace()`) |
+| `critical` | `crit  ` | **Reverse Red** | `\033[7;31m` | [<span style="background-color: #da3633; color: #ffffff; font-weight: 600; padding: 0 3px;">crit  </span>] Out of memory | Fatal system failures |
+| `exception` | `except` | **Reverse Red** | `\033[7;31m` | [<span style="background-color: #da3633; color: #ffffff; font-weight: 600; padding: 0 3px;">except</span>] std::runtime_error | Exception handler logging (`exp()`) |
+| `error` | `error ` | **Reverse Orange** | `\033[7;38;5;208m` | [<span style="background-color: #d96c00; color: #ffffff; font-weight: 600; padding: 0 3px;">error </span>] Network unreachable | Operational errors (`err()`, `err_throw()`) |
+| `warning` | `warn  ` | **Reverse Light Yellow** | `\033[7;38;5;220m` | [<span style="background-color: #ffd700; color: #000000; font-weight: 600; padding: 0 3px;">warn  </span>] High memory usage | Recoverable warnings (`warn()`) |
+| `info` | `info  ` | **Default / Neutral** | `\033[0m` | <span style="color: #e6edf3;">[info  ] Task starting...</span> | Application status changes (`info()`) |
+| `debug` | `debug ` | **Light Gray** | `\033[38;5;250m` | <span style="color: #8b949e;">[debug ] Step 3 complete</span> | General debug inspection (`debug()`) |
+| `trace` | `trace ` | **Dark Blue** | `\033[38;5;19m` | <span style="color: #58a6ff;">[trace ] RX 1024 bytes</span> | High-frequency I/O operations & packet/buffer dumps (`trace()`) |
 
 > **Advice for High-Volume I/O Logging:**
 > High-frequency operations — such as socket data transfers, stream packet dumps, HTTP body payload dumps, or file buffer reads/writes — should **always** use `trace_level::trace` (`scope.trace(...)`). This allows I/O diagnostic noise to be cleanly filtered out when running at `LogLevel::debug` or `info` thresholds without incurring string formatting costs.

@@ -61,18 +61,14 @@ Executing the example above outputs formatted log entries to `std::cerr` with dy
     <span class="terminal-dot green" style="width: 12px; height: 12px; border-radius: 50%; background-color: #27c93f; display: inline-block;"></span>
     <span class="terminal-title" style="color: #8b949e; font-size: 12px; margin-left: 6px; font-family: sans-serif;">Console Output (std::cerr)</span>
   </div>
-  <pre class="terminal-body" style="padding: 14px 18px; color: #e6edf3; font-size: 13px; line-height: 1.65; overflow-x: auto; margin: 0; background: transparent;"><span style="color: #6e7681;">  Creating NEW SCOPE main:6</span>
-<span style="color: #8b949e;">2026-08-15T20:49:27.060564Z</span>  <span style="color: #e6edf3;">[info  ]</span> main - Application initialization complete
-<span style="color: #6e7681;">  Creating NEW SCOPE perform_operation:6</span>
-<span style="color: #6e7681;">  Creating NEW SCOPE worker:6</span>
-<span style="color: #8b949e;">2026-08-15T20:49:27.060600Z</span>  <span style="color: #e6edf3;">[info  ]</span>     worker - Worker starting task with ID=42
-<span style="color: #8b949e;">2026-08-15T20:49:27.060620Z</span>  <span style="color: #58a6ff;">[trace ]</span>     worker - Low-level trace details for worker setup
-<span style="color: #6e7681;">  Creating NEW SCOPE worker/subtask:3</span>
-<span style="color: #8b949e;">2026-08-15T20:49:27.070800Z</span>  <span style="color: #d29922;">[warn  ]</span>       <span style="color: #d29922;">worker/subtask - Resource usage reached 85%</span>
-<span style="color: #8b949e;">2026-08-15T20:49:27.070850Z</span>  <span style="color: #8b949e;">[debug ]</span>       <span style="color: #8b949e;">worker/subtask - COMPLETED: time:</span><span style="color: #3fb950; font-weight: 600;">10210us</span>
-<span style="color: #8b949e;">2026-08-15T20:49:27.070900Z</span>  <span style="color: #8b949e;">[debug ]</span>     <span style="color: #8b949e;">worker - COMPLETED: time:</span><span style="color: #3fb950; font-weight: 600;">10310us</span>
-<span style="color: #8b949e;">2026-08-15T20:49:27.071000Z</span>  <span style="color: #ff7b72;">[except]</span>   <span style="color: #ff7b72;">perform_operation - <b>std::runtime_error</b> - <i>Simulated failure in sub-system</i> - Error encountered during operation execution</span>
-<span style="color: #8b949e;">2026-08-15T20:49:27.071050Z</span>  <span style="color: #8b949e;">[debug ]</span>   <span style="color: #8b949e;">perform_operation - COMPLETED: time:</span><span style="color: #3fb950; font-weight: 600;">10500us</span>
-<span style="color: #8b949e;">2026-08-15T20:49:27.071120Z</span>  <span style="color: #8b949e;">[debug ]</span> main - COMPLETED: time:<span style="color: #3fb950; font-weight: 600;">10620us</span></pre>
+  <pre class="terminal-body" style="padding: 14px 18px; color: #e6edf3; font-size: 13px; line-height: 1.65; overflow-x: auto; margin: 0; background: transparent;"><span style="color: #8b949e;">2026-08-15T20:49:27.060564Z</span>|[<span style="color: #e6edf3;">info  </span>]|<span style="color: #8b949e;">main</span>|Application initialization complete
+<span style="color: #8b949e;">2026-08-15T20:49:27.060600Z</span>|[<span style="color: #e6edf3;">info  </span>]|<span style="color: #8b949e;">main/worker</span>|Worker starting task with ID=42
+<span style="color: #8b949e;">2026-08-15T20:49:27.060620Z</span>|[<span style="color: #58a6ff;">trace </span>]|<span style="color: #8b949e;">main/worker</span>|<span style="color: #58a6ff;">Low-level trace details for worker setup</span>
+<span style="color: #8b949e;">2026-08-15T20:49:27.070800Z</span>|[<span style="background-color: #ffd700; color: #000000; font-weight: 600; padding: 0 3px;">warn  </span>]|<span style="color: #8b949e;">main/worker/subtask</span>|<span style="color: #ffd700;">Resource usage reached 85%</span>
+<span style="color: #8b949e;">2026-08-15T20:49:27.070850Z</span>|[<span style="color: #8b949e;">debug </span>]|<span style="color: #8b949e;">main/worker/subtask</span>|<span style="color: #8b949e;">COMPLETED: time:</span><span style="color: #3fb950; font-weight: 600;">10210us</span>
+<span style="color: #8b949e;">2026-08-15T20:49:27.070900Z</span>|[<span style="color: #8b949e;">debug </span>]|<span style="color: #8b949e;">main/worker</span>|<span style="color: #8b949e;">COMPLETED: time:</span><span style="color: #3fb950; font-weight: 600;">10310us</span>
+<span style="color: #8b949e;">2026-08-15T20:49:27.071000Z</span>|[<span style="background-color: #da3633; color: #ffffff; font-weight: 600; padding: 0 3px;">except</span>]|<span style="color: #8b949e;">main/perform_operation</span>|<span style="color: #ff7b72;"><b>std::runtime_error</b> - <i>Simulated failure in sub-system</i> - Error encountered during operation execution</span>
+<span style="color: #8b949e;">2026-08-15T20:49:27.071050Z</span>|[<span style="color: #8b949e;">debug </span>]|<span style="color: #8b949e;">main/perform_operation</span>|<span style="color: #8b949e;">COMPLETED: time:</span><span style="color: #3fb950; font-weight: 600;">10500us</span>
+<span style="color: #8b949e;">2026-08-15T20:49:27.071120Z</span>|[<span style="color: #8b949e;">debug </span>]|<span style="color: #8b949e;">main</span>|<span style="color: #8b949e;">COMPLETED: time:</span><span style="color: #3fb950; font-weight: 600;">10620us</span></pre>
 </div>
 
