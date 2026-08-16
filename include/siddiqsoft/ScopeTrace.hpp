@@ -43,11 +43,23 @@
 #include <chrono>
 #include <concepts>
 #include <format>
+#include <iostream>
 #include <ostream>
+#include <print>
 #include <source_location>
 #include <string>
 #include <string_view>
 #include <type_traits>
+
+#if defined(_WIN32) || defined(_WIN64)
+#ifndef WIN32_LEAN_AND_MEAN
+#define WIN32_LEAN_AND_MEAN
+#endif
+#ifndef NOMINMAX
+#define NOMINMAX
+#endif
+#include <windows.h>
+#endif
 #include <utility>
 
 namespace siddiqsoft
@@ -281,6 +293,21 @@ namespace siddiqsoft
                                        trace_level                 level = trace_level::none,
                                        const std::source_location& sl    = std::source_location::current())
         {
+#if defined(_WIN32) || defined(_WIN64)
+            // We need to enable ANSI escape code processing on Windows 10+ for colored output in the console.
+            static const bool win_ansi_initialized = []() {
+                HANDLE hErr = GetStdHandle(STD_ERROR_HANDLE);
+                if (hErr != INVALID_HANDLE_VALUE && hErr != NULL) {
+                    DWORD mode = 0;
+                    if (GetConsoleMode(hErr, &mode)) {
+                        SetConsoleMode(hErr, mode | ENABLE_VIRTUAL_TERMINAL_PROCESSING);
+                    }
+                }
+                return true;
+            }();
+            (void)win_ansi_initialized;
+#endif
+
             static ScopeTrace instance {sn, level, 0, sl};
             if (!sn.empty()) {
                 instance.m_scope_name = sn;

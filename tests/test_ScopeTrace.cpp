@@ -187,3 +187,94 @@ TEST(ScopeTraceTest, LogLevelFiltering)
     EXPECT_TRUE(trace_output.contains("DEBG_MSG"));
     EXPECT_TRUE(trace_output.contains("TRCE_MSG"));
 }
+
+TEST(ScopeTraceTest, ExtractHelpers)
+{
+    // Test extract_file_name with Unix and Windows paths
+    EXPECT_EQ("ScopeTrace.hpp", siddiqsoft::ScopeTrace::extract_file_name("/Users/test/repos/ScopeTrace/include/siddiqsoft/ScopeTrace.hpp"));
+    EXPECT_EQ("main.cpp", siddiqsoft::ScopeTrace::extract_file_name("C:\\Projects\\App\\main.cpp"));
+    EXPECT_EQ("test.h", siddiqsoft::ScopeTrace::extract_file_name("test.h"));
+    EXPECT_EQ("", siddiqsoft::ScopeTrace::extract_file_name(""));
+
+    // Test extract_func_name with complex function signatures
+    EXPECT_EQ("foo", siddiqsoft::ScopeTrace::extract_func_name("void namespace_name::class_name::foo(int, double)"));
+    EXPECT_EQ("bar", siddiqsoft::ScopeTrace::extract_func_name("auto bar()"));
+}
+
+TEST(ScopeTraceTest, DynamicSetLevel)
+{
+    std::stringstream buffer;
+    auto* old_cerr = std::cerr.rdbuf(buffer.rdbuf());
+
+    {
+        auto scope = g_scope.sub_scope("SetLevelTest", siddiqsoft::trace_level::warning);
+        scope.info("BEFORE_SET_LEVEL"); // Should be filtered out
+
+        scope.set_level(siddiqsoft::trace_level::info);
+        scope.info("AFTER_SET_LEVEL"); // Should be logged
+    }
+
+    std::cerr.rdbuf(old_cerr);
+    std::string output = buffer.str();
+
+    EXPECT_FALSE(output.contains("BEFORE_SET_LEVEL"));
+    EXPECT_TRUE(output.contains("AFTER_SET_LEVEL"));
+}
+
+TEST(ScopeTraceTest, ExplicitNameGetInstance)
+{
+    auto& instance = siddiqsoft::ScopeTrace::GetInstance("ExplicitAppScope", siddiqsoft::trace_level::debug);
+    EXPECT_EQ("ExplicitAppScope", instance.name());
+
+    auto sub = instance.sub_scope("sub_module");
+    EXPECT_EQ("ExplicitAppScope/sub_module", sub.name());
+}
+
+TEST(ScopeTraceTest, FormattingAndTagOutput)
+{
+    std::stringstream buffer;
+    auto* old_cerr = std::cerr.rdbuf(buffer.rdbuf());
+
+    {
+        auto scope = g_scope.sub_scope("TagFormatTest", siddiqsoft::trace_level::trace);
+        scope.log<siddiqsoft::trace_level::critical>("Crit message");
+        scope.warn("Warn message");
+        scope.info("Info message");
+    }
+
+    std::cerr.rdbuf(old_cerr);
+    std::string output = buffer.str();
+
+    // Verify presence of abbreviated tag labels in square brackets
+    EXPECT_TRUE(output.contains("crit  "));
+    EXPECT_TRUE(output.contains("warn  "));
+    EXPECT_TRUE(output.contains("info  "));
+
+    // Verify presence of reverse video ANSI escape codes for critical (\033[7;31m) and warn (\033[7;38;5;220m)
+    EXPECT_TRUE(output.contains("\033[7;31m"));
+    EXPECT_TRUE(output.contains("\033[7;38;5;220m"));
+}
+
+TEST(ScopeTraceTest, ConcurrentThreadSafety)
+{
+    constexpr int num_threads = 8;
+    constexpr int iterations_per_thread = 50;
+
+    std::vector<std::future<void>> futures;
+    futures.reserve(num_threads);
+
+    for (int t = 0; t < num_threads; ++t) {
+        futures.push_back(std::async(std::launch::async, [t]() {
+            for (int i = 0; i < iterations_per_thread; ++i) {
+                auto thread_scope = g_scope.sub_scope(std::format("Thread_{}", t));
+                thread_scope.info("Thread {} iteration {}", t, i);
+                auto inner = thread_scope.sub_scope("InnerLoop");
+                inner.trace("Trace iteration {}", i);
+            }
+        }));
+    }
+
+    for (auto& f : futures) {
+        f.get();
+    }
+}
