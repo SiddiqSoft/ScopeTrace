@@ -11,26 +11,26 @@
 
 #include "../include/siddiqsoft/ScopeTrace.hpp"
 
-auto& g_scope = siddiqsoft::ScopeTrace::CreateInstance("test_ScopeTrace", siddiqsoft::trace_level::debug);
+auto& g_scope = siddiqsoft::ScopeTrace::GetInstance("test_ScopeTrace", siddiqsoft::trace_level::debug);
 
 
-TEST(ScopeTraceTest, CreateInstanceSingleton)
+TEST(ScopeTraceTest, GetInstanceSingleton)
 {
-    auto& instance1 = siddiqsoft::ScopeTrace::CreateInstance("SingletonApp", siddiqsoft::LogLevel::debug);
-    auto& instance2 = siddiqsoft::ScopeTrace::CreateInstance();
+    auto& instance1 = siddiqsoft::ScopeTrace::GetInstance("SingletonApp", siddiqsoft::LogLevel::debug);
+    auto& instance2 = siddiqsoft::ScopeTrace::GetInstance();
 
     // Must refer to the exact same process singleton instance
     EXPECT_EQ(&instance1, &instance2);
     EXPECT_EQ(0, instance1.depth());
 
-    auto child = instance1.nest("worker");
+    auto child = instance1.sub_scope("worker");
     EXPECT_EQ(1, child.depth());
 }
 
 TEST(ScopeTraceTest, HelloWorld)
 {
     {
-        auto scope = g_scope.nest(__func__, siddiqsoft::trace_level::trace);
+        auto scope = g_scope.sub_scope(__func__, siddiqsoft::trace_level::trace);
 
         scope.log<siddiqsoft::trace_level::info>("Hello, World!");
         std::this_thread::sleep_for(std::chrono::milliseconds(2));
@@ -40,7 +40,7 @@ TEST(ScopeTraceTest, HelloWorld)
 TEST(ScopeTraceTest, HelloWorld_Lambda)
 {
     std::future<void> f = std::async(std::launch::async, []() {
-        auto scope = g_scope.nest("HelloWorld_Lambda");
+        auto scope = g_scope.sub_scope("HelloWorld_Lambda");
 
         scope.trace("Hello, World!");
         std::this_thread::sleep_for(std::chrono::milliseconds(2));
@@ -52,21 +52,21 @@ TEST(ScopeTraceTest, HelloWorld_Lambda)
 TEST(ScopeTraceTest, ParentageDepthNesting)
 {
     // g_scope is depth 0.
-    // Multiple sibling nest() calls directly on g_scope must all produce depth = 1
-    auto childA = g_scope.nest("childA");
-    auto childB = g_scope.nest("childB");
-    auto childC = g_scope.nest("childC");
+    // Multiple sibling sub_scope() calls directly on g_scope must all produce depth = 1
+    auto childA = g_scope.sub_scope("childA");
+    auto childB = g_scope.sub_scope("childB");
+    auto childC = g_scope.sub_scope("childC");
 
     EXPECT_EQ(1, childA.depth());
     EXPECT_EQ(1, childB.depth());
     EXPECT_EQ(1, childC.depth());
 
     // Nesting from childA (depth 1) must produce depth 2
-    auto grandChildA = childA.nest("grandChildA");
+    auto grandChildA = childA.sub_scope("grandChildA");
     EXPECT_EQ(2, grandChildA.depth());
 
     // Sibling nesting from childA must also produce depth 2
-    auto grandChildA2 = childA.nest("grandChildA2");
+    auto grandChildA2 = childA.sub_scope("grandChildA2");
     EXPECT_EQ(2, grandChildA2.depth());
 }
 
@@ -75,10 +75,10 @@ TEST(ScopeTraceTest, ScopeDepthNesting)
     std::vector<size_t> depths;
 
     {
-        auto outer = g_scope.nest("Outer");
+        auto outer = g_scope.sub_scope("Outer");
 
         {
-            auto inner = outer.nest("Inner");
+            auto inner = outer.sub_scope("Inner");
             inner.trace("Inner scope message");
 
             inner.warn("Inner scope warning message");
@@ -86,7 +86,7 @@ TEST(ScopeTraceTest, ScopeDepthNesting)
             inner.err("Inner scope error message");
             {
                 // Use this for anonymous or within an exception scope.
-                auto innermost = inner.nest("Innermost");
+                auto innermost = inner.sub_scope("Innermost");
                 innermost.trace("Innermost scope message");
                 EXPECT_EQ(3, innermost.depth());
             }
@@ -99,10 +99,10 @@ TEST(ScopeTraceTest, ScopeDepthNesting)
 
 TEST(ScopeTraceTest, ExceptionSafety)
 {
-    auto scope = g_scope.nest(__func__);
+    auto scope = g_scope.sub_scope(__func__);
 
     try {
-        auto inner = scope.nest("Nested", siddiqsoft::trace_level::warning);
+        auto inner = scope.sub_scope("Nested", siddiqsoft::trace_level::warning);
 
         inner.info("From the inner scope line: {} -- FILTERED", __LINE__);
         inner.log<siddiqsoft::trace_level::warning>("From the inner scope line: {}", __LINE__);
@@ -116,11 +116,11 @@ TEST(ScopeTraceTest, ExceptionSafety)
 
 TEST(ScopeTraceTest, ExceptionSafety_2)
 {
-    auto scope = g_scope.nest("ExceptionSafety_2", siddiqsoft::trace_level::info);
+    auto scope = g_scope.sub_scope("ExceptionSafety_2", siddiqsoft::trace_level::info);
 
     EXPECT_THROW(
             {
-                auto inner = scope.nest("inner");
+                auto inner = scope.sub_scope("inner");
 
                 inner.log<siddiqsoft::trace_level::info>("From the inner scope line: {}", __LINE__);
                 inner.err_throw<std::invalid_argument>("Deliberate error from here");
@@ -136,7 +136,7 @@ TEST(ScopeTraceTest, LogLevelFiltering)
         auto*             old_cerr = std::cerr.rdbuf(buffer.rdbuf());
 
         {
-            auto scope = siddiqsoft::ScopeTrace::CreateInstance().nest("FilterTest", config_level);
+            auto scope = siddiqsoft::ScopeTrace::GetInstance().sub_scope("FilterTest", config_level);
             scope.log<siddiqsoft::trace_level::critical>("CRIT_MSG");
             scope.log<siddiqsoft::trace_level::error>("ERR_MSG");
             scope.warn("WARN_MSG");

@@ -1,6 +1,6 @@
 # Basic Usage Example
 
-This example demonstrates how to use `siddiqsoft::ScopeTrace` for scope tracing, nested scope timing (`nest()`), info, trace, warning, and error logging, exception capture, and string formatting.
+This example demonstrates how to use `siddiqsoft::ScopeTrace` for scope tracing, nested scope timing (`sub_scope()`), info, trace, warning, and error logging, exception capture, and string formatting.
 
 ```cpp
 #include <iostream>
@@ -11,12 +11,12 @@ This example demonstrates how to use `siddiqsoft::ScopeTrace` for scope tracing,
 void worker()
 {
     // Create nested scope from process singleton
-    auto scope = siddiqsoft::ScopeTrace::CreateInstance().nest("worker", siddiqsoft::LogLevel::trace);
+    auto scope = siddiqsoft::ScopeTrace::GetInstance().sub_scope("worker", siddiqsoft::LogLevel::trace);
     scope.info("Worker starting task with ID={}", 42);
     scope.trace("Low-level trace details for worker setup");
 
     // Create a child nested scope ("worker/subtask") with warning threshold
-    auto sub = scope.nest("subtask", siddiqsoft::LogLevel::warning);
+    auto sub = scope.sub_scope("subtask", siddiqsoft::LogLevel::warning);
     std::this_thread::sleep_for(std::chrono::milliseconds(10));
 
     sub.warn("Resource usage reached {}%", 85);
@@ -24,7 +24,7 @@ void worker()
 
 void perform_operation()
 {
-    auto scope = siddiqsoft::ScopeTrace::CreateInstance().nest("perform_operation", siddiqsoft::LogLevel::trace);
+    auto scope = siddiqsoft::ScopeTrace::GetInstance().sub_scope("perform_operation", siddiqsoft::LogLevel::trace);
     worker();
 
     try {
@@ -39,7 +39,7 @@ void perform_operation()
 int main()
 {
     // Obtain process-wide singleton ScopeTrace instance
-    auto& scope = siddiqsoft::ScopeTrace::CreateInstance("main", siddiqsoft::LogLevel::trace);
+    auto& scope = siddiqsoft::ScopeTrace::GetInstance("main", siddiqsoft::LogLevel::trace);
     scope.info("Application initialization complete");
 
     perform_operation();

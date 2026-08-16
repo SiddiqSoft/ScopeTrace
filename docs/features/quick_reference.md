@@ -5,16 +5,16 @@
 ### Process Singleton Instantiation & Nesting
 ```cpp
 // Access or initialize process-wide singleton ScopeTrace instance
-auto& log = siddiqsoft::ScopeTrace::CreateInstance("my_app", siddiqsoft::LogLevel::debug);
+auto& log = siddiqsoft::ScopeTrace::GetInstance("my_app", siddiqsoft::LogLevel::debug);
 
 // Access process singleton without arguments
-auto& root = siddiqsoft::ScopeTrace::CreateInstance();
+auto& root = siddiqsoft::ScopeTrace::GetInstance();
 
 // Update process threshold dynamically
 root.set_level(siddiqsoft::LogLevel::trace);
 
 // Nested scope creation (automatically formatted as "<parent_name>/<child_name>")
-auto inner = root.nest("sub_task", siddiqsoft::LogLevel::info);
+auto inner = root.sub_scope("sub_task", siddiqsoft::LogLevel::info);
 ```
 
 ### Structured Console Logging & Colors
@@ -62,10 +62,10 @@ try {
   <pre class="terminal-body" style="padding: 14px 18px; color: #e6edf3; font-size: 13px; line-height: 1.65; overflow-x: auto; margin: 0; background: transparent;"><span style="color: #8b949e;">2026-08-15T20:49:27.060564Z</span>  <span style="color: #58a6ff;">[trace ]</span> scope - Socket read 1024 bytes from 127.0.0.1:8080
 <span style="color: #8b949e;">2026-08-15T20:49:27.060600Z</span>  <span style="color: #8b949e;">[debug ]</span> scope - Debugging state: count=42
 <span style="color: #8b949e;">2026-08-15T20:49:27.060620Z</span>  <span style="color: #e6edf3;">[info  ]</span> scope - Processing item 1 of 100
-<span style="color: #8b949e;">2026-08-15T20:49:27.060700Z</span>  <span style="color: #d29922;">[warning]</span> <span style="color: #d29922;">scope - Cache miss for key: user_123</span>
-<span style="color: #8b949e;">2026-08-15T20:49:27.060800Z</span>  <span style="color: #ffa657;">[error  ]</span> <span style="color: #ffa657;">scope - Failed to open connection to host: db.internal</span>
-<span style="color: #8b949e;">2026-08-15T20:49:27.060900Z</span>  <span style="color: #ff7b72;">[exception]</span> <span style="color: #ff7b72;">scope - <b>std::runtime_error</b> - <i>Fatal database connection timeout: 5s</i> - from:main.cpp@39</span>
-<span style="color: #8b949e;">2026-08-15T20:49:27.061000Z</span>  <span style="color: #ff7b72;">[exception]</span> <span style="color: #ff7b72;">scope - <b>std::exception</b> - <i>Device I/O error</i> - Operation failed for request ID: REQ-99</span>
+<span style="color: #8b949e;">2026-08-15T20:49:27.060700Z</span>  <span style="color: #d29922;">[warn  ]</span> <span style="color: #d29922;">scope - Cache miss for key: user_123</span>
+<span style="color: #8b949e;">2026-08-15T20:49:27.060800Z</span>  <span style="color: #ffa657;">[error ]</span> <span style="color: #ffa657;">scope - Failed to open connection to host: db.internal</span>
+<span style="color: #8b949e;">2026-08-15T20:49:27.060900Z</span>  <span style="color: #ff7b72;">[except]</span> <span style="color: #ff7b72;">scope - <b>std::runtime_error</b> - <i>Fatal database connection timeout: 5s</i> - from:main.cpp@39</span>
+<span style="color: #8b949e;">2026-08-15T20:49:27.061000Z</span>  <span style="color: #ff7b72;">[except]</span> <span style="color: #ff7b72;">scope - <b>std::exception</b> - <i>Device I/O error</i> - Operation failed for request ID: REQ-99</span>
 <span style="color: #8b949e;">2026-08-15T20:49:27.061100Z</span>  <span style="color: #8b949e;">[debug ]</span> scope - COMPLETED: time:<span style="color: #3fb950; font-weight: 600;">540us</span></pre>
 </div>
 

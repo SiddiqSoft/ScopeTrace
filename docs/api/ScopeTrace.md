@@ -52,16 +52,16 @@ A specialized format string wrapper struct in `namespace siddiqsoft` that combin
 
 ## Process Singleton & Nesting API
 
-### `static ScopeTrace& CreateInstance(std::string_view sn = {}, trace_level level = trace_level::none, const std::source_location& sl = std::source_location::current())`
+### `static ScopeTrace& GetInstance(std::string_view sn = {}, trace_level level = trace_level::none, const std::source_location& sl = std::source_location::current())`
 Static factory method for obtaining or initializing the process-wide singleton `ScopeTrace` instance.
 - **Process Singleton**: Ensures only one process-wide root scope instance exists (`depth = 0`).
-- **Initialization & Updates**: First invocation constructs the process singleton with `sn`, threshold `level`, and `sl`. Subsequent calls return the same singleton reference (updating process scope name or `m_log_level` if non-default parameters are supplied).
+- **Initialization**: First invocation constructs the process singleton with `sn`, threshold `level`, and `sl`. Subsequent calls return the exact same singleton reference.
 
 - **`sn`**: Process scope label or contextual identifier (defaults to caller file name extracted from caller `std::source_location::file_name()`).
 - **`level`**: Logging threshold (`LogLevel` / `trace_level`, defaults to `trace_level::none`).
 - **`sl`**: Source location (defaults to caller site via `std::source_location::current()`).
 
-### `ScopeTrace nest(std::string_view sn, trace_level level = trace_level::none, const std::source_location& sl = std::source_location::current()) const`
+### `ScopeTrace sub_scope(std::string_view sn, trace_level level = trace_level::none, const std::source_location& sl = std::source_location::current()) const`
 Creates and returns a new child `ScopeTrace` instance. The child scope name is automatically formatted as `"<parent_scope_name>/<sn>"`. Child scope depth is derived directly from parent depth (`child.depth() = parent.depth() + 1`). If `level` is set to `trace_level::none` (default), the child scope inherits the parent's logging threshold (`m_log_level`).
 
 - **`sn`**: Sub-scope label string (required).
@@ -69,7 +69,7 @@ Creates and returns a new child `ScopeTrace` instance. The child scope name is a
 - **`sl`**: Source location (defaults to caller site).
 
 ### Protected Constructors
-Direct constructors `ScopeTrace(...)` are `protected:`. Direct stack instantiation (e.g. `ScopeTrace scope;`) is disabled in production code; instances must be obtained via `ScopeTrace::CreateInstance(...)` or `parent.nest(...)`.
+Direct constructors `ScopeTrace(...)` are `protected:`. Direct stack instantiation (e.g. `ScopeTrace scope;`) is disabled in production code; instances must be obtained via `ScopeTrace::GetInstance(...)` or `parent.sub_scope(...)`.
 
 ### `~ScopeTrace() noexcept`
 Destructor. Logs a scope completion message with elapsed duration in microseconds (`COMPLETED: time:...us`) at `trace_level::debug` severity.

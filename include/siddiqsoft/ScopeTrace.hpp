@@ -259,8 +259,8 @@ namespace siddiqsoft
         }
 
         /// @brief Construct a ScopeTrace with a scope name, log level threshold, and optional source location
-        /// @note Direct construction is protected; obtain the process singleton via ScopeTrace::CreateInstance(...) or
-        /// parent.nest(...)
+        /// @note Direct construction is protected; obtain the process singleton via ScopeTrace::GetInstance(...) or
+        /// parent.sub_scope(...)
         explicit ScopeTrace(std::string_view            sn    = {},
                             trace_level                 level = trace_level::none,
                             const std::source_location& sl    = std::source_location::current())
@@ -270,28 +270,28 @@ namespace siddiqsoft
 
     public:
         /// @brief Obtain the process-wide singleton ScopeTrace instance
-        /// @param sn Custom scope label for the process (defaults to plain function name on first initialization)
+        /// @param sn Custom scope label for the process (defaults to file name on first initialization)
         /// @param level Process-wide logging threshold (defaults to trace_level::none on first initialization)
         /// @param sl Source location (defaults to caller site on first initialization)
         /// @return Reference to the single process-wide ScopeTrace instance
-        static ScopeTrace& CreateInstance(std::string_view            sn    = {},
-                                          trace_level                 level = trace_level::none,
-                                          const std::source_location& sl    = std::source_location::current())
+        static ScopeTrace& GetInstance(std::string_view            sn    = {},
+                                       trace_level                 level = trace_level::none,
+                                       const std::source_location& sl    = std::source_location::current())
         {
             static ScopeTrace instance {sn, level, 0, sl};
             return instance;
         }
 
         /// @brief Create a nested sub-scope with child scope name and logging threshold
-        /// @note The new nest scope will inherit the parent's logging threshold if the child level is set to trace_level::none.
+        /// @note The new sub_scope will inherit the parent's logging threshold if the child level is set to trace_level::none.
         /// The child scope depth is derived directly from the parent's depth (parent.depth() + 1).
         /// @param sn Custom sub-scope label (appended as "parent/child")
         /// @param level Logging threshold for child scope (defaults to trace_level::none)
         /// @param sl Source location (defaults to caller site)
         /// @return New ScopeTrace instance
-        ScopeTrace nest(std::string_view            sn, //< required sub-scope name
-                        trace_level                 level = trace_level::none,
-                        const std::source_location& sl    = std::source_location::current()) const
+        ScopeTrace sub_scope(std::string_view            sn, //< required sub-scope name
+                              trace_level                 level = trace_level::none,
+                              const std::source_location& sl    = std::source_location::current()) const
         {
             return ScopeTrace {m_scope_name.empty() ? std::string(sn) : std::format("{}/{}", m_scope_name, sn),
                                level == trace_level::none ? m_log_level : level,

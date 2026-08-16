@@ -10,8 +10,8 @@
 
 - **RAII Scope Timing**: Automatic duration measurement upon scope exit.
 - **`std::source_location` Integration**: Capture file, line, and function automatically.
-- **Process Singleton Entry**: Instantiated exclusively via static `ScopeTrace::CreateInstance()` process singleton.
-- **Nesting Level Tracking**: Indents nested scope execution trees dynamically using parentage depth inheritance (`nest()`).
+- **Process Singleton Entry**: Instantiated exclusively via static `ScopeTrace::GetInstance()` process singleton.
+- **Nesting Level Tracking**: Indents nested scope execution trees dynamically using parentage depth inheritance (`sub_scope()`).
 - **Dynamic Log Level Filtering**: Fine-grained threshold control (`LogLevel` / `trace_level`). Critical, exception, and error logs are always output, while warning, info, debug, and trace are filtered according to threshold (`m_log_level`).
 - **Structured Console Logging**: Specialized `info()`, `debug()`, `trace()`, `warn()`, `err()`, `err_throw()`, and `exp()` methods for formatted console logging with ANSI colors and ISO 8601 UTC timestamps.
 
@@ -35,13 +35,13 @@ For full detailed documentation, integration guides, and API specifications, vis
 #include <iostream>
 #include <siddiqsoft/ScopeTrace.hpp>
 
-// Global instance configured with trace threshold
-static siddiqsoft::ScopeTrace Log{"MYPROJECT", siddiqsoft::LogLevel::trace};
+// Obtain process singleton configured with trace threshold
+auto& Log = siddiqsoft::ScopeTrace::GetInstance("MYPROJECT", siddiqsoft::LogLevel::trace);
 
 void sub_task()
 {
-    // Create nested context ("MYPROJECT-sub_task") with info threshold
-    auto inner = Log.nest(__func__, siddiqsoft::LogLevel::info);
+    // Create nested context ("MYPROJECT/sub_task") with info threshold
+    auto inner = Log.sub_scope(__func__, siddiqsoft::LogLevel::info);
     auto last_line = __LINE__;
 
     try {

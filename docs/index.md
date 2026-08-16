@@ -43,10 +43,10 @@ How many of us have had to write code that is surrounded by `#if defined(DEBUG).
     ```cpp
     void foo() {
         // Access process singleton with LogLevel::info threshold
-        auto& root = siddiqsoft::ScopeTrace::CreateInstance("foo", siddiqsoft::LogLevel::info);
+        auto& root = siddiqsoft::ScopeTrace::GetInstance("foo", siddiqsoft::LogLevel::info);
 
         try {
-            auto inner = root.nest("Nested", siddiqsoft::LogLevel::info); // Inner scope label ("foo/Nested")
+            auto inner = root.sub_scope("Nested", siddiqsoft::LogLevel::info); // Inner scope label ("foo/Nested")
 
             inner.info("From the inner scope line: {}", __LINE__);
             // We log information and throw in one shot!
@@ -64,8 +64,8 @@ How many of us have had to write code that is surrounded by `#if defined(DEBUG).
 ## Key Highlights
 
 - **Zero-Boilerplate Tracing**: Automatically record function name, file path, and line numbers using `std::source_location` and auto-extracted `__func__` names.
-- **Process Singleton Entry**: Instantiated exclusively via static `ScopeTrace::CreateInstance()` process singleton.
-- **Nesting Level Tracking**: Indents nested scope execution trees dynamically using parentage depth inheritance (`nest()`).
+- **Process Singleton Entry**: Instantiated exclusively via static `ScopeTrace::GetInstance()` process singleton.
+- **Nesting Level Tracking**: Indents nested scope execution trees dynamically using parentage depth inheritance (`sub_scope()`).
 - **Structured Console Logging**: Specialized logging methods for `info()`, `trace()`, `warn()`, `err()`, and `exp()` with depth indentation, ANSI colors, and ISO 8601 UTC timestamps.
 - **C++23 Native Support**: Leverages `std::format` and `std::println` to `std::cerr`.
 
@@ -80,7 +80,7 @@ How many of us have had to write code that is surrounded by `#if defined(DEBUG).
 void process_request()
 {
     // Create nested scope from process singleton
-    auto scope = siddiqsoft::ScopeTrace::CreateInstance().nest("process_request", siddiqsoft::LogLevel::info);
+    auto scope = siddiqsoft::ScopeTrace::GetInstance().sub_scope("process_request", siddiqsoft::LogLevel::info);
     scope.info("Parsing incoming payload...");
     scope.warn("Payload buffer usage: 82%");
     // Work executed here...
@@ -89,7 +89,7 @@ void process_request()
 int main()
 {
     // Access process singleton root
-    auto& scope = siddiqsoft::ScopeTrace::CreateInstance("main", siddiqsoft::LogLevel::info);
+    auto& scope = siddiqsoft::ScopeTrace::GetInstance("main", siddiqsoft::LogLevel::info);
     process_request();
     return 0;
 }
