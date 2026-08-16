@@ -279,6 +279,12 @@ namespace siddiqsoft
                                        const std::source_location& sl    = std::source_location::current())
         {
             static ScopeTrace instance {sn, level, 0, sl};
+            if (!sn.empty()) {
+                instance.m_scope_name = sn;
+            }
+            if (level != trace_level::none) {
+                instance.m_log_level = level;
+            }
             return instance;
         }
 

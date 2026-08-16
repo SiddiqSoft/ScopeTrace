@@ -16,7 +16,7 @@ auto& g_scope = siddiqsoft::ScopeTrace::GetInstance("test_ScopeTrace", siddiqsof
 
 TEST(ScopeTraceTest, GetInstanceSingleton)
 {
-    auto& instance1 = siddiqsoft::ScopeTrace::GetInstance("SingletonApp", siddiqsoft::LogLevel::debug);
+    auto& instance1 = siddiqsoft::ScopeTrace::GetInstance("test_ScopeTrace", siddiqsoft::LogLevel::debug);
     auto& instance2 = siddiqsoft::ScopeTrace::GetInstance();
 
     // Must refer to the exact same process singleton instance

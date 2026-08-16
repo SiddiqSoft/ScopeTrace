@@ -53,11 +53,9 @@ A specialized format string wrapper struct in `namespace siddiqsoft` that combin
 ## Process Singleton & Nesting API
 
 ### `static ScopeTrace& GetInstance(std::string_view sn = {}, trace_level level = trace_level::none, const std::source_location& sl = std::source_location::current())`
-Static factory method for obtaining or initializing the process-wide singleton `ScopeTrace` instance.
-- **Process Singleton**: Ensures only one process-wide root scope instance exists (`depth = 0`).
-- **Initialization**: First invocation constructs the process singleton with `sn`, threshold `level`, and `sl`. Subsequent calls return the exact same singleton reference.
-
-- **`sn`**: Process scope label or contextual identifier (defaults to caller file name extracted from caller `std::source_location::file_name()`).
+Static factory method for obtaining the process-wide singleton `ScopeTrace` instance.
+- **Pure Meyer's Singleton**: Zero state management or internal maps. Constructing a thread-safe static instance on the first invocation (`depth = 0`). All subsequent calls across the process return a reference to the exact same shared instance.
+- **`sn`**: Process scope label (defaults to caller file name extracted from caller `std::source_location::file_name()` on first initialization).
 - **`level`**: Logging threshold (`LogLevel` / `trace_level`, defaults to `trace_level::none`).
 - **`sl`**: Source location (defaults to caller site via `std::source_location::current()`).
 
