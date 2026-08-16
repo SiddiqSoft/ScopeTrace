@@ -1920,7 +1920,7 @@ High-frequency operations — such as socket data transfers, stream packet dumps
 - <strong>Process Singleton</strong>: Ensures only one process-wide root scope instance exists (<code>depth = 0</code>).
 - <strong>Initialization &amp; Updates</strong>: First invocation constructs the process singleton with <code>sn</code>, threshold <code>level</code>, and <code>sl</code>. Subsequent calls return the same singleton reference (updating process scope name or <code>m_log_level</code> if non-default parameters are supplied).</p>
 <ul>
-<li><strong><code>sn</code></strong>: Process scope label or contextual identifier (defaults to caller plain function name).</li>
+<li><strong><code>sn</code></strong>: Process scope label or contextual identifier (defaults to caller file name extracted from caller <code>std::source_location::file_name()</code>).</li>
 <li><strong><code>level</code></strong>: Logging threshold (<code>LogLevel</code> / <code>trace_level</code>, defaults to <code>trace_level::none</code>).</li>
 <li><strong><code>sl</code></strong>: Source location (defaults to caller site via <code>std::source_location::current()</code>).</li>
 </ul>
@@ -1980,6 +1980,8 @@ High-frequency operations — such as socket data transfers, stream packet dumps
   Returns scope name string view (<code>m_scope_name</code>).</li>
 <li><strong><code>[[nodiscard]] static std::string_view extract_func_name(std::string_view full_signature) noexcept</code></strong><br />
   Extracts plain function name matching <code>__func__</code> from full signature (returns <code>"GLOBAL"</code> if empty).</li>
+<li><strong><code>[[nodiscard]] static std::string_view extract_file_name(std::string_view file_path) noexcept</code></strong><br />
+  Extracts plain file name (e.g., <code>"main.cpp"</code>) from full file path string. Used for default scope naming when <code>sn</code> is omitted.</li>
 <li><strong><code>[[nodiscard]] static std::string current_timestamp() noexcept</code></strong><br />
   Returns ISO 8601 UTC timestamp string with microsecond precision e.g. <code>"2026-08-13T23:16:00.519049Z  "</code> (styled with <code>LTGY</code> color).</li>
 <li><strong><code>[[nodiscard]] std::string_view function_name() const noexcept</code></strong><br />
@@ -2193,7 +2195,7 @@ High-frequency operations — such as socket data transfers, stream packet dumps
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.expand", "navigation.path", "navigation.top", "navigation.footer", "navigation.tracking", "search.suggest", "search.highlight", "search.share", "content.code.copy", "content.code.annotate"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": "0.41.0-alpha.1"}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.expand", "navigation.path", "navigation.top", "navigation.footer", "navigation.tracking", "search.suggest", "search.highlight", "search.share", "content.code.copy", "content.code.annotate"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": "0.41.0-alpha.2"}</script>
     
     
       <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
