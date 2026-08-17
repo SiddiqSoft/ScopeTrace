@@ -100,3 +100,47 @@ Direct constructors `ScopeTrace(...)` are `protected:`. Direct stack instantiati
 
 ### Copy & Move Prevention
 `ScopeTrace` explicitly **deletes all copy and move constructors and assignment operators** (`ScopeTrace(const ScopeTrace&) = delete`, `ScopeTrace(ScopeTrace&&) = delete`). Instances cannot be copied or moved.
+
+---
+
+## 6. Caching Logger References (`GetInstance()` Performance Best Practice)
+
+### Recommended Pattern: Module/File Static Reference
+
+While `ScopeTrace::GetInstance(...)` can be called from anywhere, invoking `GetInstance()` repeatedly on every single log call incurs small runtime overheads:
+- **Atomic Guard Check**: C++11 "Magic Statics" emit an atomic memory barrier check on every call to verify singleton initialization.
+- **Parameter Evaluation**: Default argument `std::source_location::current()` constructs a temporary stack object on every call.
+- **Scope Name Check**: Internal string assignment check (`if (!sn.empty())`) evaluates on every call.
+
+To eliminate these overheads, **cache a static reference per file or module**:
+
+```cpp
+// In your cpp file or module scope:
+static auto& Log = siddiqsoft::ScopeTrace::GetInstance("MY_MODULE", siddiqsoft::LogLevel::info);
+
+void process_data()
+{
+    // Fast direct call bypassing GetInstance() atomic guard checks & argument evaluation
+    Log.info("Data processing started");
+
+    auto scope = Log.sub_scope("inner_task");
+    scope.trace("Tracing details...");
+}
+```
+
+> **Performance Advantage:**  
+> The `GetInstance()` initialization, atomic barrier check, string assignment, and parameter evaluation happen **once** when the translation unit loads. Subsequent `Log.info(...)` or `Log.sub_scope(...)` calls execute via direct reference lookup without function wrapper overhead.
+
+### Thread-Local Instances for Worker Threads
+
+For high-throughput worker threads that require independent local threshold filtering or isolated thread scopes, cache a `thread_local` reference:
+
+```cpp
+thread_local auto& t_Log = siddiqsoft::ScopeTrace::GetInstance("WORKER", siddiqsoft::LogLevel::debug);
+
+void worker_loop()
+{
+    t_Log.debug("Worker iteration starting...");
+}
+```
+

@@ -112,9 +112,18 @@ int main()
 
 ---
 
+## Best Practices & Performance Optimization
+
+For optimal performance, cache a static reference per file/module (`static auto& Log = ScopeTrace::GetInstance("MYMODULE");`) rather than calling `GetInstance()` repeatedly on every log statement. This bypasses thread-safety atomic initialization checks and temporary object creation on subsequent log calls.
+
+Read the complete [**Best Practices Guide**](features/best_practices.md) for details on high-frequency I/O tracing (`scope.trace`), dynamic nesting (`scope.sub_scope`), exception flow (`err_throw`/`exp`), and reference caching.
+
+---
+
 ## Navigation Guide
 
 - [**Features Overview**](features/index.md)
+- [**Best Practices Guide**](features/best_practices.md)
 - [**CMake & Integration**](integration/cmake.md)
 - [**API Reference**](api/index.md)
 - [**Examples & Walkthroughs**](examples/index.md)

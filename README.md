@@ -22,6 +22,7 @@
 For full detailed documentation, integration guides, and API specifications, visit our MkDocs documentation site:
 
 - [**Features Overview**](https://SiddiqSoft.github.io/ScopeTrace/features/)
+- [**Best Practices Guide**](https://SiddiqSoft.github.io/ScopeTrace/features/best_practices/)
 - [**Integration & CMake Guide**](https://SiddiqSoft.github.io/ScopeTrace/integration/cmake/)
 - [**Dependency Graph**](https://SiddiqSoft.github.io/ScopeTrace/integration/dependencies/)
 - [**API Reference**](https://SiddiqSoft.github.io/ScopeTrace/api/)
