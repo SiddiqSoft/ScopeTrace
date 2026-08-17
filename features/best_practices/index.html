@@ -725,6 +725,45 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#6-caching-logger-references-getinstance-performance-best-practice" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Caching Logger References (GetInstance() Performance Best Practice)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6. Caching Logger References (GetInstance() Performance Best Practice)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#recommended-pattern-modulefile-static-reference" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Recommended Pattern: Module/File Static Reference
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#thread-local-instances-for-worker-threads" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Thread-Local Instances for Worker Threads
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1323,6 +1362,45 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#6-caching-logger-references-getinstance-performance-best-practice" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Caching Logger References (GetInstance() Performance Best Practice)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6. Caching Logger References (GetInstance() Performance Best Practice)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#recommended-pattern-modulefile-static-reference" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Recommended Pattern: Module/File Static Reference
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#thread-local-instances-for-worker-threads" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Thread-Local Instances for Worker Threads
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1468,6 +1546,39 @@ When running with standard logging thresholds (<code>LogLevel::info</code> or <c
 <p>Direct constructors <code>ScopeTrace(...)</code> are <code>protected:</code>. Direct stack instantiation (e.g. <code>siddiqsoft::ScopeTrace scope;</code>) is disabled in client code and will fail to compile.</p>
 <h3 id="copy-move-prevention">Copy &amp; Move Prevention<a class="headerlink" href="#copy-move-prevention" title="Permanent link">&para;</a></h3>
 <p><code>ScopeTrace</code> explicitly <strong>deletes all copy and move constructors and assignment operators</strong> (<code>ScopeTrace(const ScopeTrace&amp;) = delete</code>, <code>ScopeTrace(ScopeTrace&amp;&amp;) = delete</code>). Instances cannot be copied or moved.</p>
+<hr />
+<h2 id="6-caching-logger-references-getinstance-performance-best-practice">6. Caching Logger References (<code>GetInstance()</code> Performance Best Practice)<a class="headerlink" href="#6-caching-logger-references-getinstance-performance-best-practice" title="Permanent link">&para;</a></h2>
+<h3 id="recommended-pattern-modulefile-static-reference">Recommended Pattern: Module/File Static Reference<a class="headerlink" href="#recommended-pattern-modulefile-static-reference" title="Permanent link">&para;</a></h3>
+<p>While <code>ScopeTrace::GetInstance(...)</code> can be called from anywhere, invoking <code>GetInstance()</code> repeatedly on every single log call incurs small runtime overheads:
+- <strong>Atomic Guard Check</strong>: C++11 "Magic Statics" emit an atomic memory barrier check on every call to verify singleton initialization.
+- <strong>Parameter Evaluation</strong>: Default argument <code>std::source_location::current()</code> constructs a temporary stack object on every call.
+- <strong>Scope Name Check</strong>: Internal string assignment check (<code>if (!sn.empty())</code>) evaluates on every call.</p>
+<p>To eliminate these overheads, <strong>cache a static reference per file or module</strong>:</p>
+<div class="language-cpp highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="c1">// In your cpp file or module scope:</span>
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="k">static</span><span class="w"> </span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="n">Log</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">siddiqsoft</span><span class="o">::</span><span class="n">ScopeTrace</span><span class="o">::</span><span class="n">GetInstance</span><span class="p">(</span><span class="s">"MY_MODULE"</span><span class="p">,</span><span class="w"> </span><span class="n">siddiqsoft</span><span class="o">::</span><span class="n">LogLevel</span><span class="o">::</span><span class="n">info</span><span class="p">);</span>
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>
+</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="kt">void</span><span class="w"> </span><span class="nf">process_data</span><span class="p">()</span>
+</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="p">{</span>
+</span><span id="__span-4-6"><a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="w">    </span><span class="c1">// Fast direct call bypassing GetInstance() atomic guard checks &amp; argument evaluation</span>
+</span><span id="__span-4-7"><a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="w">    </span><span class="n">Log</span><span class="p">.</span><span class="n">info</span><span class="p">(</span><span class="s">"Data processing started"</span><span class="p">);</span>
+</span><span id="__span-4-8"><a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a>
+</span><span id="__span-4-9"><a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="n">scope</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Log</span><span class="p">.</span><span class="n">sub_scope</span><span class="p">(</span><span class="s">"inner_task"</span><span class="p">);</span>
+</span><span id="__span-4-10"><a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="w">    </span><span class="n">scope</span><span class="p">.</span><span class="n">trace</span><span class="p">(</span><span class="s">"Tracing details..."</span><span class="p">);</span>
+</span><span id="__span-4-11"><a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a><span class="p">}</span>
+</span></code></pre></div>
+<blockquote>
+<p><strong>Performance Advantage:</strong><br />
+The <code>GetInstance()</code> initialization, atomic barrier check, string assignment, and parameter evaluation happen <strong>once</strong> when the translation unit loads. Subsequent <code>Log.info(...)</code> or <code>Log.sub_scope(...)</code> calls execute via direct reference lookup without function wrapper overhead.</p>
+</blockquote>
+<h3 id="thread-local-instances-for-worker-threads">Thread-Local Instances for Worker Threads<a class="headerlink" href="#thread-local-instances-for-worker-threads" title="Permanent link">&para;</a></h3>
+<p>For high-throughput worker threads that require independent local threshold filtering or isolated thread scopes, cache a <code>thread_local</code> reference:</p>
+<div class="language-cpp highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="k">thread_local</span><span class="w"> </span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="n">t_Log</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">siddiqsoft</span><span class="o">::</span><span class="n">ScopeTrace</span><span class="o">::</span><span class="n">GetInstance</span><span class="p">(</span><span class="s">"WORKER"</span><span class="p">,</span><span class="w"> </span><span class="n">siddiqsoft</span><span class="o">::</span><span class="n">LogLevel</span><span class="o">::</span><span class="n">debug</span><span class="p">);</span>
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="kt">void</span><span class="w"> </span><span class="nf">worker_loop</span><span class="p">()</span>
+</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="p">{</span>
+</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="w">    </span><span class="n">t_Log</span><span class="p">.</span><span class="n">debug</span><span class="p">(</span><span class="s">"Worker iteration starting..."</span><span class="p">);</span>
+</span><span id="__span-5-6"><a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="p">}</span>
+</span></code></pre></div>
 
 
 
@@ -1563,7 +1674,7 @@ When running with standard logging thresholds (<code>LogLevel::info</code> or <c
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.expand", "navigation.path", "navigation.top", "navigation.footer", "navigation.tracking", "search.suggest", "search.highlight", "search.share", "content.code.copy", "content.code.annotate"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": "0.52.0-alpha.3"}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.expand", "navigation.path", "navigation.top", "navigation.footer", "navigation.tracking", "search.suggest", "search.highlight", "search.share", "content.code.copy", "content.code.annotate"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": "0.51.2-1"}</script>
     
     
       <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>

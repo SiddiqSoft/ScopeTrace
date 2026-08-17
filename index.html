@@ -512,6 +512,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#best-practices-performance-optimization" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Best Practices &amp; Performance Optimization
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#navigation-guide" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1242,6 +1253,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#best-practices-performance-optimization" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Best Practices &amp; Performance Optimization
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#navigation-guide" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1379,9 +1401,14 @@
 </div>
 
 <hr />
+<h2 id="best-practices-performance-optimization">Best Practices &amp; Performance Optimization<a class="headerlink" href="#best-practices-performance-optimization" title="Permanent link">&para;</a></h2>
+<p>For optimal performance, cache a static reference per file/module (<code>static auto&amp; Log = ScopeTrace::GetInstance("MYMODULE");</code>) rather than calling <code>GetInstance()</code> repeatedly on every log statement. This bypasses thread-safety atomic initialization checks and temporary object creation on subsequent log calls.</p>
+<p>Read the complete <a href="features/best_practices/"><strong>Best Practices Guide</strong></a> for details on high-frequency I/O tracing (<code>scope.trace</code>), dynamic nesting (<code>scope.sub_scope</code>), exception flow (<code>err_throw</code>/<code>exp</code>), and reference caching.</p>
+<hr />
 <h2 id="navigation-guide">Navigation Guide<a class="headerlink" href="#navigation-guide" title="Permanent link">&para;</a></h2>
 <ul>
 <li><a href="features/"><strong>Features Overview</strong></a></li>
+<li><a href="features/best_practices/"><strong>Best Practices Guide</strong></a></li>
 <li><a href="integration/cmake/"><strong>CMake &amp; Integration</strong></a></li>
 <li><a href="api/"><strong>API Reference</strong></a></li>
 <li><a href="examples/"><strong>Examples &amp; Walkthroughs</strong></a></li>
@@ -1465,7 +1492,7 @@
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": ".", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.expand", "navigation.path", "navigation.top", "navigation.footer", "navigation.tracking", "search.suggest", "search.highlight", "search.share", "content.code.copy", "content.code.annotate"], "search": "assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": "0.52.0-alpha.3"}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": ".", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.expand", "navigation.path", "navigation.top", "navigation.footer", "navigation.tracking", "search.suggest", "search.highlight", "search.share", "content.code.copy", "content.code.annotate"], "search": "assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": "0.51.2-1"}</script>
     
     
       <script src="assets/javascripts/bundle.d7400e89.min.js"></script>
