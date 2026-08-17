@@ -35,3 +35,4 @@ bin/
 *.sln.docstates
 *.tcl
 *.userprefs
+pack/CPM.cmake

@@ -124,7 +124,7 @@ TEST(ScopeTraceTest, ExceptionSafety_2)
             {
                 auto inner = scope.sub_scope("inner");
 
-                inner.log<siddiqsoft::trace_level::info>("From the inner scope line: {}", __LINE__);
+                inner.info("From the inner scope line: {}", __LINE__);
                 inner.err_throw<std::invalid_argument>("Deliberate error from here");
             },
             std::invalid_argument);
@@ -191,7 +191,8 @@ TEST(ScopeTraceTest, LogLevelFiltering)
 TEST(ScopeTraceTest, ExtractHelpers)
 {
     // Test extract_file_name with Unix and Windows paths
-    EXPECT_EQ("ScopeTrace.hpp", siddiqsoft::ScopeTrace::extract_file_name("/Users/test/repos/ScopeTrace/include/siddiqsoft/ScopeTrace.hpp"));
+    EXPECT_EQ("ScopeTrace.hpp",
+              siddiqsoft::ScopeTrace::extract_file_name("/Users/test/repos/ScopeTrace/include/siddiqsoft/ScopeTrace.hpp"));
     EXPECT_EQ("main.cpp", siddiqsoft::ScopeTrace::extract_file_name("C:\\Projects\\App\\main.cpp"));
     EXPECT_EQ("test.h", siddiqsoft::ScopeTrace::extract_file_name("test.h"));
     EXPECT_EQ("", siddiqsoft::ScopeTrace::extract_file_name(""));
@@ -204,7 +205,7 @@ TEST(ScopeTraceTest, ExtractHelpers)
 TEST(ScopeTraceTest, DynamicSetLevel)
 {
     std::stringstream buffer;
-    auto* old_cerr = std::cerr.rdbuf(buffer.rdbuf());
+    auto*             old_cerr = std::cerr.rdbuf(buffer.rdbuf());
 
     {
         auto scope = g_scope.sub_scope("SetLevelTest", siddiqsoft::trace_level::warning);
@@ -233,7 +234,7 @@ TEST(ScopeTraceTest, ExplicitNameGetInstance)
 TEST(ScopeTraceTest, FormattingAndTagOutput)
 {
     std::stringstream buffer;
-    auto* old_cerr = std::cerr.rdbuf(buffer.rdbuf());
+    auto*             old_cerr = std::cerr.rdbuf(buffer.rdbuf());
 
     {
         auto scope = g_scope.sub_scope("TagFormatTest", siddiqsoft::trace_level::trace);
@@ -257,8 +258,8 @@ TEST(ScopeTraceTest, FormattingAndTagOutput)
 
 TEST(ScopeTraceTest, ConcurrentThreadSafety)
 {
-    constexpr int num_threads = 8;
-    constexpr int iterations_per_thread = 50;
+    constexpr int                  num_threads           = 8;
+    constexpr int                  iterations_per_thread = 50;
 
     std::vector<std::future<void>> futures;
     futures.reserve(num_threads);

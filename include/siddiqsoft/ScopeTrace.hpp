@@ -123,25 +123,25 @@ namespace siddiqsoft
     class ScopeTrace
     {
         // Colors for output
-        static constexpr std::string_view LTGY {"\033[38;5;250m"};       //< Light gray
-        static constexpr std::string_view DKGY {"\033[1;40m"};           //< Dark gray
-        static constexpr std::string_view RED {"\033[0;31m"};            //< Red
-        static constexpr std::string_view REV_RED {"\033[7;31m"};        //< Reverse Red
-        static constexpr std::string_view ORN {"\033[38;5;208m"};        //< Orange
-        static constexpr std::string_view REV_ORN {"\033[7;38;5;208m"};  //< Reverse Orange
-        static constexpr std::string_view BLU {"\033[0;34m"};            //< Blue
-        static constexpr std::string_view DRKBLU {"\033[38;5;19m"};      //< Dark Blue
-        static constexpr std::string_view GRN {"\033[0;32m"};            //< Green
-        static constexpr std::string_view YLW {"\033[1;33m"};            //< Yellow
-        static constexpr std::string_view LTYLW {"\033[38;5;220m"};      //< Light Bright Yellow
-        static constexpr std::string_view REV_LTYLW {"\033[7;38;5;220m"};//< Reverse Light Bright Yellow
-        static constexpr std::string_view BOLD {"\033[1m"};              //< Bold
-        static constexpr std::string_view ITAL {"\033[3m"};              //< Italic
-        static constexpr std::string_view UNDL {"\033[4m"};              //< Underline
-        static constexpr std::string_view NOTUNDL {"\033[24m"};          //< Not underline
-        static constexpr std::string_view NOTBOLD {"\033[22m"};          //< Not bold
-        static constexpr std::string_view NOTITAL {"\033[23m"};          //< Not italic
-        static constexpr std::string_view NOC {"\033[0m"};               //< No Color
+        static constexpr std::string_view LTGY {"\033[38;5;250m"};        //< Light gray
+        static constexpr std::string_view DKGY {"\033[1;40m"};            //< Dark gray
+        static constexpr std::string_view RED {"\033[0;31m"};             //< Red
+        static constexpr std::string_view REV_RED {"\033[7;31m"};         //< Reverse Red
+        static constexpr std::string_view ORN {"\033[38;5;208m"};         //< Orange
+        static constexpr std::string_view REV_ORN {"\033[7;38;5;208m"};   //< Reverse Orange
+        static constexpr std::string_view BLU {"\033[0;34m"};             //< Blue
+        static constexpr std::string_view DRKBLU {"\033[38;5;19m"};       //< Dark Blue
+        static constexpr std::string_view GRN {"\033[0;32m"};             //< Green
+        static constexpr std::string_view YLW {"\033[1;33m"};             //< Yellow
+        static constexpr std::string_view LTYLW {"\033[38;5;220m"};       //< Light Bright Yellow
+        static constexpr std::string_view REV_LTYLW {"\033[7;38;5;220m"}; //< Reverse Light Bright Yellow
+        static constexpr std::string_view BOLD {"\033[1m"};               //< Bold
+        static constexpr std::string_view ITAL {"\033[3m"};               //< Italic
+        static constexpr std::string_view UNDL {"\033[4m"};               //< Underline
+        static constexpr std::string_view NOTUNDL {"\033[24m"};           //< Not underline
+        static constexpr std::string_view NOTBOLD {"\033[22m"};           //< Not bold
+        static constexpr std::string_view NOTITAL {"\033[23m"};           //< Not italic
+        static constexpr std::string_view NOC {"\033[0m"};                //< No Color
         static constexpr std::string_view global_function_name {};
 
         // We're using this to allow unit tests to access protected members of ScopeTrace for testing purposes.
@@ -378,10 +378,45 @@ namespace siddiqsoft
 
         [[nodiscard]] static constexpr auto logline_end_color(trace_level) noexcept -> std::string_view { return NOC; }
 
-        [[nodiscard]] auto                  logline_prefix(trace_level level) const -> std::string
+        [[nodiscard]] auto logline_prefix(trace_level level, const std::source_location& location) const -> std::string
         {
-            return std::format(
-                    "{}{:%FT%TZ}{} {: <6} {}", LTGY, std::chrono::system_clock::now(), logline_tag_color(level), level, NOC);
+            // ISO8601 level linenumber@filename |
+            return std::format("{}{:%FT%TZ} {}{}{: >7} {}{} {:0>6}@{} {}",
+                               LTGY,
+                               std::chrono::system_clock::now(),
+                               logline_tag_color(level),
+                               ITAL,
+                               level,
+                               NOC,
+                               LTGY,
+                               location.line(),
+                               extract_file_name(location.file_name()),
+                               NOC);
+        }
+
+
+        /// @brief Core log implementation accepting explicit caller source_location
+        /// @note We need this helper function so we can provide the actual source of the caller's location
+        /// otherwise the source_location_format_string<> would always capture the location of the log() function itself.
+        template <trace_level level = trace_level::critical, typename... Args>
+        auto& log_at(const std::source_location& loc, std::format_string<Args...> fmt, Args&&... args)
+        {
+            constexpr bool is_always_logged =
+                    (level == trace_level ::critical || level == trace_level ::exception || level == trace_level ::error);
+
+            if (is_always_logged || level <= m_log_level) {
+                std::println(std::cerr,
+                             "{}{}{}{}{}|{}|{}",
+                             logline_prefix(level, loc),
+                             LTGY,
+                             m_scope_name,
+                             NOC,
+                             logline_start_color(level),
+                             std::format(fmt, std::forward<Args>(args)...),
+                             logline_end_color(level));
+            }
+
+            return *this;
         }
 
     public:
@@ -393,24 +428,9 @@ namespace siddiqsoft
         /// @param args Format arguments
         /// @return Reference to this ScopeTrace instance
         template <trace_level level = trace_level::critical, typename... Args>
-        auto& log(std::format_string<Args...> fmt, Args&&... args)
+        auto& log(source_location_format_string<std::type_identity_t<Args>...> fmt, Args&&... args)
         {
-            constexpr bool is_always_logged =
-                    (level == trace_level ::critical || level == trace_level ::exception || level == trace_level ::error);
-
-            if (is_always_logged || level <= m_log_level) {
-                std::println(std::cerr,
-                             "{}{}{}{}{}|{}|{}",
-                             logline_prefix(level),
-                             LTGY, // the name of the scope is always light gray, regardless of log level
-                             m_scope_name.empty() ? m_location.file_name() : m_scope_name,
-                             NOC,
-                             logline_start_color(level),
-                             std::format(fmt, std::forward<Args>(args)...),
-                             logline_end_color(level));
-            }
-
-            return *this;
+            return log_at<level>(fmt.location, fmt.fmt, std::forward<Args>(args)...);
         }
 
 
@@ -419,9 +439,9 @@ namespace siddiqsoft
         /// @param fmt Format string
         /// @param args Format arguments
         template <typename... Args>
-        auto& warn(std::format_string<Args...> fmt, Args&&... args)
+        auto& warn(source_location_format_string<std::type_identity_t<Args>...> fmt, Args&&... args)
         {
-            return log<siddiqsoft::trace_level ::warning>(fmt, std::forward<Args>(args)...);
+            return log_at<siddiqsoft::trace_level ::warning>(fmt.location, fmt.fmt, std::forward<Args>(args)...);
         }
 
         /// @brief Log a formatted warning message to std::cerr with indentation and scope label
@@ -429,9 +449,9 @@ namespace siddiqsoft
         /// @param fmt Format string
         /// @param args Format arguments
         template <typename... Args>
-        auto& trace(std::format_string<Args...> fmt, Args&&... args)
+        auto& trace(source_location_format_string<std::type_identity_t<Args>...> fmt, Args&&... args)
         {
-            return log<siddiqsoft::trace_level ::trace>(fmt, std::forward<Args>(args)...);
+            return log_at<siddiqsoft::trace_level ::trace>(fmt.location, fmt.fmt, std::forward<Args>(args)...);
         }
 
         /// @brief Log a formatted warning message to std::cerr with indentation and scope label
@@ -439,9 +459,9 @@ namespace siddiqsoft
         /// @param fmt Format string
         /// @param args Format arguments
         template <typename... Args>
-        auto& debug(std::format_string<Args...> fmt, Args&&... args)
+        auto& debug(source_location_format_string<std::type_identity_t<Args>...> fmt, Args&&... args)
         {
-            return log<siddiqsoft::trace_level ::debug>(fmt, std::forward<Args>(args)...);
+            return log_at<siddiqsoft::trace_level ::debug>(fmt.location, fmt.fmt, std::forward<Args>(args)...);
         }
 
 
@@ -450,29 +470,32 @@ namespace siddiqsoft
         /// @param fmt Format string
         /// @param args Format arguments
         template <typename... Args>
-        auto& err(std::format_string<Args...> fmt, Args&&... args)
+        auto& err(source_location_format_string<std::type_identity_t<Args>...> fmt, Args&&... args)
         {
-            return log<siddiqsoft::trace_level ::error>(fmt, std::forward<Args>(args)...);
+            return log_at<siddiqsoft::trace_level ::error>(fmt.location, fmt.fmt, std::forward<Args>(args)...);
         }
 
         /// @brief Log exception details (type and message) to std::cerr with indentation and scope label
         /// @param e Reference to caught exception
-        void exp(const std::exception& e)
+        /// @param loc Optional caller source location (defaults to caller site)
+        void exp(const std::exception& e, const std::source_location& loc = std::source_location::current())
         {
-            log<siddiqsoft::trace_level ::exception>("{}{}{}{}", BOLD, typeid(e).name(), NOTBOLD, e.what());
+            log_at<siddiqsoft::trace_level::exception>(
+                    loc, "{}{}{} - {}{}{}", BOLD, typeid(e).name(), NOTBOLD, ITAL, e.what(), NOTITAL);
         }
 
         template <typename... Args>
-        void exp(const std::exception& e, std::format_string<Args...> fmt, Args&&... args)
+        void exp(const std::exception& e, source_location_format_string<std::type_identity_t<Args>...> fmt, Args&&... args)
         {
-            log<siddiqsoft::trace_level ::exception>("{}{}{} - {}{}{} - {}",
-                                                     BOLD,
-                                                     typeid(e).name(),
-                                                     NOTBOLD,
-                                                     ITAL,
-                                                     e.what(),
-                                                     NOTITAL,
-                                                     std::format(fmt, std::forward<Args>(args)...));
+            log_at<siddiqsoft::trace_level::exception>(fmt.location,
+                                                       "{}{}{} - {}{}{} - {}",
+                                                       BOLD,
+                                                       typeid(e).name(),
+                                                       NOTBOLD,
+                                                       ITAL,
+                                                       e.what(),
+                                                       NOTITAL,
+                                                       std::format(fmt.fmt, std::forward<Args>(args)...));
         }
 
 
@@ -487,18 +510,15 @@ namespace siddiqsoft
             const auto& loc = fmt_loc.location;
             std::string msg = std::format(fmt_loc.fmt, std::forward<Args>(args)...);
 
-            log<siddiqsoft::trace_level::exception>("{}{}{} - {}{}{}{} - {}from:{}@{}{}",
-                                                    BOLD,
-                                                    typeid(EX).name(),
-                                                    NOTBOLD,
-                                                    ITAL,
-                                                    msg,
-                                                    NOTITAL,
-                                                    NOC,
-                                                    UNDL,
-                                                    loc.file_name(),
-                                                    loc.line(),
-                                                    NOTUNDL);
+            log_at<siddiqsoft::trace_level::exception>(loc,
+                                                       "{}{}{} - {}{}{}{}",
+                                                       BOLD,
+                                                       typeid(EX).name(),
+                                                       NOTBOLD,
+                                                       ITAL,
+                                                       msg,
+                                                       NOTITAL,
+                                                       NOC);
 
             throw EX(msg);
         }
@@ -509,9 +529,9 @@ namespace siddiqsoft
         /// @param fmt Format string
         /// @param args Format arguments
         template <typename... Args>
-        auto& info(std::format_string<Args...> fmt, Args&&... args)
+        auto& info(source_location_format_string<std::type_identity_t<Args>...> fmt, Args&&... args)
         {
-            return log<siddiqsoft::trace_level ::info>(fmt, std::forward<Args>(args)...);
+            return log_at<siddiqsoft::trace_level ::info>(fmt.location, fmt.fmt, std::forward<Args>(args)...);
         }
 
         /// @brief Update the logging threshold level for this scope
@@ -528,7 +548,7 @@ namespace siddiqsoft
         {
             auto us = std::chrono::duration_cast<std::chrono::microseconds>(elapsed()).count();
 
-            log<siddiqsoft::trace_level::debug>("COMPLETED: time:{}{}us{}", GRN, us, NOC);
+            log_at<siddiqsoft::trace_level::debug>(m_location, "COMPLETED: time:{}{}us{}", GRN, us, NOC);
         }
 
     private:
