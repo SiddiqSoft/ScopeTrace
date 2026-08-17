@@ -247,9 +247,9 @@ TEST(ScopeTraceTest, FormattingAndTagOutput)
     std::string output = buffer.str();
 
     // Verify presence of abbreviated tag labels in square brackets
-    EXPECT_TRUE(output.contains("crit  "));
-    EXPECT_TRUE(output.contains("warn  "));
-    EXPECT_TRUE(output.contains("info  "));
+    EXPECT_TRUE(output.contains("  crit"));
+    EXPECT_TRUE(output.contains("  warn"));
+    EXPECT_TRUE(output.contains("  info"));
 
     // Verify presence of reverse video ANSI escape codes for critical (\033[7;31m) and warn (\033[7;38;5;220m)
     EXPECT_TRUE(output.contains("\033[7;31m"));
